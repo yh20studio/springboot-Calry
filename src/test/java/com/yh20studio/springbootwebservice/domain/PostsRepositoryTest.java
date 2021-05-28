@@ -1,5 +1,7 @@
 package com.yh20studio.springbootwebservice.domain;
 
+import com.yh20studio.springbootwebservice.domain.posts.Posts;
+import com.yh20studio.springbootwebservice.domain.posts.PostsRepository;
 import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;

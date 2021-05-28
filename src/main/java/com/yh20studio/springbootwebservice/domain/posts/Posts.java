@@ -1,5 +1,6 @@
-package com.yh20studio.springbootwebservice.domain;
+package com.yh20studio.springbootwebservice.domain.posts;
 
+import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
 import lombok.*;
 import lombok.extern.java.Log;
 
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class Posts extends BaseTimeEntity{
+public class Posts extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

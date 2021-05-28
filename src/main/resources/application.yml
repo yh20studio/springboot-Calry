@@ -2,3 +2,6 @@ spring:
     h2:
         console:
             enabled: true
+    profiles:
+        include: oauth
+    # 프로퍼티 파일명을 application-XXX.properties 이런 식으로 지으면, 위에 처럼 spring.profiles.include=XXX 로 로딩할 수 있습니다.
