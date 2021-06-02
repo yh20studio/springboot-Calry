@@ -19,7 +19,7 @@ public class PostsServiceTest {
     @Autowired
     private PostsRepository postsRepository;
 
-    @After("")
+    @After("Dto데이터가_posts테이블에_저장")
     public void cleanup (){
         postsRepository.deleteAll();
     }

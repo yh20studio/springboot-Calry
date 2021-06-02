@@ -25,12 +25,12 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
-public class CustomOAuth2UserService  {
+public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private UserRepository userRepository;
     private HttpSession httpSession;
 
-    /**@Override
+    @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
@@ -59,7 +59,7 @@ public class CustomOAuth2UserService  {
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey()
         );
-    }**/
+    }
 
     @Transactional
     //메소드 내에서 Exception이 발생하면 해당 메소드에서 이루어진 모든 DB작업을 초기화 시킵니다.
@@ -70,15 +70,20 @@ public class CustomOAuth2UserService  {
     @Transactional
     //메소드 내에서 Exception이 발생하면 해당 메소드에서 이루어진 모든 DB작업을 초기화 시킵니다.
     public User saveOrUpdate(OAuthAttributes attributes){
-        UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder()
+
+        UserSaveRequestDto dto = UserSaveRequestDto.builder()
                 .name(attributes.getName())
                 .email(attributes.getEmail())
                 .picture(attributes.getPicture())
                 .build();
 
         User user = userRepository.findByEmail(attributes.getEmail())
-                .map(entity -> new UserMainResponseDto(entity).updateEntity(attributes.getName(), attributes.getPicture()))
-                .orElse(userSaveRequestDto.toEntity());
+                .map(entity -> {
+                    entity.updateName(attributes.getName());
+                    entity.updatePicture(attributes.getPicture());
+                    return entity;
+                })
+                .orElse(dto.toEntity());
 
         return userRepository.save(user);
     }

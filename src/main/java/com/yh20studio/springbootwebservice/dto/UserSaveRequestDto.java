@@ -4,8 +4,12 @@ import com.yh20studio.springbootwebservice.domain.posts.Posts;
 import com.yh20studio.springbootwebservice.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class UserSaveRequestDto {
 
     private String name;

@@ -1,16 +1,24 @@
 package com.yh20studio.springbootwebservice.domain.user;
 
 import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import javax.persistence.*;
 
 
+
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@TypeDef(
+        name = "pgsql_enum",
+        typeClass = PostgreSQLEnumType.class
+)
+@Table(name="\"User\"")
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +35,7 @@ public class User extends BaseTimeEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Type( type = "pgsql_enum" )
     private Role role;
 
     public enum Role {
@@ -47,6 +56,14 @@ public class User extends BaseTimeEntity {
 
     }
 
+    public void updateName(String name){
+        this.name = name;
+    }
+
+    public void updatePicture(String picture){
+        this.picture = picture;
+    }
+
     @Builder
     public User(String name, String email, String picture, Role role){
         this.name = name;
@@ -58,3 +75,4 @@ public class User extends BaseTimeEntity {
 
 
 }
+

@@ -33,13 +33,4 @@ public class UserMainResponseDto {
                 .orElse("");
     }
 
-    public User updateEntity(String name, String picture){
-        return User.builder()
-                .name(name)
-                .email(email)
-                .picture(picture)
-                .role(User.Role.GUEST)
-                .build();
-    }
-
 }
