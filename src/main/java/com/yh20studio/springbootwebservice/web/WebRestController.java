@@ -1,12 +1,17 @@
 package com.yh20studio.springbootwebservice.web;
 
+import com.yh20studio.springbootwebservice.dto.ArchivesMainResponseDto;
+import com.yh20studio.springbootwebservice.dto.ArchivesSaveRequestDto;
 import com.yh20studio.springbootwebservice.dto.PostsSaveRequestDto;
+import com.yh20studio.springbootwebservice.service.ArchivesService;
 import com.yh20studio.springbootwebservice.service.PostsService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -16,17 +21,29 @@ import org.springframework.web.bind.annotation.RestController;
 public class WebRestController {
     private PostsService postsService;
 
+    private ArchivesService archivesService;
+
     /** public WebRestController(PostsRepository postsRepository) {
         this.postsRepository = postsRepository;
     } **/
 
-    @GetMapping("/hello")
+    @GetMapping(value="/hello", produces = "application/json; charset=UTF-8")
     public String hello(){
         return "HelloWorld";
     }
 
-    @PostMapping("/posts")
+    @PostMapping(value="/posts", produces = "application/json; charset=UTF-8")
     public Long savePosts(@RequestBody PostsSaveRequestDto dto){
         return postsService.save(dto);
+    }
+
+    @PostMapping(value="/archives/post", produces = "application/json; charset=UTF-8")
+    public Long saveArchives(@RequestBody ArchivesSaveRequestDto dto){
+        return archivesService.save(dto);
+    }
+
+    @GetMapping(value="/archives/get", produces = "application/json; charset=UTF-8")
+    public List<ArchivesMainResponseDto> findAllDescArchives(){
+        return archivesService.findAllDesc();
     }
 }

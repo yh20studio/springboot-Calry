@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .headers().frameOptions().disable()
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/", "/css/**", "/login**", "/images/**", "/js/**", "/h2/**", "/h2-console/**", "/favicon.ico").permitAll()
+                    .antMatchers("/", "/archives/**", "/css/**", "/login**", "/images/**", "/js/**", "/h2/**", "/h2-console/**", "/favicon.ico").permitAll()
                     .antMatchers("/api/v1/**").hasRole(User.Role.USER.name())
                     .anyRequest().authenticated()
                 .and()
@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .oauth2Login()
                     .userInfoEndpoint()
                     .userService(customOAuth2UserService);
+
 
     }
 
