@@ -12,15 +12,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ArchivesSaveRequestDto {
 
-    private Long id;
     private String title;
     private String content;
     private String url;
     private String author;
 
     @Builder
-    public ArchivesSaveRequestDto(Long id, String title, String content, String url, String author){
-        this.id = id;
+    public ArchivesSaveRequestDto(String title, String content, String url, String author){
         this.title = title;
         this.content = content;
         this.url = url;

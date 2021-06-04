@@ -35,7 +35,6 @@ class ArchivesServiceTest {
     public void Archives테이블_조회_DescById (){
         //given
         ArchivesSaveRequestDto dto = ArchivesSaveRequestDto.builder()
-                .id(0L)
                 .title("조회 테스트 게시글입니다.")
                 .content("가장 위에 있어야 합니다.")
                 .url("url")
@@ -57,7 +56,6 @@ class ArchivesServiceTest {
     public void Dto데이터가_Archives테이블에_저장 (){
         //given
         ArchivesSaveRequestDto dto = ArchivesSaveRequestDto.builder()
-                .id(0L)
                 .author("2young")
                 .content("테스트")
                 .title("테스트 타이틀")
@@ -79,26 +77,23 @@ class ArchivesServiceTest {
     public void Dto데이터가_Archives_업데이트 (){
         //given
         ArchivesSaveRequestDto dto = ArchivesSaveRequestDto.builder()
-                .id(0L)
                 .author("2young")
                 .content("테스트")
                 .title("테스트 타이틀")
                 .url("url")
                 .build();
-        Long dtoId = archivesService.save(dto);
-        ArchivesSaveRequestDto updateDto = ArchivesSaveRequestDto.builder()
-                .id(dtoId)
-                .author("2young")
-                .content("업데이트 테스트")
-                .title("업데이트 테스트 타이틀")
-                .url("업데이트 url")
-                .build();
+        Long id = archivesService.save(dto);
+
         //when
-        archivesService.save(updateDto);
+        ArchivesSaveRequestDto updateDto = ArchivesSaveRequestDto.builder()
+                .content("update 테스트")
+                .title("update 테스트 타이틀")
+                .url("update url")
+                .build();
+        archivesService.update(id, updateDto);
 
         //then
-        Archives archives = archivesRepository.findById(dtoId).get();
-        assertThat(archives.getAuthor()).isEqualTo(updateDto.getAuthor());
+        Archives archives = archivesRepository.findById(id).get();
         assertThat(archives.getContent()).isEqualTo(updateDto.getContent());
         assertThat(archives.getTitle()).isEqualTo(updateDto.getTitle());
         assertThat(archives.getUrl()).isEqualTo(updateDto.getUrl());
@@ -108,7 +103,6 @@ class ArchivesServiceTest {
     public void Dto_Archive테이블_삭제(){
         //given
         ArchivesSaveRequestDto dto = ArchivesSaveRequestDto.builder()
-                .id(0L)
                 .author("2young")
                 .content("삭제됩니다.")
                 .title("삭제 테스트 타이틀")

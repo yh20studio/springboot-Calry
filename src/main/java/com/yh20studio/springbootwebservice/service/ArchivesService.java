@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -30,14 +31,19 @@ public class ArchivesService {
 
     @Transactional
     public Long save(ArchivesSaveRequestDto dto){
-        Archives archives = archivesRepository.findById(dto.getId())
+        return archivesRepository.save(dto.toEntity()).getId();
+    }
+
+    @Transactional
+    public Long update(Long id, ArchivesSaveRequestDto dto){
+        Archives archives = archivesRepository.findById(id)
                 .map(entity -> {entity.updateWhole(
                         dto.getTitle(),
                         dto.getContent(),
                         dto.getUrl());
                     return entity;
                 })
-                .orElse(dto.toEntity());
+                .orElseThrow(() -> new NoSuchElementException());
 
         return archivesRepository.save(archives).getId();
     }

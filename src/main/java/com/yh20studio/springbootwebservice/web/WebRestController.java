@@ -6,10 +6,7 @@ import com.yh20studio.springbootwebservice.dto.PostsSaveRequestDto;
 import com.yh20studio.springbootwebservice.service.ArchivesService;
 import com.yh20studio.springbootwebservice.service.PostsService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,8 +39,19 @@ public class WebRestController {
         return archivesService.save(dto);
     }
 
+    @PutMapping(value="/archives/put/{id}", produces = "application/json; charset=UTF-8")
+    public Long updateArchives(@PathVariable("id") Long id, @RequestBody ArchivesSaveRequestDto dto){
+        return archivesService.update(id, dto);
+    }
+
     @GetMapping(value="/archives/get", produces = "application/json; charset=UTF-8")
     public List<ArchivesMainResponseDto> findAllDescArchives(){
         return archivesService.findAllDesc();
+    }
+
+    @DeleteMapping(value="/archives/delete/{id}", produces = "application/json; charset=UTF-8")
+    public String deleteArchives(@PathVariable("id") Long id){
+        archivesService.delete(id);
+        return "delete";
     }
 }
