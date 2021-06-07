@@ -1,6 +1,7 @@
 package com.yh20studio.springbootwebservice.dto;
 
 import com.yh20studio.springbootwebservice.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -16,5 +17,12 @@ public class SessionUserDto implements Serializable {
         this.name = user.getName();
         this.email = user.getEmail();
         this.picture = user.getPicture();
+    }
+
+    @Builder
+    public SessionUserDto(String name, String email, String picture){
+        this.name = name;
+        this.email = email;
+        this.picture = picture;
     }
 }

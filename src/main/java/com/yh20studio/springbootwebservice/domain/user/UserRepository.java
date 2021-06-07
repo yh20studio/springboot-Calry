@@ -1,5 +1,6 @@
 package com.yh20studio.springbootwebservice.domain.user;
 
+import com.yh20studio.springbootwebservice.domain.archives.Archives;
 import com.yh20studio.springbootwebservice.domain.posts.Posts;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

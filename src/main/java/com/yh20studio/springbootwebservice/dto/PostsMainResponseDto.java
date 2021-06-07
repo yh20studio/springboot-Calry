@@ -1,6 +1,7 @@
 package com.yh20studio.springbootwebservice.dto;
 
 import com.yh20studio.springbootwebservice.domain.posts.Posts;
+import com.yh20studio.springbootwebservice.domain.user.User;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -12,13 +13,13 @@ public class PostsMainResponseDto {
 
     private Long id;
     private String title;
-    private String author;
+    private User owner;
     private String modifiedDate;
 
     public PostsMainResponseDto(Posts entity){
         id = entity.getId();
         title = entity.getTitle();
-        author = entity.getAuthor();
+        owner = entity.getOwner();
         modifiedDate = toStringDateTime(entity.getModifiedDate());
     }
 
