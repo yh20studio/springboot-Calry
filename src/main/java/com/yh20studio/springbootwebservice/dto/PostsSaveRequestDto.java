@@ -14,20 +14,20 @@ public class PostsSaveRequestDto {
 
     private String title;
     private String content;
-    private User owner;
+    private User user;
 
     @Builder
-    public PostsSaveRequestDto(String title, String content, User owner){
+    public PostsSaveRequestDto(String title, String content, User user){
         this.title = title;
         this.content = content;
-        this.owner = owner;
+        this.user = user;
     }
 
     public Posts toEntity(){
         return Posts.builder()
                 .title(title)
                 .content(content)
-                .owner(owner)
+                .user(user)
                 .build();
     }
 }

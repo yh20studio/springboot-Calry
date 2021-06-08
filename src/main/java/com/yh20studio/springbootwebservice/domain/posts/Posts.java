@@ -24,19 +24,20 @@ public class Posts extends BaseTimeEntity {
     @Column(columnDefinition = "Text", nullable = false)
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
+    //TODO: casecade 설정
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(foreignKey = @ForeignKey(name = "user_id"))
+    private User user;
 
 
     //해당 클래스의 빌더패턴 클래스를 생성
     //생성자나 빌더나 생성시점에 값을 채워주는 역할은 똑같습니다.
     //다만, 생성자의 경우 지금 채워야할 필드가 무엇인지 명확히 지정할수가 없습니다.
     @Builder
-    public Posts(String title, String content, User owner){
+    public Posts(String title, String content, User user){
         this.title = title;
         this.content = content;
-        this.owner = owner;
+        this.user = user;
     }
 }
 

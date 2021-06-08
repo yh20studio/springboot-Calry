@@ -13,13 +13,15 @@ public class PostsMainResponseDto {
 
     private Long id;
     private String title;
-    private User owner;
+    private String content;
+    private User user;
     private String modifiedDate;
 
     public PostsMainResponseDto(Posts entity){
         id = entity.getId();
         title = entity.getTitle();
-        owner = entity.getOwner();
+        content = entity.getContent();
+        user = entity.getUser();
         modifiedDate = toStringDateTime(entity.getModifiedDate());
     }
 

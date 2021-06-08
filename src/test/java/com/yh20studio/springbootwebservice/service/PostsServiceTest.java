@@ -4,6 +4,7 @@ import com.yh20studio.springbootwebservice.domain.posts.Posts;
 import com.yh20studio.springbootwebservice.domain.posts.PostsRepository;
 import com.yh20studio.springbootwebservice.domain.user.User;
 import com.yh20studio.springbootwebservice.domain.user.UserRepository;
+import com.yh20studio.springbootwebservice.dto.PostsMainResponseDto;
 import com.yh20studio.springbootwebservice.dto.PostsSaveRequestDto;
 import com.yh20studio.springbootwebservice.dto.SessionUserDto;
 import org.aspectj.lang.annotation.After;
@@ -11,7 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,7 +30,7 @@ public class PostsServiceTest {
     @Autowired
     private UserRepository userRepository;
 
-    @After("Dto데이터가_posts테이블에_저장")
+    @After("")
     public void cleanup (){
         postsRepository.deleteAll();
     }
@@ -45,21 +48,19 @@ public class PostsServiceTest {
                 .orElseThrow(() -> new NoSuchElementException());
 
         PostsSaveRequestDto dto = PostsSaveRequestDto.builder()
-                .owner(user)
-                .content("테스트")
-                .title("테스트 타이틀")
+                .user(user)
+                .content("테스트a")
+                .title("테스트 타이틀a")
                 .build();
-
         //when
-        postsService.save(dto);
-
+        Long savedPostsId = postsService.save(dto);
         //then
-        Posts posts = postsRepository.findAll().get(0);
-        User owner = posts.getOwner();
-        System.out.println(owner.getEmail());
-        System.out.println(owner);
+        Posts posts = postsRepository.findById(savedPostsId)
+                .orElseThrow(() -> new NoSuchElementException());
 
-        assertThat(posts.getOwner()).isEqualTo(dto.getOwner());
+        User ownerUser = posts.getUser();
+
+        assertThat(ownerUser.getEmail()).isEqualTo(dto.getUser().getEmail());
         assertThat(posts.getContent()).isEqualTo(dto.getContent());
         assertThat(posts.getTitle()).isEqualTo(dto.getTitle());
     }

@@ -1,6 +1,7 @@
 package com.yh20studio.springbootwebservice.domain.user;
 
 import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
+import com.yh20studio.springbootwebservice.domain.posts.Posts;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import javax.persistence.*;
-
+import java.util.List;
 
 
 @Getter
@@ -32,6 +33,12 @@ public class User extends BaseTimeEntity {
 
     @Column
     private String picture;
+
+    //TODO: casecade 설정
+    @OneToMany(mappedBy="user")
+    @OrderBy("id DESC")
+    private List<Posts> posts;
+
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -63,6 +70,7 @@ public class User extends BaseTimeEntity {
     public void updatePicture(String picture){
         this.picture = picture;
     }
+
 
     @Builder
     public User(String name, String email, String picture, Role role){
