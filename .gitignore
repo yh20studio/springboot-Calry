@@ -38,5 +38,7 @@ out/
 
 ### oauth
 src/main/resources/application-google.yml
+### postgresql
 src/main/resources/application-postgresql.yml
+### jwt
 src/main/resources/application-jwt.yml
