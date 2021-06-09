@@ -1,21 +1,19 @@
-package com.yh20studio.springbootwebservice.domain.user;
+package com.yh20studio.springbootwebservice.domain.member;
 
-import com.yh20studio.springbootwebservice.domain.posts.Posts;
 import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class UserRepositoryTest {
+public class MemberRepositoryTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @After("")
     public void cleanup() {
@@ -23,24 +21,24 @@ public class UserRepositoryTest {
          이후 테스트 코드에 영향을 끼치지 않기 위해
          테스트 메소드가 끝날때 마다 respository 전체 비우는 코드
          **/
-        userRepository.deleteAll();
+        memberRepository.deleteAll();
     }
 
     @Test
-    public void User_add(){
+    public void Member_add(){
         //given
-        userRepository.save(User.builder()
+        memberRepository.save(Member.builder()
                 .name("youngho")
                 .email("yh20studio@gmail.com")
                 .picture("none")
-                .role(User.Role.GUEST)
+                .role(Member.Role.GUEST)
                 .build());
 
         //when
-        List<User> userList = userRepository.findAll();
+        List<Member> memberList = memberRepository.findAll();
 
         //then
-        User saved = userList.get(0);
-        assertThat(saved.getRole()).isEqualTo(User.Role.GUEST);
+        Member saved = memberList.get(0);
+        assertThat(saved.getRole()).isEqualTo(Member.Role.GUEST);
     }
 }

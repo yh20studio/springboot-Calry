@@ -1,9 +1,7 @@
 package com.yh20studio.springbootwebservice.dto;
 
 import com.yh20studio.springbootwebservice.domain.archives.Archives;
-import com.yh20studio.springbootwebservice.domain.user.User;
 import lombok.Getter;
-import lombok.extern.java.Log;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

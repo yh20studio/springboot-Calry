@@ -1,12 +1,10 @@
 package com.yh20studio.springbootwebservice.service;
 
 
-import com.yh20studio.springbootwebservice.domain.posts.Posts;
-import com.yh20studio.springbootwebservice.domain.user.User;
-import com.yh20studio.springbootwebservice.domain.user.UserRepository;
+import com.yh20studio.springbootwebservice.domain.member.Member;
+import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
 import com.yh20studio.springbootwebservice.dto.*;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -14,20 +12,17 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private UserRepository userRepository;
+    private MemberService memberService;
     private HttpSession httpSession;
 
     @Override
@@ -50,41 +45,16 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuthAttributes attributes = OAuthAttributes
                 .of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        User user = saveOrUpdate(attributes);
+        Member member = memberService.saveOrUpdate(attributes);
 
-        // SessioUser: 세션에 사용자 정보를 저장하기 위한 DTO 클래스 (개발자가 생성)
-        httpSession.setAttribute("user", new SessionUserDto(user));
+        // SessionMember: 세션에 사용자 정보를 저장하기 위한 DTO 클래스 (개발자가 생성)
+        httpSession.setAttribute("member", new SessionMemberDto(member));
         return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(user.getRole().getRoleKey())),
+                Collections.singleton(new SimpleGrantedAuthority(member.getRole().getRoleKey())),
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey()
         );
     }
 
-    @Transactional
-    //메소드 내에서 Exception이 발생하면 해당 메소드에서 이루어진 모든 DB작업을 초기화 시킵니다.
-    public Long save(UserSaveRequestDto dto){
-        return userRepository.save(dto.toEntity()).getId();
-    }
 
-    @Transactional
-    //메소드 내에서 Exception이 발생하면 해당 메소드에서 이루어진 모든 DB작업을 초기화 시킵니다.
-    public User saveOrUpdate(OAuthAttributes attributes){
-
-        UserSaveRequestDto dto = UserSaveRequestDto.builder()
-                .name(attributes.getName())
-                .email(attributes.getEmail())
-                .picture(attributes.getPicture())
-                .build();
-
-        User user = userRepository.findByEmail(attributes.getEmail())
-                .map(entity -> {
-                    entity.updateName(attributes.getName());
-                    entity.updatePicture(attributes.getPicture());
-                    return entity;
-                })
-                .orElse(dto.toEntity());
-
-        return userRepository.save(user);
-    }
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Getter
 @Setter
@@ -33,4 +34,7 @@ public class ArchivesSaveRequestDto {
                 .author(author)
                 .build();
     }
+
+
+
 }

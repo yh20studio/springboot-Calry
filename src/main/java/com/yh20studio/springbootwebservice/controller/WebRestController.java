@@ -1,4 +1,4 @@
-package com.yh20studio.springbootwebservice.web;
+package com.yh20studio.springbootwebservice.controller;
 
 import com.yh20studio.springbootwebservice.dto.ArchivesMainResponseDto;
 import com.yh20studio.springbootwebservice.dto.ArchivesSaveRequestDto;

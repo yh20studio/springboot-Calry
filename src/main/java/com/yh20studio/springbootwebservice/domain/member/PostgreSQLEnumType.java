@@ -1,4 +1,4 @@
-package com.yh20studio.springbootwebservice.domain.user;
+package com.yh20studio.springbootwebservice.domain.member;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;

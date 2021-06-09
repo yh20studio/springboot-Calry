@@ -1,16 +1,11 @@
-package com.yh20studio.springbootwebservice.web;
+package com.yh20studio.springbootwebservice.controller;
 
-import io.restassured.RestAssured;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

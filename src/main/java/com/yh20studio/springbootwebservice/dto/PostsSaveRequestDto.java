@@ -1,7 +1,7 @@
 package com.yh20studio.springbootwebservice.dto;
 
 import com.yh20studio.springbootwebservice.domain.posts.Posts;
-import com.yh20studio.springbootwebservice.domain.user.User;
+import com.yh20studio.springbootwebservice.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,20 +14,20 @@ public class PostsSaveRequestDto {
 
     private String title;
     private String content;
-    private User user;
+    private Member member;
 
     @Builder
-    public PostsSaveRequestDto(String title, String content, User user){
+    public PostsSaveRequestDto(String title, String content, Member member){
         this.title = title;
         this.content = content;
-        this.user = user;
+        this.member = member;
     }
 
     public Posts toEntity(){
         return Posts.builder()
                 .title(title)
                 .content(content)
-                .user(user)
+                .member(member)
                 .build();
     }
 }

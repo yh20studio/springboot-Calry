@@ -1,7 +1,7 @@
 spring:
     profiles:
         active: test
-        include: google
+        include: google, jwt
     h2:
         console:
             enabled: true
@@ -12,11 +12,11 @@ spring:
 spring:
     profiles:
         active: dev
-        include: google, postgresql
+        include: google, postgresql, jwt
 
 ---
 
 spring:
     profiles:
         active: real
-        include: google, postgresql
+        include: google, postgresql, jwt

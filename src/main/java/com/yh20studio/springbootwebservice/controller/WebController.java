@@ -1,6 +1,6 @@
-package com.yh20studio.springbootwebservice.web;
+package com.yh20studio.springbootwebservice.controller;
 
-import com.yh20studio.springbootwebservice.dto.SessionUserDto;
+import com.yh20studio.springbootwebservice.dto.SessionMemberDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,10 +29,10 @@ public class WebController {
     @GetMapping("/login")
     public String index(Model model) {
 
-        SessionUserDto user = (SessionUserDto) httpSession.getAttribute("user");
-        if(user != null) {
-            model.addAttribute("userName", user.getName());
-            model.addAttribute("userImg", user.getPicture());
+        SessionMemberDto member = (SessionMemberDto) httpSession.getAttribute("member");
+        if(member != null) {
+            model.addAttribute("memberName", member.getName());
+            model.addAttribute("memberImg", member.getPicture());
         }
         return "test.html";
     }

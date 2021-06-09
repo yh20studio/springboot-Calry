@@ -1,6 +1,5 @@
 package com.yh20studio.springbootwebservice.dto;
 
-import com.yh20studio.springbootwebservice.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,29 +13,32 @@ public class OAuthAttributes {
     private String name;
     private String email;
     private String picture;
+    private String resource;
 
     @Builder
     OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email,
-                             String picture){
+                             String picture, String resource){
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
         this.email = email;
         this.picture = picture;
+        this.resource = resource;
     }
 
     public static OAuthAttributes of (String registrationId,
                                       String userNameAttributeName,
                                       Map<String, Object> attributes){
-        return ofGoogle(userNameAttributeName, attributes);
+        return ofGoogle(registrationId, userNameAttributeName, attributes);
     }
 
-    public static OAuthAttributes ofGoogle(String userNameAttributeName,
+    public static OAuthAttributes ofGoogle(String registrationId, String userNameAttributeName,
                                            Map<String, Object> attributes) {
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
                 .picture((String) attributes.get("picture"))
+                .resource(registrationId)
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();

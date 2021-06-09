@@ -3,11 +3,8 @@ package com.yh20studio.springbootwebservice.service;
 
 import com.yh20studio.springbootwebservice.domain.archives.Archives;
 import com.yh20studio.springbootwebservice.domain.archives.ArchivesRepository;
-import com.yh20studio.springbootwebservice.domain.user.User;
 import com.yh20studio.springbootwebservice.dto.ArchivesMainResponseDto;
 import com.yh20studio.springbootwebservice.dto.ArchivesSaveRequestDto;
-import com.yh20studio.springbootwebservice.dto.PostsMainResponseDto;
-import com.yh20studio.springbootwebservice.dto.PostsSaveRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

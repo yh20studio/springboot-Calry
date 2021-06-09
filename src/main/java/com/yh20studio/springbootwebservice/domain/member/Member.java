@@ -1,4 +1,4 @@
-package com.yh20studio.springbootwebservice.domain.user;
+package com.yh20studio.springbootwebservice.domain.member;
 
 import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
 import com.yh20studio.springbootwebservice.domain.posts.Posts;
@@ -19,8 +19,8 @@ import java.util.List;
         name = "pgsql_enum",
         typeClass = PostgreSQLEnumType.class
 )
-@Table(name="\"User\"")
-public class User extends BaseTimeEntity {
+@Table(name="\"Member\"")
+public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,8 +34,14 @@ public class User extends BaseTimeEntity {
     @Column
     private String picture;
 
+    @Column
+    private String resource;
+
+    @Column
+    private String password;
+
     //TODO: casecade 설정
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy="member")
     @OrderBy("id DESC")
     private List<Posts> posts;
 
@@ -71,12 +77,13 @@ public class User extends BaseTimeEntity {
         this.picture = picture;
     }
 
-
     @Builder
-    public User(String name, String email, String picture, Role role){
+    public Member(String name, String email, String picture, String resource, String password, Role role){
         this.name = name;
         this.email = email;
         this.picture = picture;
+        this.resource = resource;
+        this.password = password;
         this.role = role;
     }
 

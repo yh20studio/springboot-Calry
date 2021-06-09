@@ -1,30 +1,33 @@
 package com.yh20studio.springbootwebservice.dto;
 
-import com.yh20studio.springbootwebservice.domain.posts.Posts;
-import com.yh20studio.springbootwebservice.domain.user.User;
+import com.yh20studio.springbootwebservice.domain.member.Member;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Optional;
 
 @Getter
-public class UserMainResponseDto {
+public class MemberMainResponseDto {
     private Long id;
     private String name;
     private String email;
     private String picture;
-    private User.Role role;
+    private String resource;
+    private Member.Role role;
     private String modifiedDate;
 
-    public UserMainResponseDto(User entity){
+    public MemberMainResponseDto(Member entity){
         id = entity.getId();
         name = entity.getName();
         email = entity.getEmail();
         picture = entity.getPicture();
+        resource = entity.getResource();
         role = entity.getRole();
         modifiedDate = toStringDateTime(entity.getModifiedDate());
     }
+
 
     private String toStringDateTime(LocalDateTime localDateTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -32,5 +35,7 @@ public class UserMainResponseDto {
                 .map(formatter::format)
                 .orElse("");
     }
+
+
 
 }

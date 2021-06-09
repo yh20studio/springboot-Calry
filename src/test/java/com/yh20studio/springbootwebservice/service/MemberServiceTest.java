@@ -6,15 +6,10 @@ import com.yh20studio.springbootwebservice.dto.MemberSaveRequestDto;
 import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-class CustomOAuth2UserServiceTest {
-
-    @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
+public class MemberServiceTest {
 
     @Autowired
     private MemberService memberService;
@@ -68,5 +63,4 @@ class CustomOAuth2UserServiceTest {
         assertThat(member.getEmail()).isEqualTo(dto.getEmail());
         assertThat(member.getPicture()).isEqualTo(dto.getPicture());
     }
-
 }

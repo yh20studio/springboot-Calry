@@ -2,19 +2,16 @@ package com.yh20studio.springbootwebservice.service;
 
 import com.yh20studio.springbootwebservice.domain.posts.Posts;
 import com.yh20studio.springbootwebservice.domain.posts.PostsRepository;
-import com.yh20studio.springbootwebservice.domain.user.User;
-import com.yh20studio.springbootwebservice.domain.user.UserRepository;
-import com.yh20studio.springbootwebservice.dto.PostsMainResponseDto;
+import com.yh20studio.springbootwebservice.domain.member.Member;
+import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
 import com.yh20studio.springbootwebservice.dto.PostsSaveRequestDto;
-import com.yh20studio.springbootwebservice.dto.SessionUserDto;
+import com.yh20studio.springbootwebservice.dto.SessionMemberDto;
 import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,7 +25,7 @@ public class PostsServiceTest {
     private PostsRepository postsRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @After("")
     public void cleanup (){
@@ -38,17 +35,17 @@ public class PostsServiceTest {
     @Test
     public void Dto데이터가_posts테이블에_저장 (){
         //given
-        SessionUserDto userDto = SessionUserDto.builder()
+        SessionMemberDto memberDto = SessionMemberDto.builder()
                 .name("2young")
                 .email("tym9169@gmail.com")
                 .picture("none")
                 .build();
 
-        User user = userRepository.findByEmail(userDto.getEmail())
+        Member member = memberRepository.findByEmail(memberDto.getEmail())
                 .orElseThrow(() -> new NoSuchElementException());
 
         PostsSaveRequestDto dto = PostsSaveRequestDto.builder()
-                .user(user)
+                .member(member)
                 .content("테스트a")
                 .title("테스트 타이틀a")
                 .build();
@@ -58,9 +55,9 @@ public class PostsServiceTest {
         Posts posts = postsRepository.findById(savedPostsId)
                 .orElseThrow(() -> new NoSuchElementException());
 
-        User ownerUser = posts.getUser();
+        Member ownerMember = posts.getMember();
 
-        assertThat(ownerUser.getEmail()).isEqualTo(dto.getUser().getEmail());
+        assertThat(ownerMember.getEmail()).isEqualTo(dto.getMember().getEmail());
         assertThat(posts.getContent()).isEqualTo(dto.getContent());
         assertThat(posts.getTitle()).isEqualTo(dto.getTitle());
     }
