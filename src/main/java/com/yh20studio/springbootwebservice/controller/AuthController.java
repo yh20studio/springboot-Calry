@@ -1,6 +1,7 @@
 package com.yh20studio.springbootwebservice.controller;
 
 import com.yh20studio.springbootwebservice.dto.MemberSaveRequestDto;
+import com.yh20studio.springbootwebservice.dto.token.AccessTokenResponseDto;
 import com.yh20studio.springbootwebservice.dto.token.TokenRequestDto;
 import com.yh20studio.springbootwebservice.dto.token.TokenResponseDto;
 import com.yh20studio.springbootwebservice.service.AuthService;
@@ -25,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDto> login(@RequestBody MemberSaveRequestDto memberSaveRequestDto){
+    public ResponseEntity<AccessTokenResponseDto> login(@RequestBody MemberSaveRequestDto memberSaveRequestDto){
         return ResponseEntity.ok(authService.login(memberSaveRequestDto));
     }
 

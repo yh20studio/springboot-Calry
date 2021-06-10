@@ -6,6 +6,7 @@ import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
 import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshToken;
 import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshTokenRepository;
 import com.yh20studio.springbootwebservice.dto.MemberSaveRequestDto;
+import com.yh20studio.springbootwebservice.dto.token.AccessTokenResponseDto;
 import com.yh20studio.springbootwebservice.dto.token.TokenRequestDto;
 import com.yh20studio.springbootwebservice.dto.token.TokenResponseDto;
 import lombok.AllArgsConstructor;
@@ -32,20 +33,19 @@ public class AuthService {
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
 
-
         Member member = memberSaveRequestDto.toMember(passwordEncoder);
         return memberRepository.save(member).getId();
     }
 
     @Transactional
-    public TokenResponseDto login(MemberSaveRequestDto memberSaveRequestDto) {
+    public AccessTokenResponseDto login(MemberSaveRequestDto memberSaveRequestDto) {
         UsernamePasswordAuthenticationToken authenticationToken = memberSaveRequestDto.toAuthentication();
 
         // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
         //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행됨
-        System.out.println(authenticationToken);
+
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        System.out.println(authentication);
+
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenResponseDto tokenResponseDto = jwtUtil.generateTokenDto(authentication);
 
@@ -58,7 +58,10 @@ public class AuthService {
         refreshTokenRepository.save(refreshToken);
 
         // 5. 토큰 발급
-        return tokenResponseDto;
+        AccessTokenResponseDto accessTokenResponseDto = AccessTokenResponseDto.builder()
+                .token(tokenResponseDto.getAccessToken())
+                .build();
+        return accessTokenResponseDto;
     }
 
     @Transactional
