@@ -1,12 +1,15 @@
 package com.yh20studio.springbootwebservice.service;
 
 import com.yh20studio.springbootwebservice.component.JwtUtil;
+import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackList;
+import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackListRepository;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
 import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshToken;
 import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshTokenRepository;
-import com.yh20studio.springbootwebservice.dto.MemberSaveRequestDto;
-import com.yh20studio.springbootwebservice.dto.token.AccessTokenResponseDto;
+import com.yh20studio.springbootwebservice.dto.httpResponse.MessageResponse;
+import com.yh20studio.springbootwebservice.dto.member.MemberSaveRequestDto;
+import com.yh20studio.springbootwebservice.dto.token.AccessTokenRequestDto;
 import com.yh20studio.springbootwebservice.dto.token.TokenRequestDto;
 import com.yh20studio.springbootwebservice.dto.token.TokenResponseDto;
 import lombok.AllArgsConstructor;
@@ -26,6 +29,7 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
     private JwtUtil jwtUtil;
     private RefreshTokenRepository refreshTokenRepository;
+    private AccessTokenBlackListRepository accessTokenBlackListRepository;
 
     @Transactional
     public Long signup(MemberSaveRequestDto memberSaveRequestDto) {
@@ -38,14 +42,12 @@ public class AuthService {
     }
 
     @Transactional
-    public AccessTokenResponseDto login(MemberSaveRequestDto memberSaveRequestDto) {
+    public TokenResponseDto login(MemberSaveRequestDto memberSaveRequestDto) {
         UsernamePasswordAuthenticationToken authenticationToken = memberSaveRequestDto.toAuthentication();
 
         // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
         //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행됨
-
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenResponseDto tokenResponseDto = jwtUtil.generateTokenDto(authentication);
 
@@ -53,15 +55,44 @@ public class AuthService {
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(authentication.getName())
                 .value(tokenResponseDto.getRefreshToken())
+                .expires(tokenResponseDto.getRefreshTokenExpiresIn())
                 .build();
 
         refreshTokenRepository.save(refreshToken);
 
         // 5. 토큰 발급
-        AccessTokenResponseDto accessTokenResponseDto = AccessTokenResponseDto.builder()
-                .token(tokenResponseDto.getAccessToken())
+        return tokenResponseDto;
+    }
+
+    @Transactional
+    public MessageResponse logout(TokenRequestDto tokenRequestDto) {
+
+        if (!jwtUtil.validateToken(tokenRequestDto.getRefreshToken())) {
+            throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
+        }
+
+        Authentication authentication = jwtUtil.getAuthentication(tokenRequestDto.getAccessToken());
+
+        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
+
+        if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
+            throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
+        }
+
+        // AccessToken 블랙리스트 추가
+        AccessTokenRequestDto accessTokenRequestDto = AccessTokenRequestDto.builder()
+                .key(refreshToken.getKey())
+                .value(tokenRequestDto.getAccessToken())
+                .expires(tokenRequestDto.getAccessTokenExpiresIn())
                 .build();
-        return accessTokenResponseDto;
+
+        accessTokenBlackListRepository.save(accessTokenRequestDto.toEntity());
+
+        // RefreshToken 삭제
+        refreshTokenRepository.deleteByKey((refreshToken.getKey()));
+
+        return new MessageResponse("Logout");
     }
 
     @Transactional
@@ -87,7 +118,10 @@ public class AuthService {
         TokenResponseDto tokenResponseDto = jwtUtil.generateTokenDto(authentication);
 
         // 6. 저장소 정보 업데이트
-        RefreshToken newRefreshToken = refreshToken.updateValue(tokenResponseDto.getRefreshToken());
+        RefreshToken newRefreshToken = refreshToken
+                .updateValue(tokenResponseDto.getRefreshToken())
+                .updateExpires(tokenResponseDto.getRefreshTokenExpiresIn());
+
         refreshTokenRepository.save(newRefreshToken);
 
         // 토큰 발급

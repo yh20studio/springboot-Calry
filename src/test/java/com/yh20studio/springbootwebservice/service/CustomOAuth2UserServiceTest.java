@@ -2,7 +2,7 @@ package com.yh20studio.springbootwebservice.service;
 
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
-import com.yh20studio.springbootwebservice.dto.MemberSaveRequestDto;
+import com.yh20studio.springbootwebservice.dto.member.MemberSaveRequestDto;
 import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

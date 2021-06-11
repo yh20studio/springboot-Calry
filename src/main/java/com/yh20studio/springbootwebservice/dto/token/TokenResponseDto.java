@@ -11,14 +11,16 @@ public class TokenResponseDto {
     private String accessToken;
     private Long accessTokenExpiresIn;
     private String refreshToken;
+    private Long refreshTokenExpiresIn;
 
     @Builder
-    public TokenResponseDto(String token, String grantType, String accessToken, Long accessTokenExpiresIn, String refreshToken){
+    public TokenResponseDto(String token, String grantType, String accessToken, Long accessTokenExpiresIn, String refreshToken, Long refreshTokenExpiresIn){
         this.token = token;
         this.grantType = grantType;
         this.accessToken = accessToken;
         this.accessTokenExpiresIn = accessTokenExpiresIn;
         this.refreshToken = refreshToken;
+        this.refreshTokenExpiresIn = refreshTokenExpiresIn;
     }
 
 }

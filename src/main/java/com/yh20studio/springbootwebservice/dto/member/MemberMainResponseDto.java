@@ -1,4 +1,4 @@
-package com.yh20studio.springbootwebservice.dto;
+package com.yh20studio.springbootwebservice.dto.member;
 
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import lombok.Getter;

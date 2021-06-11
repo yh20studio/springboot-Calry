@@ -3,7 +3,9 @@ package com.yh20studio.springbootwebservice.controller;
 import com.yh20studio.springbootwebservice.dto.ArchivesMainResponseDto;
 import com.yh20studio.springbootwebservice.dto.ArchivesSaveRequestDto;
 import com.yh20studio.springbootwebservice.dto.PostsSaveRequestDto;
+import com.yh20studio.springbootwebservice.dto.member.MemberMainResponseDto;
 import com.yh20studio.springbootwebservice.service.ArchivesService;
+import com.yh20studio.springbootwebservice.service.MemberService;
 import com.yh20studio.springbootwebservice.service.PostsService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,7 @@ public class WebRestController {
     private PostsService postsService;
 
     private ArchivesService archivesService;
+    private MemberService memberService;
 
     /** public WebRestController(PostsRepository postsRepository) {
         this.postsRepository = postsRepository;
@@ -53,5 +56,10 @@ public class WebRestController {
     public String deleteArchives(@PathVariable("id") Long id){
         archivesService.delete(id);
         return "delete";
+    }
+
+    @GetMapping(value="/user/info", produces = "application/json; charset=UTF-8")
+    public MemberMainResponseDto getMyInfo() {
+        return memberService.getMyInfo();
     }
 }

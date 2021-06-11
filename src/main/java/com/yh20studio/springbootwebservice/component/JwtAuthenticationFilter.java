@@ -1,5 +1,6 @@
 package com.yh20studio.springbootwebservice.component;
 
+import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackListRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 //final이나 @NonNull인 필드 값만 파라미터로 받는 생성자를 만들어줍니다.
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -24,6 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static String BEARER_PREFIX = "Bearer ";
 
     private final JwtUtil jwtUtil;
+    private final AccessTokenBlackListRepository accessTokenBlackListRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException{
@@ -31,6 +33,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwt = resolveToken(request);
 
         if(StringUtils.hasText(jwt) && jwtUtil.validateToken(jwt)) {
+            if(accessTokenBlackListRepository.existsByValue(jwt)){
+                throw new RuntimeException("Access Token 이 유효하지 않습니다.");
+            }
             Authentication authentication = jwtUtil.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
@@ -39,9 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String resolveToken(HttpServletRequest request) {
-        System.out.println(request.toString());
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        System.out.println(bearerToken);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }

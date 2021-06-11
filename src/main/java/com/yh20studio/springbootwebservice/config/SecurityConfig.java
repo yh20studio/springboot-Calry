@@ -3,6 +3,7 @@ package com.yh20studio.springbootwebservice.config;
 import com.yh20studio.springbootwebservice.component.JwtAccessDeniedHandler;
 import com.yh20studio.springbootwebservice.component.JwtAuthenticationEntryPoint;
 import com.yh20studio.springbootwebservice.component.JwtUtil;
+import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackListRepository;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.service.CustomOAuth2UserService;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtUtil jwtUtil;
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private AccessTokenBlackListRepository accessTokenBlackListRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -62,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .logout().logoutSuccessUrl("/")
                 .and()
-                    .apply(new JwtSecurityConfig(jwtUtil))
+                    .apply(new JwtSecurityConfig(jwtUtil, accessTokenBlackListRepository))
                 .and()
                     .oauth2Login()
                     .userInfoEndpoint()

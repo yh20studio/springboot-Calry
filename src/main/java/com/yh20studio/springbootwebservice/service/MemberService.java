@@ -3,8 +3,8 @@ package com.yh20studio.springbootwebservice.service;
 import com.yh20studio.springbootwebservice.component.SecurityUtil;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
-import com.yh20studio.springbootwebservice.dto.MemberMainResponseDto;
-import com.yh20studio.springbootwebservice.dto.MemberSaveRequestDto;
+import com.yh20studio.springbootwebservice.dto.member.MemberMainResponseDto;
+import com.yh20studio.springbootwebservice.dto.member.MemberSaveRequestDto;
 import com.yh20studio.springbootwebservice.dto.OAuthAttributes;
 import lombok.AllArgsConstructor;
 
@@ -49,4 +49,5 @@ public class MemberService {
                 .map(MemberMainResponseDto::new)
                 .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
     }
+
 }

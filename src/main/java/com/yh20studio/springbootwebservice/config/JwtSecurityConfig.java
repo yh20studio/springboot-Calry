@@ -2,6 +2,7 @@ package com.yh20studio.springbootwebservice.config;
 
 import com.yh20studio.springbootwebservice.component.JwtAuthenticationFilter;
 import com.yh20studio.springbootwebservice.component.JwtUtil;
+import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackListRepository;
 import io.jsonwebtoken.Jwt;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
     private JwtUtil jwtUtil;
-
+    private AccessTokenBlackListRepository accessTokenBlackListRepository;
     @Override
     public void configure(HttpSecurity http){
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtil);
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtil, accessTokenBlackListRepository);
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }
