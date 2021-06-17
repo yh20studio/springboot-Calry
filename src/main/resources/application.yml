@@ -1,21 +1,15 @@
 spring:
     profiles:
-        active: test
-        include: google, jwt, log
-    h2:
-        console:
-            enabled: true
-
+        group:
+            "test": "google,jwt,postgresqltest"
+            "dev": "google,jwt,postgresql"
 ---
-
 spring:
-    profiles:
-        active: dev
-        include: google, postgresql, jwt
-
+    config:
+        activate:
+            on-profile: local
 ---
-
 spring:
-    profiles:
-        active: real
-        include: google, postgresql, jwt
+    config:
+        activate:
+            on-profile: dev

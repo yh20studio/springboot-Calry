@@ -1,8 +1,8 @@
 package com.yh20studio.springbootwebservice.controller;
 
-import com.yh20studio.springbootwebservice.dto.ArchivesMainResponseDto;
-import com.yh20studio.springbootwebservice.dto.ArchivesSaveRequestDto;
-import com.yh20studio.springbootwebservice.dto.PostsSaveRequestDto;
+import com.yh20studio.springbootwebservice.dto.archives.ArchivesMainResponseDto;
+import com.yh20studio.springbootwebservice.dto.archives.ArchivesSaveRequestDto;
+import com.yh20studio.springbootwebservice.dto.posts.PostsSaveRequestDto;
 import com.yh20studio.springbootwebservice.dto.member.MemberMainResponseDto;
 import com.yh20studio.springbootwebservice.service.ArchivesService;
 import com.yh20studio.springbootwebservice.service.MemberService;

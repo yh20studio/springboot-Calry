@@ -25,7 +25,7 @@ public class JwtUtil {
 
     private static String AUTHORITIES_KEY = "auth";
     private static String BEARER_TYPE = "bearer";
-    private static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            // 30분
+    private static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60;            // 60분
     private static long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
 
     private Key key;
@@ -42,6 +42,7 @@ public class JwtUtil {
                 .collect(Collectors.joining(","));
         long now = (new Date().getTime());
 
+        System.out.println(authorities);
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
@@ -81,8 +82,10 @@ public class JwtUtil {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
+        // username 값에 memberId 값을 넣어줌
         UserDetails userDetails = new User(claims.getSubject(), "", authorities);
-
+        // 인증 성공시 SecurityContextHolder에 저장할 Authentication 객체 생성
+        // 이 토큰은 id/password로 로그인한 Token이 아니라 jwtFilter를 거치고 온 요청에서 입력없이 로그인이 되는 과정
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 

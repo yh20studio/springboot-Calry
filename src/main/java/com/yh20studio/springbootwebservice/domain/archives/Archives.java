@@ -1,6 +1,7 @@
 package com.yh20studio.springbootwebservice.domain.archives;
 
 import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
+import com.yh20studio.springbootwebservice.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,17 +27,20 @@ public class Archives extends BaseTimeEntity {
     @Column(nullable = false)
     private String url;
 
-    private String author;
+    //TODO: casecade 설정
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(foreignKey = @ForeignKey(name = "member_id"))
+    private Member member;
 
     //해당 클래스의 빌더패턴 클래스를 생성
     //생성자나 빌더나 생성시점에 값을 채워주는 역할은 똑같습니다.
     //다만, 생성자의 경우 지금 채워야할 필드가 무엇인지 명확히 지정할수가 없습니다.
     @Builder
-    public Archives(String title, String content, String url, String author){
+    public Archives(String title, String content, String url, Member member){
         this.title = title;
         this.content = content;
         this.url = url;
-        this.author = author;
+        this.member = member;
     }
 
     public void updateWhole(String title, String content, String url){

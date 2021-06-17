@@ -1,4 +1,4 @@
-package com.yh20studio.springbootwebservice.domain;
+package com.yh20studio.springbootwebservice.domain.posts;
 
 import com.yh20studio.springbootwebservice.domain.posts.Posts;
 import com.yh20studio.springbootwebservice.domain.posts.PostsRepository;
@@ -10,14 +10,20 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-// @ExtendWith(SpringExtension.class)
-@SpringBootTest
+@SpringBootTest(properties = "spring.config.location=" +
+        "classpath:/application-jwt.yml" +
+        ",classpath:/application-google.yml" +
+        ",classpath:/application-postgresqltest.yml"
+)
+@AutoConfigureMockMvc(addFilters = false)
 public class PostsRepositoryTest {
 
     @Autowired
@@ -28,23 +34,14 @@ public class PostsRepositoryTest {
 
     @After("")
     public void cleanup() {
-        /**
-         이후 테스트 코드에 영향을 끼치지 않기 위해
-         테스트 메소드가 끝날때 마다 respository 전체 비우는 코드
-         **/
         postsRepository.deleteAll();
     }
     
     @Test
+    @Transactional
     public void 게시글저장_불러오기(){
         //given
-        SessionMemberDto memberDto = SessionMemberDto.builder()
-                .name("2young")
-                .email("tym9169@gmail.com")
-                .picture("none")
-                .build();
-
-        Member member = memberRepository.findByEmail(memberDto.getEmail())
+        Member member = memberRepository.findByEmail("yh20studio@gmail.com")
                 .orElseThrow(() -> new NoSuchElementException());
 
         postsRepository.save(Posts.builder()
@@ -62,17 +59,12 @@ public class PostsRepositoryTest {
     }
 
     @Test
+    @Transactional
     public void BaseTimeEntity_등록 (){
         //given
         LocalDateTime now = LocalDateTime.now();
 
-        SessionMemberDto memberDto = SessionMemberDto.builder()
-                .name("2young")
-                .email("tym9169@gmail.com")
-                .picture("none")
-                .build();
-
-        Member member = memberRepository.findByEmail(memberDto.getEmail())
+        Member member = memberRepository.findByEmail("yh20studio@gmail.com")
                 .orElseThrow(() -> new NoSuchElementException());
 
         postsRepository.save(Posts.builder()
@@ -90,10 +82,11 @@ public class PostsRepositoryTest {
         assertThat(posts.getModifiedDate()).isAfter(now);
     }
     @Test
+    @Transactional
     public void Member와Posts관계정의 (){
         //given
 
-        Member member = memberRepository.findByEmail("tym9169@gmail.com")
+        Member member = memberRepository.findByEmail("yh20studio@gmail.com")
                 .orElseThrow(() -> new NoSuchElementException());
         //when
         Posts savedPosts = postsRepository.save(Posts.builder()

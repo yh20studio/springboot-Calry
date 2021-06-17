@@ -1,6 +1,7 @@
-package com.yh20studio.springbootwebservice.dto;
+package com.yh20studio.springbootwebservice.dto.posts;
 
-import com.yh20studio.springbootwebservice.domain.archives.Archives;
+import com.yh20studio.springbootwebservice.domain.posts.Posts;
+import com.yh20studio.springbootwebservice.domain.member.Member;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -8,21 +9,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Getter
-public class ArchivesMainResponseDto {
+public class PostsMainResponseDto {
 
     private Long id;
     private String title;
     private String content;
-    private String url;
-    private String author;
+    private Member member;
     private String modifiedDate;
 
-    public ArchivesMainResponseDto(Archives entity){
+    public PostsMainResponseDto(Posts entity){
         id = entity.getId();
         title = entity.getTitle();
         content = entity.getContent();
-        url = entity.getUrl();
-        author = entity.getAuthor();
+        member = entity.getMember();
         modifiedDate = toStringDateTime(entity.getModifiedDate());
     }
 

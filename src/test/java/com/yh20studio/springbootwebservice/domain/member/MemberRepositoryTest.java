@@ -3,13 +3,18 @@ package com.yh20studio.springbootwebservice.domain.member;
 import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.config.location=" +
+        "classpath:/application-jwt.yml" +
+        ",classpath:/application-google.yml" +
+        ",classpath:/application-postgresqltest.yml"
+)
 public class MemberRepositoryTest {
 
     @Autowired

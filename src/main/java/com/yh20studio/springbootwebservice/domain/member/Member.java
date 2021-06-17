@@ -1,6 +1,7 @@
 package com.yh20studio.springbootwebservice.domain.member;
 
 import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
+import com.yh20studio.springbootwebservice.domain.archives.Archives;
 import com.yh20studio.springbootwebservice.domain.posts.Posts;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -44,6 +45,11 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy="member")
     @OrderBy("id DESC")
     private List<Posts> posts;
+
+    //TODO: casecade 설정
+    @OneToMany(mappedBy="member")
+    @OrderBy("id DESC")
+    private List<Archives> archives;
 
 
     @Column(nullable = false)

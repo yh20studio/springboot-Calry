@@ -1,8 +1,8 @@
 package com.yh20studio.springbootwebservice.service;
 
 import com.yh20studio.springbootwebservice.domain.posts.PostsRepository;
-import com.yh20studio.springbootwebservice.dto.PostsMainResponseDto;
-import com.yh20studio.springbootwebservice.dto.PostsSaveRequestDto;
+import com.yh20studio.springbootwebservice.dto.posts.PostsMainResponseDto;
+import com.yh20studio.springbootwebservice.dto.posts.PostsSaveRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

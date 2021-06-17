@@ -1,4 +1,4 @@
-package com.yh20studio.springbootwebservice.dto;
+package com.yh20studio.springbootwebservice.dto.posts;
 
 import com.yh20studio.springbootwebservice.domain.posts.Posts;
 import com.yh20studio.springbootwebservice.domain.member.Member;

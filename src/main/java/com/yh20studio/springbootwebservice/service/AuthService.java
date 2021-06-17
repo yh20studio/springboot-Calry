@@ -38,6 +38,7 @@ public class AuthService {
         }
 
         Member member = memberSaveRequestDto.toMember(passwordEncoder);
+
         return memberRepository.save(member).getId();
     }
 
