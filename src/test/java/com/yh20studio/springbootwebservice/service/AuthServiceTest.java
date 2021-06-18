@@ -40,6 +40,6 @@ import static org.mockito.Mockito.*;
 )
 class AuthServiceTest {
 
-
+  
 
 }

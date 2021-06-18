@@ -9,7 +9,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class MemberSaveRequestDto {
 
