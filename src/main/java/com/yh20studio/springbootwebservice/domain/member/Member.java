@@ -22,6 +22,7 @@ import java.util.List;
 )
 @Table(name="\"Member\"")
 public class Member extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -74,6 +75,9 @@ public class Member extends BaseTimeEntity {
         }
 
     }
+    public void updateId(Long id){
+        this.id = id;
+    }
 
     public void updateName(String name){
         this.name = name;
@@ -92,8 +96,6 @@ public class Member extends BaseTimeEntity {
         this.password = password;
         this.role = role;
     }
-
-
 
 }
 
