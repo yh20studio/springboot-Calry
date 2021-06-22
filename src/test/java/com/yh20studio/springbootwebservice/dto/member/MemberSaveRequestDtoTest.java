@@ -1,10 +1,12 @@
 package com.yh20studio.springbootwebservice.dto.member;
 
 import com.yh20studio.springbootwebservice.domain.member.Member;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -103,6 +105,32 @@ class MemberSaveRequestDtoTest {
         assertThat(member.getResource()).isEqualTo(resource);
         assertThat(passwordEncoder.matches(password, member.getPassword())).isTrue();
         assertThat(member.getRole()).isEqualTo(role);
+    }
+
+    @Test
+    public void MemberSaveRequestDto_toAuthentication(){
+        //given
+        String email = "test@naver.com";
+        String name = "test";
+        String picture = "picture";
+        String resource = "resource";
+        String password = "password";
+        Member.Role role = Member.Role.GUEST;
+
+        MemberSaveRequestDto dto = MemberSaveRequestDto.builder()
+                .email(email)
+                .name(name)
+                .picture(picture)
+                .resource(resource)
+                .password(password)
+                .role(role)
+                .build();
+        //when
+
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = dto.toAuthentication();
+
+        //then
+        Assertions.assertNotNull(usernamePasswordAuthenticationToken);
     }
 
 }

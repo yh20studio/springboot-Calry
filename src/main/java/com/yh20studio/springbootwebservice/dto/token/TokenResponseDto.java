@@ -6,7 +6,6 @@ import lombok.*;
 
 @Getter
 public class TokenResponseDto {
-    private String token;
     private String grantType;
     private String accessToken;
     private Long accessTokenExpiresIn;
@@ -14,8 +13,7 @@ public class TokenResponseDto {
     private Long refreshTokenExpiresIn;
 
     @Builder
-    public TokenResponseDto(String token, String grantType, String accessToken, Long accessTokenExpiresIn, String refreshToken, Long refreshTokenExpiresIn){
-        this.token = token;
+    public TokenResponseDto(String grantType, String accessToken, Long accessTokenExpiresIn, String refreshToken, Long refreshTokenExpiresIn){
         this.grantType = grantType;
         this.accessToken = accessToken;
         this.accessTokenExpiresIn = accessTokenExpiresIn;

@@ -7,7 +7,7 @@ spring:
 spring:
     config:
         activate:
-            on-profile: local
+            on-profile: test
 ---
 spring:
     config:

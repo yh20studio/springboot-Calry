@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
@@ -31,6 +32,9 @@ public class MemberServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @After("")
     public void cleanup (){
         memberRepository.deleteAll();
@@ -45,6 +49,7 @@ public class MemberServiceTest {
                 .email("yh20studio@gmail.com")
                 .picture("none")
                 .resource("google")
+                .password(passwordEncoder.encode("123"))
                 .role(Member.Role.GUEST)
                 .build();
 
