@@ -14,6 +14,7 @@ import com.yh20studio.springbootwebservice.dto.token.TokenRequestDto;
 import com.yh20studio.springbootwebservice.dto.token.TokenResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().logout().logoutSuccessUrl("/").permitAll()
                 .and().headers().frameOptions().sameOrigin()
                 .and().csrf().disable();**/
+
         http
                     .csrf().disable()
                     .exceptionHandling()

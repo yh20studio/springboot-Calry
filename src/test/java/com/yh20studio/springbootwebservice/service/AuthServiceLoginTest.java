@@ -9,7 +9,9 @@ import com.yh20studio.springbootwebservice.dto.member.MemberSaveRequestDto;
 import com.yh20studio.springbootwebservice.dto.token.TokenResponseDto;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,14 +22,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.BDDMockito.given;
@@ -59,7 +66,20 @@ public class AuthServiceLoginTest {
     @Autowired
     private AuthService authService;
 
-    @After("")
+    private TokenResponseDto tokenResponseDto;
+
+    @BeforeEach
+    public void setup() {
+        tokenResponseDto = TokenResponseDto.builder()
+                .grantType("grantType")
+                .accessToken("accessToken")
+                .accessTokenExpiresIn(1L)
+                .refreshToken("refreshToken")
+                .refreshTokenExpiresIn(1L)
+                .build();
+    }
+
+    @AfterEach
     public void cleanup (){
         memberRepository.deleteAll();
     }
@@ -67,14 +87,6 @@ public class AuthServiceLoginTest {
     @Test
     public void Member_DTO_login_WithRightData() throws RuntimeException {
         //given
-        TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
-                .grantType("grantType")
-                .accessToken("accessToken")
-                .accessTokenExpiresIn(1L)
-                .refreshToken("refreshToken")
-                .refreshTokenExpiresIn(1L)
-                .build();
-
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("test@naver.com", "123");
 
         Member savedMember = new Member("test", "test@naver.com", "none", "Google", passwordEncoder.encode("123"), Member.Role.GUEST);
