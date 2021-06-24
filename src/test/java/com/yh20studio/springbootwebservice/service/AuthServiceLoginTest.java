@@ -114,4 +114,28 @@ public class AuthServiceLoginTest {
 
     }
 
+    @Test
+    public void Member_DTO_login_WithWrongEmail() throws UsernameNotFoundException {
+        //given
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("test@naver.com", "123");
+
+        Member savedMember = new Member("test", "test@naver.com", "none", "Google", passwordEncoder.encode("123"), Member.Role.GUEST);
+
+        RefreshToken refreshToken = RefreshToken.builder()
+                .key("1")
+                .value("refreshToken")
+                .expires(1L)
+                .build();
+
+        given(memberSaveRequestDto.toAuthentication()).willReturn(authenticationToken);
+        given(memberRepository.findByEmail(anyString())).willThrow(new UsernameNotFoundException(savedMember.getEmail() + "-> 데이터베이스에서 찾을 수 없습니다."));
+
+        //when
+        UsernameNotFoundException exception = assertThrows(UsernameNotFoundException.class, () -> authService.login(memberSaveRequestDto));
+        //then
+        assertEquals(savedMember.getEmail() + "-> 데이터베이스에서 찾을 수 없습니다.", exception.getMessage());
+        verify(memberSaveRequestDto, times(1)).toAuthentication();
+        verify(memberRepository, times(1)).findByEmail(anyString());
+    }
+
 }
