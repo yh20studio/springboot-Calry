@@ -138,4 +138,29 @@ public class AuthServiceLoginTest {
         verify(memberRepository, times(1)).findByEmail(anyString());
     }
 
+    @Test
+    public void Member_DTO_login_WithWrongPassword() throws BadCredentialsException {
+        //given
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("test@naver.com", "1234");
+
+        Member savedMember = new Member("test", "test@naver.com", "none", "Google", passwordEncoder.encode("123"), Member.Role.GUEST);
+
+        RefreshToken refreshToken = RefreshToken.builder()
+                .key("1")
+                .value("refreshToken")
+                .expires(1L)
+                .build();
+
+        given(memberSaveRequestDto.toAuthentication()).willReturn(authenticationToken);
+        given(memberRepository.findByEmail(anyString())).willReturn(Optional.of(savedMember));
+
+        //when
+        BadCredentialsException exception = assertThrows(BadCredentialsException.class, () -> authService.login(memberSaveRequestDto));
+
+        //then
+        assertEquals("Password does not match stored value", exception.getMessage());
+        verify(memberSaveRequestDto, times(1)).toAuthentication();
+        verify(memberRepository, times(1)).findByEmail(anyString());
+    }
+
 }
