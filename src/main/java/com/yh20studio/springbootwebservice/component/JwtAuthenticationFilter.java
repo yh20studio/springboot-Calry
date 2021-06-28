@@ -1,9 +1,11 @@
 package com.yh20studio.springbootwebservice.component;
 
 import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackListRepository;
+import com.yh20studio.springbootwebservice.domain.exception.RestException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -34,7 +36,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if(StringUtils.hasText(jwt) && jwtUtil.validateToken(jwt)) {
             if(accessTokenBlackListRepository.existsByValue(jwt)){
-                throw new RuntimeException("Access Token 이 유효하지 않습니다.");
+                //401 Error
+                throw new RestException(HttpStatus.UNAUTHORIZED, "Access Token 이 유효하지 않습니다.");
             }
             Authentication authentication = jwtUtil.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);

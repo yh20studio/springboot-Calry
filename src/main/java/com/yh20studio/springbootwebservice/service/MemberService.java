@@ -1,6 +1,7 @@
 package com.yh20studio.springbootwebservice.service;
 
 import com.yh20studio.springbootwebservice.component.SecurityUtil;
+import com.yh20studio.springbootwebservice.domain.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
 import com.yh20studio.springbootwebservice.dto.member.MemberMainResponseDto;
@@ -8,6 +9,7 @@ import com.yh20studio.springbootwebservice.dto.member.MemberSaveRequestDto;
 import com.yh20studio.springbootwebservice.dto.OAuthAttributes;
 import lombok.AllArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +49,8 @@ public class MemberService {
     public MemberMainResponseDto getMyInfo() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
                 .map(MemberMainResponseDto::new)
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
+                // 404 error
+                .orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "로그인 유저 정보가 없습니다."));
     }
 
 

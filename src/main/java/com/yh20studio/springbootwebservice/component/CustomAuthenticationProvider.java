@@ -1,7 +1,9 @@
 package com.yh20studio.springbootwebservice.component;
 
+import com.yh20studio.springbootwebservice.domain.exception.RestException;
 import com.yh20studio.springbootwebservice.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -33,7 +35,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         }
 
         String password = authentication.getCredentials().toString();
-
+        System.out.println("loadUser");
         UserDetails loadedUser = customUserDetailsService.loadUserByUsername(username);
 
         if(!loadedUser.isAccountNonLocked()){
@@ -49,7 +51,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         } /* 실질적인 인증 */
 
         if(!passwordEncoder.matches(password, loadedUser.getPassword())){
-            throw new BadCredentialsException("Password does not match stored value");
+            throw new RestException(HttpStatus.NOT_FOUND, "Password does not match stored value");
         } /* checker */
 
         if(!loadedUser.isCredentialsNonExpired()){

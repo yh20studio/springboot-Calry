@@ -1,6 +1,8 @@
 package com.yh20studio.springbootwebservice.service;
 
+import com.yh20studio.springbootwebservice.component.CustomAuthenticationProvider;
 import com.yh20studio.springbootwebservice.component.JwtUtil;
+import com.yh20studio.springbootwebservice.domain.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
 import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshToken;
@@ -35,8 +37,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -155,7 +156,7 @@ public class AuthServiceLoginTest {
         given(memberRepository.findByEmail(anyString())).willReturn(Optional.of(savedMember));
 
         //when
-        BadCredentialsException exception = assertThrows(BadCredentialsException.class, () -> authService.login(memberSaveRequestDto));
+        RestException exception = assertThrows(RestException.class, () -> authService.login(memberSaveRequestDto));
 
         //then
         assertEquals("Password does not match stored value", exception.getMessage());

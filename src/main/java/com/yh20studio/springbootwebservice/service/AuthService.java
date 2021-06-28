@@ -3,6 +3,7 @@ package com.yh20studio.springbootwebservice.service;
 import com.yh20studio.springbootwebservice.component.JwtUtil;
 import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackList;
 import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackListRepository;
+import com.yh20studio.springbootwebservice.domain.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
 import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshToken;
@@ -13,6 +14,7 @@ import com.yh20studio.springbootwebservice.dto.token.AccessTokenRequestDto;
 import com.yh20studio.springbootwebservice.dto.token.TokenRequestDto;
 import com.yh20studio.springbootwebservice.dto.token.TokenResponseDto;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -35,7 +37,8 @@ public class AuthService {
     @Transactional
     public Long signup(MemberSaveRequestDto memberSaveRequestDto) {
         if(memberRepository.existsByEmail(memberSaveRequestDto.getEmail())){
-            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+            //409 Error
+            throw new RestException(HttpStatus.CONFLICT, "이미 가입되어 있는 유저입니다.");
         }
 
         Member member = memberSaveRequestDto.toMember(passwordEncoder);
@@ -70,16 +73,19 @@ public class AuthService {
     public MessageResponse logout(TokenRequestDto tokenRequestDto) {
 
         if (!jwtUtil.validateToken(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
+            //401 Error
+            throw new RestException(HttpStatus.UNAUTHORIZED, "Refresh Token 이 유효하지 않습니다.");
         }
 
         Authentication authentication = jwtUtil.getAuthentication(tokenRequestDto.getAccessToken());
 
         RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
+                //401 Error
+                .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "로그아웃 된 사용자입니다."));
 
         if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
+            //401 Error
+            throw new RestException(HttpStatus.UNAUTHORIZED, "토큰의 유저 정보가 일치하지 않습니다.");
         }
 
         // AccessToken 블랙리스트 추가
@@ -101,7 +107,8 @@ public class AuthService {
     public TokenResponseDto reissue(TokenRequestDto tokenRequestDto) {
         // 1. Refresh Token 검증
         if (!jwtUtil.validateToken(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
+            //401 Error
+            throw new RestException(HttpStatus.UNAUTHORIZED, "Refresh Token 이 유효하지 않습니다");
         }
 
         // 2. Access Token 에서 Member ID 가져오기
@@ -109,11 +116,13 @@ public class AuthService {
 
         // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져옴
         RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
+                //401 Error
+                .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "로그아웃 된 사용자입니다."));
 
         // 4. Refresh Token 일치하는지 검사
         if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
+            //401 Error
+            throw new RestException(HttpStatus.UNAUTHORIZED, "토큰의 유저 정보가 일치하지 않습니다.");
         }
 
         // 5. 새로운 토큰 생성
