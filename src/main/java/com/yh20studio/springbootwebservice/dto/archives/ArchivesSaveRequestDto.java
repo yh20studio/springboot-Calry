@@ -20,11 +20,10 @@ public class ArchivesSaveRequestDto {
     private Member member;
 
     @Builder
-    public ArchivesSaveRequestDto(String title, String content, String url, Member member){
+    public ArchivesSaveRequestDto(String title, String content, String url){
         this.title = title;
         this.content = content;
         this.url = url;
-        this.member = member;
     }
 
     public Archives toEntity(){

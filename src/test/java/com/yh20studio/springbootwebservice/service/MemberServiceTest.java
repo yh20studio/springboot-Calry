@@ -33,6 +33,9 @@ public class MemberServiceTest {
     private MemberRepository memberRepository;
 
     @Autowired
+    private SecurityUtil securityUtil;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @After("")
@@ -95,7 +98,7 @@ public class MemberServiceTest {
                 .build();
 
         //when
-        SecurityUtil.getCurrentMemberId();
+        securityUtil.getCurrentMemberId();
         MemberMainResponseDto myInfo = memberService.getMyInfo();
 
         //then

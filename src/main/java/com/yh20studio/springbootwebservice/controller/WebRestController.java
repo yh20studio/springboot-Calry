@@ -37,7 +37,7 @@ public class WebRestController {
         return postsService.save(dto);
     }
 
-    @PostMapping(value="/archives/post", produces = "application/json; charset=UTF-8")
+    @PostMapping(value="/archives", produces = "application/json; charset=UTF-8")
     public Long saveArchives(@RequestBody ArchivesSaveRequestDto dto){
         return archivesService.save(dto);
     }
@@ -47,9 +47,9 @@ public class WebRestController {
         return archivesService.update(id, dto);
     }
 
-    @GetMapping(value="/archives/get", produces = "application/json; charset=UTF-8")
-    public List<ArchivesMainResponseDto> findAllDescArchives(){
-        return archivesService.findAllDesc();
+    @GetMapping(value="/archives", produces = "application/json; charset=UTF-8")
+    public List<ArchivesMainResponseDto> findMyAllDescArchives(){
+        return archivesService.findMyAllDesc();
     }
 
     @DeleteMapping(value="/archives/delete/{id}", produces = "application/json; charset=UTF-8")

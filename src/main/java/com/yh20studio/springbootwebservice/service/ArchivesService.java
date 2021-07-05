@@ -1,11 +1,21 @@
 package com.yh20studio.springbootwebservice.service;
 
 
+import com.yh20studio.springbootwebservice.component.JwtUtil;
+import com.yh20studio.springbootwebservice.component.SecurityUtil;
 import com.yh20studio.springbootwebservice.domain.archives.Archives;
 import com.yh20studio.springbootwebservice.domain.archives.ArchivesRepository;
+import com.yh20studio.springbootwebservice.domain.exception.RestException;
+import com.yh20studio.springbootwebservice.domain.member.Member;
+import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
 import com.yh20studio.springbootwebservice.dto.archives.ArchivesMainResponseDto;
 import com.yh20studio.springbootwebservice.dto.archives.ArchivesSaveRequestDto;
+import com.yh20studio.springbootwebservice.dto.token.TokenRequestDto;
+import com.yh20studio.springbootwebservice.dto.token.TokenResponseDto;
+import io.jsonwebtoken.Jwt;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,16 +28,29 @@ import java.util.stream.Collectors;
 public class ArchivesService {
 
     private ArchivesRepository archivesRepository;
+    private MemberRepository memberRepository;
+    private SecurityUtil securityUtil;
 
     @Transactional(readOnly = true)
-    public List<ArchivesMainResponseDto> findAllDesc(){
-        return archivesRepository.findAllDesc()
+    public List<ArchivesMainResponseDto> findMyAllDesc(){
+
+        Long memberId = securityUtil.getCurrentMemberId();
+
+        return archivesRepository.findAllByMemberDesc(memberId)
                 .map(ArchivesMainResponseDto::new) //람다식 .map(posts -> new PostsMainResponseDto(posts))
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public Long save(ArchivesSaveRequestDto dto){
+
+        Long memberId = securityUtil.getCurrentMemberId();
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
+
+        dto.setMember(member);
+
         return archivesRepository.save(dto.toEntity()).getId();
     }
 

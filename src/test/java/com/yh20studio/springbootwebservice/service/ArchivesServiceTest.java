@@ -52,20 +52,22 @@ class ArchivesServiceTest {
                 .title("게시글입니다.")
                 .content("가장 아래에 있어야 합니다.")
                 .url("url")
-                .member(member)
                 .build();
+
+        firstDto.setMember(member);
 
         ArchivesSaveRequestDto secondDto = ArchivesSaveRequestDto.builder()
                 .title("조회 테스트 게시글입니다.")
                 .content("가장 위에 있어야 합니다.")
                 .url("url")
-                .member(member)
                 .build();
+
+        secondDto.setMember(member);
 
         archivesService.save(firstDto);
         archivesService.save(secondDto);
         //when
-        List<ArchivesMainResponseDto> archivesList =  archivesService.findAllDesc();
+        List<ArchivesMainResponseDto> archivesList =  archivesService.findMyAllDesc();
 
         //then
         ArchivesMainResponseDto lastestDto = archivesList.get(0);
@@ -75,30 +77,6 @@ class ArchivesServiceTest {
         assertThat(lastestDto.getUrl()).isEqualTo(secondDto.getUrl());
     }
 
-    @Test
-    @Transactional
-    public void Dto데이터가_Archives테이블에_저장 (){
-        //given
-        Member member = memberRepository.findByEmail("yh20studio@gmail.com")
-                .orElseThrow(() -> new NoSuchElementException());
-
-        ArchivesSaveRequestDto dto = ArchivesSaveRequestDto.builder()
-                .member(member)
-                .content("테스트")
-                .title("테스트 타이틀")
-                .url("url")
-                .build();
-
-        //when
-        archivesService.save(dto);
-
-        //then
-        Archives archives = archivesRepository.findAll().get(0);
-        assertThat(archives.getMember()).isEqualTo(dto.getMember());
-        assertThat(archives.getContent()).isEqualTo(dto.getContent());
-        assertThat(archives.getTitle()).isEqualTo(dto.getTitle());
-        assertThat(archives.getUrl()).isEqualTo(dto.getUrl());
-    }
 
     @Test
     @Transactional
@@ -111,8 +89,10 @@ class ArchivesServiceTest {
                 .title("테스트 타이틀")
                 .content("테스트")
                 .url("url")
-                .member(member)
                 .build();
+
+        dto.setMember(member);
+
         Long id = archivesService.save(dto);
 
         //when
@@ -141,8 +121,10 @@ class ArchivesServiceTest {
                 .title("삭제 테스트 타이틀")
                 .content("삭제됩니다.")
                 .url("url")
-                .member(member)
                 .build();
+
+        dto.setMember(member);
+
         Long dtoId = archivesService.save(dto);
 
         //when
