@@ -19,13 +19,8 @@ import java.util.List;
 // 이 애너테이션이 생성자를 대신 생성해주는 것이다.
 public class WebRestController {
     private PostsService postsService;
-
     private ArchivesService archivesService;
     private MemberService memberService;
-
-    /** public WebRestController(PostsRepository postsRepository) {
-        this.postsRepository = postsRepository;
-    } **/
 
     @GetMapping(value="/hello", produces = "application/json; charset=UTF-8")
     public String hello(){
@@ -42,8 +37,8 @@ public class WebRestController {
         return archivesService.save(dto);
     }
 
-    @PutMapping(value="/archives/put/{id}", produces = "application/json; charset=UTF-8")
-    public Long updateArchives(@PathVariable("id") Long id, @RequestBody ArchivesSaveRequestDto dto){
+    @PutMapping(value="/archives/{id}", produces = "application/json; charset=UTF-8")
+    public ArchivesMainResponseDto updateArchives(@PathVariable("id") Long id, @RequestBody ArchivesSaveRequestDto dto){
         return archivesService.update(id, dto);
     }
 
@@ -52,7 +47,7 @@ public class WebRestController {
         return archivesService.findMyAllDesc();
     }
 
-    @DeleteMapping(value="/archives/delete/{id}", produces = "application/json; charset=UTF-8")
+    @DeleteMapping(value="/archives/{id}", produces = "application/json; charset=UTF-8")
     public String deleteArchives(@PathVariable("id") Long id){
         archivesService.delete(id);
         return "delete";

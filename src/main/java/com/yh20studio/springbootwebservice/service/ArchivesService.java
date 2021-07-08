@@ -55,7 +55,7 @@ public class ArchivesService {
     }
 
     @Transactional
-    public Long update(Long id, ArchivesSaveRequestDto dto){
+    public ArchivesMainResponseDto update(Long id, ArchivesSaveRequestDto dto){
         Archives archives = archivesRepository.findById(id)
                 .map(entity -> {entity.updateWhole(
                         dto.getTitle(),
@@ -65,7 +65,8 @@ public class ArchivesService {
                 })
                 .orElseThrow(() -> new NoSuchElementException());
 
-        return archivesRepository.save(archives).getId();
+        return new ArchivesMainResponseDto(archivesRepository.save(archives));
+
     }
 
     @Transactional
