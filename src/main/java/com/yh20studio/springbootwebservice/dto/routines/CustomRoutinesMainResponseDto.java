@@ -1,33 +1,31 @@
-package com.yh20studio.springbootwebservice.dto.member;
+package com.yh20studio.springbootwebservice.dto.routines;
 
 import com.yh20studio.springbootwebservice.domain.member.Member;
+import com.yh20studio.springbootwebservice.domain.customRoutines.CustomRoutines;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 import java.util.Optional;
 
 @Getter
-public class MemberMainResponseDto {
+public class CustomRoutinesMainResponseDto {
+
     private Long id;
-    private String name;
-    private String email;
-    private String picture;
-    private String resource;
-    private Member.Role role;
+    private String icon;
+    private String title;
+    private Integer duration;
+    private Member member;
     private String modifiedDate;
 
-    public MemberMainResponseDto(Member entity){
+    public CustomRoutinesMainResponseDto(CustomRoutines entity){
         id = entity.getId();
-        name = entity.getName();
-        email = entity.getEmail();
-        picture = entity.getPicture();
-        resource = entity.getResource();
-        role = entity.getRole();
+        icon = entity.getIcon();
+        title = entity.getTitle();
+        duration = entity.getDuration();
+        member = entity.getMember();
         modifiedDate = toStringDateTime(entity.getModified_date());
     }
-
 
     private String toStringDateTime(LocalDateTime localDateTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -35,5 +33,4 @@ public class MemberMainResponseDto {
                 .map(formatter::format)
                 .orElse("");
     }
-
 }

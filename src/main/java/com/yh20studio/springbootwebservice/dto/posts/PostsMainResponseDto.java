@@ -22,7 +22,7 @@ public class PostsMainResponseDto {
         title = entity.getTitle();
         content = entity.getContent();
         member = entity.getMember();
-        modifiedDate = toStringDateTime(entity.getModifiedDate());
+        modifiedDate = toStringDateTime(entity.getModified_date());
     }
 
     private String toStringDateTime(LocalDateTime localDateTime){

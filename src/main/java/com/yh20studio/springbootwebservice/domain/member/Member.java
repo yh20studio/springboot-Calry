@@ -3,6 +3,9 @@ package com.yh20studio.springbootwebservice.domain.member;
 import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
 import com.yh20studio.springbootwebservice.domain.archives.Archives;
 import com.yh20studio.springbootwebservice.domain.posts.Posts;
+import com.yh20studio.springbootwebservice.domain.customRoutines.CustomRoutines;
+import com.yh20studio.springbootwebservice.domain.routines.Routines;
+import com.yh20studio.springbootwebservice.domain.routines.Routines_groups;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,6 +54,21 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy="member")
     @OrderBy("id DESC")
     private List<Archives> archives;
+
+    //TODO: casecade 설정
+    @OneToMany(mappedBy="member")
+    @OrderBy("id DESC")
+    private List<Routines> routinesList;
+
+    //TODO: casecade 설정
+    @OneToMany(mappedBy="member")
+    @OrderBy("id DESC")
+    private List<CustomRoutines> customRoutinesList;
+
+    //TODO: casecade 설정
+    @OneToMany(mappedBy="member")
+    @OrderBy("id DESC")
+    private List<Routines_groups> routines_groupsList;
 
 
     @Column(nullable = false)
