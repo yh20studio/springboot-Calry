@@ -39,14 +39,6 @@ public class Member extends BaseTimeEntity {
 
     @Column
     @JsonIgnore
-    private String picture;
-
-    @Column
-    @JsonIgnore
-    private String resource;
-
-    @Column
-    @JsonIgnore
     private String password;
 
     @OneToMany(mappedBy="member")
@@ -93,11 +85,9 @@ public class Member extends BaseTimeEntity {
 
 
     @Builder
-    public Member(String name, String email, String picture, String resource, String password, Role role){
+    public Member(String name, String email, String password, Role role){
         this.name = name;
         this.email = email;
-        this.picture = picture;
-        this.resource = resource;
         this.password = password;
         this.role = role;
     }

@@ -14,8 +14,6 @@ public class MemberSaveRequestDto {
 
     private String name;
     private String email;
-    private String picture;
-    private String resource;
     private String password;
     private Member.Role role;
 
@@ -23,8 +21,6 @@ public class MemberSaveRequestDto {
     public MemberSaveRequestDto(String name, String email, String picture, String resource, String password, Member.Role role){
         this.name = name;
         this.email = email;
-        this.picture = picture;
-        this.resource = resource;
         this.password = password;
         this.role = role;
     }
@@ -33,8 +29,6 @@ public class MemberSaveRequestDto {
         return Member.builder()
                 .name(name)
                 .email(email)
-                .picture(picture)
-                .resource(resource)
                 .role(Member.Role.GUEST)
                 .build();
     }
@@ -43,8 +37,6 @@ public class MemberSaveRequestDto {
         return Member.builder()
                 .name(name)
                 .email(email)
-                .picture(picture)
-                .resource(resource)
                 .password(passwordEncoder.encode(password))
                 .role(Member.Role.GUEST)
                 .build();

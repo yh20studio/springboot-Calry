@@ -13,8 +13,6 @@ public class MemberMainResponseDto {
     private Long id;
     private String name;
     private String email;
-    private String picture;
-    private String resource;
     private Member.Role role;
     private String modifiedDate;
 
@@ -22,8 +20,6 @@ public class MemberMainResponseDto {
         id = entity.getId();
         name = entity.getName();
         email = entity.getEmail();
-        picture = entity.getPicture();
-        resource = entity.getResource();
         role = entity.getRole();
         modifiedDate = toStringDateTime(entity.getModified_date());
     }
