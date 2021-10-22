@@ -33,7 +33,7 @@ public class SchedulesMainResponseDto {
         start_date = entity.getStart_date();
         end_date = entity.getEnd_date();
         labels = new LabelsMainResponseDto(entity.getLabels());
-        member = new MemberSummaryDto(entity.getMember());
+        member = new MemberSummaryDto(entity.getLabels().getMember());
     }
 
     // 일정의 시작날짜의 따라서 오름차순으로 정리하는 Comparator

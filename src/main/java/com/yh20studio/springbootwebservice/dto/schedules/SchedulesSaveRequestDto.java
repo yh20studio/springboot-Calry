@@ -22,7 +22,6 @@ public class SchedulesSaveRequestDto {
     private LocalDateTime start_date;
     private LocalDateTime end_date;
     private Labels labels;
-    private Member member;
 
     @Builder
     public SchedulesSaveRequestDto(String title, String content, String start_date, String end_date, Labels labels, Member member){
@@ -31,7 +30,6 @@ public class SchedulesSaveRequestDto {
         this.start_date = stringToLocalDateTime(start_date);
         this.end_date = stringToLocalDateTime(end_date);
         this.labels = labels;
-        this.member = member;
     }
 
     public Schedules toEntity(){
@@ -41,7 +39,6 @@ public class SchedulesSaveRequestDto {
                 .start_date(start_date)
                 .end_date(end_date)
                 .labels(labels)
-                .member(member)
                 .build();
     }
 
@@ -49,11 +46,5 @@ public class SchedulesSaveRequestDto {
     public LocalDateTime stringToLocalDateTime(String str){
         return LocalDateTime.parse(str, DateTimeFormatter.ISO_LOCAL_DATE_TIME)   ;
     }
-
-    public void setMember(Member member){
-        this.member = member;
-    }
-
-
 
 }

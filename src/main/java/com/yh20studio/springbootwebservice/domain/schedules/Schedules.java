@@ -34,22 +34,16 @@ public class Schedules extends BaseTimeEntity {
     private LocalDateTime end_date;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(foreignKey = @ForeignKey(name = "member_id"))
-    @JsonIgnore
-    private Member member;
-
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(foreignKey = @ForeignKey(name = "labels_id"))
     @JsonIgnore
     private Labels labels;
 
     @Builder
-    public Schedules(String title, String content, LocalDateTime start_date, LocalDateTime end_date, Member member, Labels labels){
+    public Schedules(String title, String content, LocalDateTime start_date, LocalDateTime end_date,  Labels labels){
         this.title = title;
         this.content = content;
         this.start_date = start_date;
         this.end_date = end_date;
-        this.member = member;
         this.labels = labels;
     }
 

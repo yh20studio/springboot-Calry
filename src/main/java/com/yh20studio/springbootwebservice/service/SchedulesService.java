@@ -603,8 +603,6 @@ public class SchedulesService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
 
-        dto.setMember(member);
-
         return new SchedulesMainResponseDto(schedulesRepository.save(dto.toEntity()));
     }
 
