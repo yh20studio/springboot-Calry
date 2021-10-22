@@ -2,7 +2,6 @@ package com.yh20studio.springbootwebservice.dto.token;
 
 import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackList;
 import com.yh20studio.springbootwebservice.domain.member.Member;
-import com.yh20studio.springbootwebservice.domain.posts.Posts;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

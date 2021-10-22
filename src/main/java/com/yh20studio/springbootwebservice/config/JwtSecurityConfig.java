@@ -16,6 +16,8 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
 
     private JwtUtil jwtUtil;
     private AccessTokenBlackListRepository accessTokenBlackListRepository;
+
+    // HttpSecurity에 직접 만든 jwtAuthenticationFilter를 추가
     @Override
     public void configure(HttpSecurity http){
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtil, accessTokenBlackListRepository);

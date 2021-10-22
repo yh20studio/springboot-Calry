@@ -2,7 +2,8 @@ package com.yh20studio.springbootwebservice.dto.routines;
 
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.routines.Routines;
-import com.yh20studio.springbootwebservice.domain.routines.Routines_memos;
+import com.yh20studio.springbootwebservice.domain.routinesGroups.RoutinesGroups;
+import com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemos;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -16,10 +17,10 @@ public class RoutinesMainResponseDto {
     private Long id;
     private String icon;
     private String title;
-    private List<Routines_memos> routines_memosList;
+    private List<RoutinesMemos> routines_memosList;
     private Integer duration;
+    private RoutinesGroups routines_groups;
     private Member member;
-    private String modifiedDate;
 
     public RoutinesMainResponseDto(Routines entity){
         id = entity.getId();
@@ -27,14 +28,8 @@ public class RoutinesMainResponseDto {
         title = entity.getTitle();
         routines_memosList = entity.getRoutines_memosList();
         duration = entity.getDuration();
+        routines_groups = entity.getRoutines_groups();
         member = entity.getMember();
-        modifiedDate = toStringDateTime(entity.getModified_date());
     }
 
-    private String toStringDateTime(LocalDateTime localDateTime){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return Optional.ofNullable(localDateTime)
-                .map(formatter::format)
-                .orElse("");
-    }
 }

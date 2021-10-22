@@ -18,8 +18,4 @@ public interface RoutinesRepository extends JpaRepository<Routines, Long> {
             "ORDER BY p.id DESC")
     Stream<Routines> findAllByMemberDesc(@Param(value = "member") Long member);
 
-    @Query("SELECT p " +
-            "FROM Routines p " +
-            "ORDER BY p.id DESC")
-    Stream<Routines> findAllDesc();
 }

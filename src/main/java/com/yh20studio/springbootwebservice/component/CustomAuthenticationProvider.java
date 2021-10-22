@@ -8,7 +8,6 @@ import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +34,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         }
 
         String password = authentication.getCredentials().toString();
-        System.out.println("loadUser");
         UserDetails loadedUser = customUserDetailsService.loadUserByUsername(username);
 
         if(!loadedUser.isAccountNonLocked()){
@@ -46,17 +44,20 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new DisabledException("User is disabled");
         }
 
+        // 실질적인 인증
         if(!loadedUser.isAccountNonExpired()){
             throw new AccountExpiredException("User account has expired");
-        } /* 실질적인 인증 */
+        }
 
+        // checker
         if(!passwordEncoder.matches(password, loadedUser.getPassword())){
             throw new RestException(HttpStatus.NOT_FOUND, "Password does not match stored value");
-        } /* checker */
+        }
 
+        // 인증 완료
         if(!loadedUser.isCredentialsNonExpired()){
             throw new CredentialsExpiredException("User credentials have expired");
-        } /* 인증 완료 */
+        }
 
         UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(
                 loadedUser, null, loadedUser.getAuthorities());

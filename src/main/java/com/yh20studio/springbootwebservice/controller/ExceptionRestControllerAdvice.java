@@ -13,6 +13,7 @@ import java.util.Map;
 // @ControllerAdvice와 @ResponseBody를 합쳐놓은 어노테이션이다. @ControllerAdvice와 동일한 역할을 수행하고, 추가적으로 @ResponseBody를 통해 객체를 리턴할 수도 있다.
 public class ExceptionRestControllerAdvice {
 
+    // Rest API 상황에서 Exception이 나왔을 때 핸들링하여 메세지를 직접 입력할 수 있도록 한다.
     @ExceptionHandler(RestException.class)
     public ResponseEntity<Map<String, Object>> handler(RestException e) {
         Map<String, Object> resBody = new HashMap<>();

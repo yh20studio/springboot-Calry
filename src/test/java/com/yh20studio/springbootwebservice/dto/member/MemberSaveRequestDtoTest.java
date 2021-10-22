@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "spring.config.location=" +
         "classpath:/application-jwt.yml" +
-        ",classpath:/application-google.yml" +
         ",classpath:/application-postgresqltest.yml"
 )
 class MemberSaveRequestDtoTest {

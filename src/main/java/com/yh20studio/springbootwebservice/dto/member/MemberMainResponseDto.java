@@ -28,7 +28,7 @@ public class MemberMainResponseDto {
         modifiedDate = toStringDateTime(entity.getModified_date());
     }
 
-
+    // RoutinesMemos가 수정된 LocalDateTime을 Json으로 내보내기 위하여 String으로 변환
     private String toStringDateTime(LocalDateTime localDateTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return Optional.ofNullable(localDateTime)

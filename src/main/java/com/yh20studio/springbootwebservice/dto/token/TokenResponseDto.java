@@ -1,6 +1,4 @@
 package com.yh20studio.springbootwebservice.dto.token;
-
-import com.yh20studio.springbootwebservice.domain.archives.Archives;
 import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshToken;
 import lombok.*;
 

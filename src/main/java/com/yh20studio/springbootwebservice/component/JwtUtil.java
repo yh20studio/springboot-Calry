@@ -27,24 +27,26 @@ public class JwtUtil {
 
     private static String AUTHORITIES_KEY = "auth";
     private static String BEARER_TYPE = "bearer";
-    private static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60;            // 60분
+    private static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 25 * 7;            // 60분
     private static long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
 
     private Key key;
 
 
+    // JWT Secret key
     public JwtUtil(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
+    // Authentication으로 토큰 생성
     public TokenResponseDto generateTokenDto(Authentication authentication){
+
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
         long now = (new Date().getTime());
 
-        System.out.println(authorities);
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
@@ -71,15 +73,18 @@ public class JwtUtil {
 
     }
 
+    // AccessToken으로 Authentication 생성
     public Authentication getAuthentication(String accessToken){
 
         Claims claims = parseClaims(accessToken);
 
+        // claims 값에  AccessToken을 생성할 때 넣었던 authorities 값이 존재하지 않는다면 HttpStatus.UNAUTHORIZED Trow
         if (claims.get(AUTHORITIES_KEY) == null){
             //401 Error
             throw new RestException(HttpStatus.UNAUTHORIZED, "권한 정보가 없는 토큰입니다.");
         }
 
+        //
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
@@ -92,6 +97,7 @@ public class JwtUtil {
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 
+    // 토큰의 유효성 확인
     public boolean validateToken(String token){
         try{
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -108,6 +114,7 @@ public class JwtUtil {
         return false;
     }
 
+    // 토큰의 claims 확인
     public Claims parseClaims(String accessToken){
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();

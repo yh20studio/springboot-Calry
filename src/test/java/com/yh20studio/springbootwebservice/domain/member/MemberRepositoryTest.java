@@ -12,7 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(properties = "spring.config.location=" +
         "classpath:/application-jwt.yml" +
-        ",classpath:/application-google.yml" +
         ",classpath:/application-postgresqltest.yml"
 )
 public class MemberRepositoryTest {

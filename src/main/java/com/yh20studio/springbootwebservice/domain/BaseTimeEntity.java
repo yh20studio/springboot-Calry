@@ -1,5 +1,6 @@
 package com.yh20studio.springbootwebservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -17,9 +18,11 @@ import java.time.LocalDateTime;
 public class BaseTimeEntity {
 
     @CreatedDate
+    @JsonIgnore
     private LocalDateTime created_date;
 
     @LastModifiedDate
+    @JsonIgnore
     private LocalDateTime modified_date;
 
 }

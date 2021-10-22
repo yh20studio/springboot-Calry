@@ -1,11 +1,11 @@
 package com.yh20studio.springbootwebservice.domain.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
-import com.yh20studio.springbootwebservice.domain.archives.Archives;
-import com.yh20studio.springbootwebservice.domain.posts.Posts;
 import com.yh20studio.springbootwebservice.domain.customRoutines.CustomRoutines;
 import com.yh20studio.springbootwebservice.domain.routines.Routines;
-import com.yh20studio.springbootwebservice.domain.routines.Routines_groups;
+
+import com.yh20studio.springbootwebservice.domain.routinesGroups.RoutinesGroups;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,41 +34,35 @@ public class Member extends BaseTimeEntity {
     private String name;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String email;
 
     @Column
+    @JsonIgnore
     private String picture;
 
     @Column
+    @JsonIgnore
     private String resource;
 
     @Column
+    @JsonIgnore
     private String password;
 
-    //TODO: casecade 설정
     @OneToMany(mappedBy="member")
     @OrderBy("id DESC")
-    private List<Posts> posts;
-
-    //TODO: casecade 설정
-    @OneToMany(mappedBy="member")
-    @OrderBy("id DESC")
-    private List<Archives> archives;
-
-    //TODO: casecade 설정
-    @OneToMany(mappedBy="member")
-    @OrderBy("id DESC")
+    @JsonIgnore
     private List<Routines> routinesList;
 
-    //TODO: casecade 설정
     @OneToMany(mappedBy="member")
     @OrderBy("id DESC")
+    @JsonIgnore
     private List<CustomRoutines> customRoutinesList;
 
-    //TODO: casecade 설정
     @OneToMany(mappedBy="member")
     @OrderBy("id DESC")
-    private List<Routines_groups> routines_groupsList;
+    @JsonIgnore
+    private List<RoutinesGroups> routines_groupsList;
 
 
     @Column(nullable = false)
@@ -97,13 +91,6 @@ public class Member extends BaseTimeEntity {
         this.id = id;
     }
 
-    public void updateName(String name){
-        this.name = name;
-    }
-
-    public void updatePicture(String picture){
-        this.picture = picture;
-    }
 
     @Builder
     public Member(String name, String email, String picture, String resource, String password, Role role){

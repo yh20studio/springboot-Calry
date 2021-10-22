@@ -16,8 +16,4 @@ public interface CustomRoutinesRepository extends JpaRepository<CustomRoutines, 
             "ORDER BY p.id DESC")
     Stream<CustomRoutines> findAllByMemberDesc(@Param(value = "member") Long member);
 
-    @Query("SELECT p " +
-            "FROM CustomRoutines p " +
-            "ORDER BY p.id DESC")
-    Stream<CustomRoutines> findAllDesc();
 }

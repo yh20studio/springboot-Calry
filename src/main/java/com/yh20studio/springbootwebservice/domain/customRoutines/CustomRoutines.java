@@ -29,15 +29,11 @@ public class CustomRoutines extends BaseTimeEntity {
     @Column
     private Integer duration;
 
-    //TODO: casecade 설정
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(foreignKey = @ForeignKey(name = "member_id"))
     @JsonIgnore
     private Member member;
 
-    //해당 클래스의 빌더패턴 클래스를 생성
-    //생성자나 빌더나 생성시점에 값을 채워주는 역할은 똑같습니다.
-    //다만, 생성자의 경우 지금 채워야할 필드가 무엇인지 명확히 지정할수가 없습니다.
     @Builder
     public CustomRoutines(String icon, String title, Integer duration, Member member){
         this.icon = icon;
