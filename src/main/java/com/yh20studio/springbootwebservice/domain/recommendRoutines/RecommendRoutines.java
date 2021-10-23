@@ -1,10 +1,7 @@
 package com.yh20studio.springbootwebservice.domain.recommendRoutines;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
-import com.yh20studio.springbootwebservice.domain.category.Category;
-import com.yh20studio.springbootwebservice.domain.member.Member;
-import com.yh20studio.springbootwebservice.domain.routines.Routines;
+import com.yh20studio.springbootwebservice.domain.routinesCategory.RoutinesCategory;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,16 +28,16 @@ public class RecommendRoutines {
     private Integer duration;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(foreignKey = @ForeignKey(name = "category_id"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "routines_category_id"))
     @JsonIgnore
-    private Category category;
+    private RoutinesCategory routines_category;
 
     @Builder
-    public RecommendRoutines(String icon, String title, Integer duration, Category category){
+    public RecommendRoutines(String icon, String title, Integer duration, RoutinesCategory routines_category){
         this.icon = icon;
         this.title = title;
         this.duration = duration;
-        this.category = category;
+        this.routines_category = routines_category;
     }
 
     public void updateWhole(String icon, String title, Integer duration){

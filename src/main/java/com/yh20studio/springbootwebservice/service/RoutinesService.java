@@ -61,7 +61,6 @@ public class RoutinesService {
             routinesGroupsSaveRequestDto.setMember(member);
             dto.setRoutines_groups(routinesGroupsRepository.save(routinesGroupsSaveRequestDto.toEntity()));
         }
-        dto.setMember(member);
 
         return new RoutinesMainResponseDto(routinesRepository.save(dto.toEntity()));
     }

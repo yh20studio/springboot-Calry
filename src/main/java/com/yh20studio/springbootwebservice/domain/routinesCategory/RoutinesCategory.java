@@ -1,4 +1,4 @@
-package com.yh20studio.springbootwebservice.domain.category;
+package com.yh20studio.springbootwebservice.domain.routinesCategory;
 
 import com.yh20studio.springbootwebservice.domain.recommendRoutines.RecommendRoutines;
 import lombok.AccessLevel;
@@ -12,8 +12,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name="\"Category\"")
-public class Category {
+@Table(name="\"Routines_category\"")
+public class RoutinesCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,12 +21,12 @@ public class Category {
     @Column(length = 500, nullable = false)
     private String title;
 
-    @OneToMany(mappedBy="category")
+    @OneToMany(mappedBy="routines_category")
     @OrderBy("id DESC")
     private List<RecommendRoutines> recommendRoutinesList;
 
     @Builder
-    public Category(String title, List<RecommendRoutines> recommendRoutinesList){
+    public RoutinesCategory(String title, List<RecommendRoutines> recommendRoutinesList){
         this.title = title;
         this.recommendRoutinesList = recommendRoutinesList;
 

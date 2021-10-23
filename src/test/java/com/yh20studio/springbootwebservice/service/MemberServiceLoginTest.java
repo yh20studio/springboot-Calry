@@ -78,12 +78,12 @@ public class MemberServiceLoginTest {
         //given
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("test@naver.com", "123");
 
-        Member savedMember = new Member("test", "test@naver.com", "none", "Google", passwordEncoder.encode("123"), Member.Role.GUEST);
+        Member savedMember = new Member("test", "test@naver.com", passwordEncoder.encode("123"), Member.Role.GUEST);
 
         RefreshToken refreshToken = RefreshToken.builder()
-                .key("1")
                 .value("refreshToken")
                 .expires(1L)
+                .member(savedMember)
                 .build();
 
         given(memberSaveRequestDto.toAuthentication()).willReturn(authenticationToken);
@@ -108,12 +108,12 @@ public class MemberServiceLoginTest {
         //given
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("test@naver.com", "123");
 
-        Member savedMember = new Member("test", "test@naver.com", "none", "Google", passwordEncoder.encode("123"), Member.Role.GUEST);
+        Member savedMember = new Member("test", "test@naver.com", passwordEncoder.encode("123"), Member.Role.GUEST);
 
         RefreshToken refreshToken = RefreshToken.builder()
-                .key("1")
                 .value("refreshToken")
                 .expires(1L)
+                .member(savedMember)
                 .build();
 
         given(memberSaveRequestDto.toAuthentication()).willReturn(authenticationToken);
@@ -132,12 +132,12 @@ public class MemberServiceLoginTest {
         //given
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("test@naver.com", "1234");
 
-        Member savedMember = new Member("test", "test@naver.com", "none", "Google", passwordEncoder.encode("123"), Member.Role.GUEST);
+        Member savedMember = new Member("test", "test@naver.com", passwordEncoder.encode("123"), Member.Role.GUEST);
 
         RefreshToken refreshToken = RefreshToken.builder()
-                .key("1")
                 .value("refreshToken")
                 .expires(1L)
+                .member(savedMember)
                 .build();
 
         given(memberSaveRequestDto.toAuthentication()).willReturn(authenticationToken);

@@ -29,7 +29,7 @@ public class RoutinesMainResponseDto {
         routines_memosList = entity.getRoutines_memosList();
         duration = entity.getDuration();
         routines_groups = entity.getRoutines_groups();
-        member = entity.getMember();
+        member = entity.getRoutines_groups().getMember();
     }
 
 }

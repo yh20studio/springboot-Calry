@@ -94,11 +94,15 @@ public class MemberService {
         // 인증 정보를 기반으로 JWT 토큰 생성(Access, Refresh Token)
         TokenResponseDto tokenResponseDto = jwtUtil.generateTokenDto(authentication);
 
+        // Authenticate 에서 유저의 id 값을 가져와서 Member 객체 생성
+        Member member = memberRepository.findById(Long.parseLong(authentication.getName()))
+                .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
+
         // 발행된 RefreshToken 저장
         RefreshToken refreshToken = RefreshToken.builder()
-                .key(authentication.getName())
                 .value(tokenResponseDto.getRefreshToken())
                 .expires(tokenResponseDto.getRefreshTokenExpiresIn())
+                .member(member)
                 .build();
 
         refreshTokenRepository.save(refreshToken);
@@ -120,8 +124,12 @@ public class MemberService {
         // Access 토큰으로 Authentication 생성
         Authentication authentication = jwtUtil.getAuthentication(tokenRequestDto.getAccessToken());
 
+        // Authenticate 에서 유저의 id 값을 가져와서 Member 객체 생성
+        Member member = memberRepository.findById(Long.parseLong(authentication.getName()))
+                .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
+
         // 현재 DB에 해당 유저의 Refresh 토큰이 존재하는지 살펴보고, 만약 없다면 이미 로그아웃된 사용자로 간주하고 HttpStatus.UNAUTHORIZED Throw
-        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
+        RefreshToken refreshToken = refreshTokenRepository.findByMember(member)
                 //401 Error
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "로그아웃 된 사용자입니다."));
 
@@ -134,15 +142,15 @@ public class MemberService {
         // AccessToken 블랙리스트 추가
         // 로그아웃 과정을 거치면서 주어진 Refresh 토큰으로 재발급은 불가능하지만, 이미 발행되었던 Access 토큰으로 로그인을 막음
         AccessTokenRequestDto accessTokenRequestDto = AccessTokenRequestDto.builder()
-                .key(refreshToken.getKey())
                 .value(tokenRequestDto.getAccessToken())
                 .expires(tokenRequestDto.getAccessTokenExpiresIn())
+                .member(refreshToken.getMember())
                 .build();
 
         accessTokenBlackListRepository.save(accessTokenRequestDto.toEntity());
 
         // RefreshToken 삭제
-        refreshTokenRepository.deleteByKey((refreshToken.getKey()));
+        refreshTokenRepository.deleteById((refreshToken.getId()));
 
         return new MessageResponse("Logout");
     }
@@ -160,9 +168,12 @@ public class MemberService {
         // Access 토큰에서 Member Id 가져오기
         Authentication authentication = jwtUtil.getAuthentication(tokenRequestDto.getAccessToken());
 
-        // DB에서 Member Id를 기반으로 Refresh Token 값 가져옴
-        // 해당 토큰이 없다면 HttpStatus.UNAUTHORIZED Throw
-        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
+        // Authenticate 에서 유저의 id 값을 가져와서 Member 객체 생성
+        Member member = memberRepository.findById(Long.parseLong(authentication.getName()))
+                .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
+
+        // DB에서 Member Id를 기반으로 Refresh Token 값 가져온다. 해당 토큰이 없다면 HttpStatus.UNAUTHORIZED Throw
+        RefreshToken refreshToken = refreshTokenRepository.findByMember(member)
                 //401 Error
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "로그아웃 된 사용자입니다."));
 

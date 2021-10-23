@@ -30,31 +30,25 @@ public class Routines extends BaseTimeEntity {
     @Column(length = 500, nullable = false)
     private String title;
 
+    @Column
+    private Integer duration;
+
     @OneToMany(mappedBy="routines")
     @OrderBy("id DESC")
     private List<RoutinesMemos> routines_memosList;
-
-    @Column
-    private Integer duration;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(foreignKey = @ForeignKey(name = "routines_groups_id"), nullable = false)
     @JsonProperty("routines_groups")
     private RoutinesGroups routines_groups;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(foreignKey = @ForeignKey(name = "member_id"))
-    @JsonIgnore
-    private Member member;
-
     @Builder
-    public Routines(String icon, String title, List<RoutinesMemos> routines_memosList, Integer duration, RoutinesGroups routines_groups, Member member){
+    public Routines(String icon, String title, List<RoutinesMemos> routines_memosList, Integer duration, RoutinesGroups routines_groups){
         this.icon = icon;
         this.title = title;
         this.routines_memosList = routines_memosList;
         this.duration = duration;
         this.routines_groups = routines_groups;
-        this.member = member;
     }
 
     public void updateWhole(String icon, String title, Integer duration){

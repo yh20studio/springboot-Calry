@@ -14,23 +14,22 @@ import javax.persistence.Id;
 @NoArgsConstructor
 public class AccessTokenRequestDto {
 
-
-    private String key;
     private String value;
     private Long expires;
+    private Member member;
 
     @Builder
-    public AccessTokenRequestDto(String key, String value, Long expires){
-        this.key = key;
+    public AccessTokenRequestDto(String value, Long expires, Member member){
         this.value = value;
         this.expires = expires;
+        this.member = member;
     }
 
     public AccessTokenBlackList toEntity(){
         return AccessTokenBlackList.builder()
-                .key(key)
                 .value(value)
                 .expires(expires)
+                .member(member)
                 .build();
     }
 }

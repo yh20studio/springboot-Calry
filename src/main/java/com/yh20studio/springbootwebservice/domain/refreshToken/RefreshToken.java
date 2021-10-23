@@ -1,26 +1,39 @@
 package com.yh20studio.springbootwebservice.domain.refreshToken;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
+import com.yh20studio.springbootwebservice.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
 @Table(name = "refresh_token")
 @Entity
-public class RefreshToken extends BaseTimeEntity {
+public class RefreshToken {
 
     @Id
-    private String key;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String value;
 
     private Long expires;
+
+    @OneToOne
+    @JoinColumn(name = "member")
+    @JsonIgnore
+    private Member member;
+
+    @Builder
+    public RefreshToken(String value, Long expires, Member member){
+        this.value = value;
+        this.expires = expires;
+        this.member = member;
+    }
 
     public RefreshToken updateValue(String token){
         this.value = token;
@@ -30,12 +43,5 @@ public class RefreshToken extends BaseTimeEntity {
     public RefreshToken updateExpires(Long expires){
         this.expires = expires;
         return this;
-    }
-
-    @Builder
-    public RefreshToken(String key, String value, Long expires){
-        this.key = key;
-        this.value = value;
-        this.expires = expires;
     }
 }

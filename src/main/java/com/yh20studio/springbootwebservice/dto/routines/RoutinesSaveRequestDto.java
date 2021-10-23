@@ -18,7 +18,6 @@ public class RoutinesSaveRequestDto {
     private String title;
     private Integer duration;
     private RoutinesGroups routines_groups;
-    private Member member;
 
     @Builder
     public RoutinesSaveRequestDto(String icon, String title, Integer duration, RoutinesGroups routines_groups){
@@ -35,7 +34,6 @@ public class RoutinesSaveRequestDto {
                 .title(title)
                 .duration(duration)
                 .routines_groups(routines_groups)
-                .member(member)
                 .build();
     }
 
