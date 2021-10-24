@@ -13,6 +13,6 @@
 
 
 ## 데이터 구조 ERD
-- https://www.erdcloud.com/d/yYBYcnWYso9gsXmbD
+- https://www.erdcloud.com/d/JrTwNyxMsg6KLSZ5J
 
 <img width="786" alt="springboot-calry-ERD" src="https://user-images.githubusercontent.com/78459713/138601977-8a8cdfd3-9e00-4025-b122-643d07adabe6.png">
