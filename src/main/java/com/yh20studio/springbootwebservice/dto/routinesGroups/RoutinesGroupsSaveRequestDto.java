@@ -18,19 +18,19 @@ public class RoutinesGroupsSaveRequestDto {
 
     private Long routines_id;
     private String title;
-    private List<Routines> routinesList;
+    private Routines routines;
     private Member member;
 
     @Builder
-    public RoutinesGroupsSaveRequestDto(String title, List<Routines> routinesList){
+    public RoutinesGroupsSaveRequestDto(String title, Routines routines){
         this.title = title;
-        this.routinesList = routinesList;
+        this.routines = routines;
     }
 
     public RoutinesGroups toEntity(){
         return RoutinesGroups.builder()
                 .title(title)
-                .routinesList(routinesList)
+                .routines(routines)
                 .member(member)
                 .build();
     }

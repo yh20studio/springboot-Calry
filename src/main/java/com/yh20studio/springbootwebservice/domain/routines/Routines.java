@@ -6,6 +6,7 @@ import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.routinesGroups.RoutinesGroups;
 import com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemos;
+import com.yh20studio.springbootwebservice.domain.todayRoutines.TodayRoutines;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,22 +34,35 @@ public class Routines extends BaseTimeEntity {
     @Column
     private Integer duration;
 
-    @OneToMany(mappedBy="routines")
+    @Column
+
+    @OneToMany(mappedBy="routines", cascade = CascadeType.REMOVE)
+    @OrderBy("id DESC")
+    @JsonIgnore
+    private List<RoutinesGroups> routines_groupsList;
+
+    @OneToMany(mappedBy="routines", cascade = CascadeType.REMOVE)
     @OrderBy("id DESC")
     private List<RoutinesMemos> routines_memosList;
 
+    @OneToMany(mappedBy="routines", cascade = CascadeType.REMOVE)
+    @OrderBy("id DESC")
+    @JsonIgnore
+    private List<TodayRoutines> today_routinesList;
+
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(foreignKey = @ForeignKey(name = "routines_groups_id"), nullable = false)
-    @JsonProperty("routines_groups")
-    private RoutinesGroups routines_groups;
+    @JoinColumn(foreignKey = @ForeignKey(name = "member_id"), nullable = false)
+    @JsonIgnore
+    private Member member;
+
 
     @Builder
-    public Routines(String icon, String title, List<RoutinesMemos> routines_memosList, Integer duration, RoutinesGroups routines_groups){
+    public Routines(String icon, String title, List<RoutinesMemos> routines_memosList, Integer duration, Member member){
         this.icon = icon;
         this.title = title;
         this.routines_memosList = routines_memosList;
         this.duration = duration;
-        this.routines_groups = routines_groups;
+        this.member = member;
     }
 
     public void updateWhole(String icon, String title, Integer duration){

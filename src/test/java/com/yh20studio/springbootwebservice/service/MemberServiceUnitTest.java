@@ -38,7 +38,7 @@ class MemberServiceUnitTest {
 
     @BeforeEach
     private void setup() {
-        savedMember = new Member("test", "test@naver.com", "none", "Google", "123", Member.Role.GUEST);
+        savedMember = new Member("test", "test@naver.com",  "123", Member.Role.GUEST);
         savedMember.updateId(1L);
     }
 

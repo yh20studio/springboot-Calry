@@ -3,9 +3,9 @@ package com.yh20studio.springbootwebservice.domain.member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
 import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackList;
-import com.yh20studio.springbootwebservice.domain.customRoutines.CustomRoutines;
-import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshToken;
 import com.yh20studio.springbootwebservice.domain.routines.Routines;
+import com.yh20studio.springbootwebservice.domain.todayRoutines.TodayRoutines;
+import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshToken;
 
 import com.yh20studio.springbootwebservice.domain.routinesGroups.RoutinesGroups;
 import lombok.AccessLevel;
@@ -51,11 +51,10 @@ public class Member extends BaseTimeEntity {
     @JsonIgnore
     private List<AccessTokenBlackList> access_token_black_list;
 
-
     @OneToMany(mappedBy="member")
     @OrderBy("id DESC")
     @JsonIgnore
-    private List<CustomRoutines> customRoutinesList;
+    private List<Routines> routinesList;
 
     @OneToMany(mappedBy="member")
     @OrderBy("id DESC")

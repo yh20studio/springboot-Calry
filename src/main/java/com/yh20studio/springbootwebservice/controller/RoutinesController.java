@@ -16,8 +16,8 @@ public class RoutinesController {
 
     // Get Method
     @GetMapping(value="/routines", produces = "application/json; charset=UTF-8")
-    public List<RoutinesMainResponseDto> findMyAllDescRoutines(){
-        return routinesService.getMyAllDesc();
+    public List<RoutinesMainResponseDto> findMyAllASCRoutines(){
+        return routinesService.getMyAllASC();
     }
 
     // Post Method

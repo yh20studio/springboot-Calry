@@ -13,12 +13,12 @@ public class RoutinesGroupsMainResponseDto {
 
     private Long id;
     private String title;
-    private List<Routines> routines_List;
+    private Routines routines;
 
     public RoutinesGroupsMainResponseDto(RoutinesGroups entity){
         id = entity.getId();
         title = entity.getTitle();
-        routines_List = entity.getRoutinesList();
+        routines = entity.getRoutines();
 
     }
 }
