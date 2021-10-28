@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -63,6 +64,41 @@ public class TodayRoutinesService {
 
 
         return new TodayRoutinesMainResponseDto(todayRoutinesRepository.save(dto.toEntity()));
+    }
+
+    // 로그인된 유저의 RequestBody에서 List<TodayRoutines> DTO를 받은 후 저장
+    // DTO에서 date 값을 받아서 해당 날짜에 TodayRoutinesGroups이 존재하는지 확인한다. 만약 없다면 새롭게 저장하고, TodayRoutinesGroups를 가져오기로 한다.
+    @Transactional
+    public List<TodayRoutinesMainResponseDto> saveList(List<TodayRoutinesSaveRequestDto> dtoList){
+        Long memberId = securityUtil.getCurrentMemberId();
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
+
+        List<TodayRoutinesSaveRequestDto> todayRoutinesSaveRequestDtoList = new ArrayList();
+        TodayRoutinesGroups todayRoutinesGroups = null;
+
+        for(TodayRoutinesSaveRequestDto todayRoutinesGroupsDto : dtoList){
+
+            if (todayRoutinesGroups == null){ // todayRoutinesGroups 값이 비워져 있다면?
+                todayRoutinesGroups = todayRoutinesGroupsRepository.findByMemberAndDate(memberId, LocalDate.parse(todayRoutinesGroupsDto.getDate()))
+                        .orElseGet(() -> todayRoutinesGroupsRepository.save((new TodayRoutinesGroupsSaveRequestDto(todayRoutinesGroupsDto.getDate(), 0, member)).toEntity()));
+            }
+            if(todayRoutinesGroups.getDate() != LocalDate.parse(todayRoutinesGroupsDto.getDate())){ // 반복문 도중에 만약 날짜가 다음날로 넘어가서 새롭게 todayRoutinesGroups를 정의 해야할 경우
+                todayRoutinesGroups = todayRoutinesGroupsRepository.findByMemberAndDate(memberId, LocalDate.parse(todayRoutinesGroupsDto.getDate()))
+                        .orElseGet(() -> todayRoutinesGroupsRepository.save((new TodayRoutinesGroupsSaveRequestDto(todayRoutinesGroupsDto.getDate(), 0, member)).toEntity()));
+            }
+
+            todayRoutinesGroupsDto.setTodayRoutinesGroups(todayRoutinesGroups);
+            todayRoutinesSaveRequestDtoList.add(todayRoutinesGroupsDto);
+        }
+
+        return todayRoutinesRepository.saveAll(
+                todayRoutinesSaveRequestDtoList
+                        .stream()
+                        .map(TodayRoutinesSaveRequestDto::toEntity)
+                .collect(Collectors.toList())
+        ).stream().map(TodayRoutinesMainResponseDto::new).collect(Collectors.toList());
     }
 
     // 로그인된 유저의 RequestBody에서 TodayRoutines DTO와, url Path에서 TodayRoutines의 id를 받은 후 업데이트

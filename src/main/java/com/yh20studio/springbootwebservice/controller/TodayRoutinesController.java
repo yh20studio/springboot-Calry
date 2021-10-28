@@ -27,6 +27,12 @@ public class TodayRoutinesController {
         return todayRoutinesService.save(dto);
     }
 
+    // List로 여러 데이터가 들어올 경우 Post Method
+    @PostMapping(value="/list", produces = "application/json; charset=UTF-8")
+    public List<TodayRoutinesMainResponseDto> saveTodayRoutinesList(@RequestBody List<TodayRoutinesSaveRequestDto> dto){
+        return todayRoutinesService.saveList(dto);
+    }
+
     // Put Method
     @PutMapping(value="/{id}", produces = "application/json; charset=UTF-8")
     public TodayRoutinesMainResponseDto updateTodayRoutines(@PathVariable("id") Long id, @RequestBody TodayRoutinesSaveRequestDto dto){

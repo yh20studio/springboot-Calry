@@ -3,6 +3,7 @@ package com.yh20studio.springbootwebservice.service;
 import com.yh20studio.springbootwebservice.domain.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.routines.Routines;
 import com.yh20studio.springbootwebservice.domain.routines.RoutinesRepository;
+import com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemos;
 import com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemosRepository;
 import com.yh20studio.springbootwebservice.dto.routinesMemos.MemosMainResponseDto;
 import com.yh20studio.springbootwebservice.dto.routinesMemos.MemosSaveRequestDto;
@@ -36,7 +37,7 @@ public class RoutinesMemosService {
     // 로그인된 유저의 RequestBody에서 MemosSaveRequestDto와, url Path에서 RoutinesMeoms의 id를 받은 후 업데이트
     @Transactional
     public MemosMainResponseDto update(Long id, MemosSaveRequestDto dto){
-        com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemos routines_memos = routinesmemosRepository.findById(id)
+        RoutinesMemos routines_memos = routinesmemosRepository.findById(id)
                 .map(entity -> {entity.updateWhole(
                         dto.getContent());
                     return entity;

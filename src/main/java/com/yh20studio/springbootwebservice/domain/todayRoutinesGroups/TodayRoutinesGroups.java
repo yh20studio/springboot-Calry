@@ -37,7 +37,7 @@ public class TodayRoutinesGroups extends BaseTimeEntity {
     private Member member;
 
     @OneToMany(mappedBy="todayRoutinesGroups")
-    @OrderBy("id DESC")
+    @OrderBy("id ASC")
     private List<TodayRoutines> todayRoutinesList;
 
     @Builder

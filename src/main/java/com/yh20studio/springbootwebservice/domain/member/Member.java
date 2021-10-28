@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
 import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackList;
 import com.yh20studio.springbootwebservice.domain.routines.Routines;
+import com.yh20studio.springbootwebservice.domain.routinesGroupsUnions.RoutinesGroupsUnions;
 import com.yh20studio.springbootwebservice.domain.todayRoutines.TodayRoutines;
 import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshToken;
 
@@ -59,8 +60,7 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy="member")
     @OrderBy("id DESC")
     @JsonIgnore
-    private List<RoutinesGroups> routines_groupsList;
-
+    private List<RoutinesGroupsUnions> routinesGroupsUnionsList;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

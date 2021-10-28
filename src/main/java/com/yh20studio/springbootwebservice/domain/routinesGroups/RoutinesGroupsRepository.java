@@ -12,9 +12,4 @@ import java.util.stream.Stream;
 public interface RoutinesGroupsRepository extends JpaRepository<RoutinesGroups, Long> {
     Optional<RoutinesGroups> findById(Long id);
 
-    @Query("SELECT p " +
-            "FROM RoutinesGroups p " +
-            "WHERE p.member.id = :member ")
-    Stream<RoutinesGroups> findByMember(@Param(value = "member") Long member);
-
 }

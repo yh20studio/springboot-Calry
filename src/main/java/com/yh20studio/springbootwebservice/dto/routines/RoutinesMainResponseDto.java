@@ -19,7 +19,6 @@ public class RoutinesMainResponseDto {
     private String title;
     private List<RoutinesMemos> routines_memosList;
     private Integer duration;
-    private Member member;
 
     public RoutinesMainResponseDto(Routines entity){
         id = entity.getId();
@@ -27,7 +26,6 @@ public class RoutinesMainResponseDto {
         title = entity.getTitle();
         routines_memosList = entity.getRoutines_memosList();
         duration = entity.getDuration();
-        member = entity.getMember();
     }
 
 }
