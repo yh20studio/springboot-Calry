@@ -99,11 +99,18 @@ public class MemberService {
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
 
         // 발행된 RefreshToken 저장
-        RefreshToken refreshToken = RefreshToken.builder()
-                .value(tokenResponseDto.getRefreshToken())
-                .expires(tokenResponseDto.getRefreshTokenExpiresIn())
-                .member(member)
-                .build();
+        RefreshToken refreshToken =  refreshTokenRepository.findByMember(member)
+                .map(entity -> {entity.updateWhole(
+                        tokenResponseDto.getRefreshToken(),
+                        tokenResponseDto.getRefreshTokenExpiresIn()
+                );
+                    return entity;
+                })
+                .orElseGet(() -> refreshTokenRepository.save(RefreshToken.builder()
+                        .value(tokenResponseDto.getRefreshToken())
+                        .expires(tokenResponseDto.getRefreshTokenExpiresIn())
+                        .member(member)
+                        .build()));
 
         refreshTokenRepository.save(refreshToken);
 

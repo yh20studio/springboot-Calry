@@ -34,6 +34,10 @@ public class RefreshToken {
         this.expires = expires;
         this.member = member;
     }
+    public void updateWhole(String token, Long expires){
+        this.value = token;
+        this.expires = expires;
+    }
 
     public RefreshToken updateValue(String token){
         this.value = token;

@@ -81,7 +81,6 @@ public class TodayRoutinesGroupsService {
                 .map(entity -> {entity.updateDate(
                         dto.getDate()
                 );
-
                     return entity;
                 })
                 .orElseThrow(() -> new NoSuchElementException());
