@@ -57,7 +57,6 @@ public class RoutinesService {
     public RoutinesMainResponseDto update(Long id, RoutinesSaveRequestDto dto){
         Routines routines = routinesRepository.findById(id)
                 .map(entity -> {entity.updateWhole(
-                        dto.getIcon(),
                         dto.getTitle(),
                         dto.getDuration());
                     return entity;

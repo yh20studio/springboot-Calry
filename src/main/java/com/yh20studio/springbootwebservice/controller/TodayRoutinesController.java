@@ -2,6 +2,7 @@ package com.yh20studio.springbootwebservice.controller;
 
 import com.yh20studio.springbootwebservice.dto.todayRoutines.TodayRoutinesMainResponseDto;
 import com.yh20studio.springbootwebservice.dto.todayRoutines.TodayRoutinesSaveRequestDto;
+import com.yh20studio.springbootwebservice.dto.todayRoutines.TodayRoutinesUpdateRequestDto;
 import com.yh20studio.springbootwebservice.service.TodayRoutinesService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class TodayRoutinesController {
 
     // Put Method
     @PutMapping(value="/{id}", produces = "application/json; charset=UTF-8")
-    public TodayRoutinesMainResponseDto updateTodayRoutines(@PathVariable("id") Long id, @RequestBody TodayRoutinesSaveRequestDto dto){
+    public TodayRoutinesMainResponseDto updateTodayRoutines(@PathVariable("id") Long id, @RequestBody TodayRoutinesUpdateRequestDto dto){
         return todayRoutinesService.update(id, dto);
     }
 

@@ -9,6 +9,8 @@ import com.yh20studio.springbootwebservice.service.TodayRoutinesService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -21,8 +23,14 @@ public class TodayRoutinesGroupsController {
 
     // 주어진 date 값에 따라서 TodayRoutinesGroupsMainResponseDto를 가져오는 Get Method
     @GetMapping(value="/{date}", produces = "application/json; charset=UTF-8")
-    public TodayRoutinesGroupsMainResponseDto findAllDescTodayRoutines(@PathVariable("date") String date){
+    public TodayRoutinesGroupsMainResponseDto findAllTodayRoutinesGroupsByDate(@PathVariable("date") String date){
         return todayRoutinesGroupsService.getByDate(date);
+    }
+
+    // 로그인된 Member의 모든 TodayRoutinesGroups의 성공 여부 및 grade를 가져오는 Get Method
+    @GetMapping(value="", produces = "application/json; charset=UTF-8")
+    public List<TodayRoutinesGroupsMainResponseDto> findAllTodayRoutinesGroups(){
+        return todayRoutinesGroupsService.getAllTodayRoutinesGroups();
     }
 
 

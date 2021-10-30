@@ -14,7 +14,6 @@ public class TodayRoutinesMainResponseDto {
     private Long id;
     private LocalTime finishTime;
     private Boolean finish;
-    private TodayRoutinesGroups todayRoutinesGroups;
     private Routines routines;
 
 
@@ -22,7 +21,6 @@ public class TodayRoutinesMainResponseDto {
         id = entity.getId();
         finishTime = entity.getFinishTime();
         finish = entity.getFinish();
-        todayRoutinesGroups = entity.getTodayRoutinesGroups();
         routines = entity.getRoutines();
     }
 

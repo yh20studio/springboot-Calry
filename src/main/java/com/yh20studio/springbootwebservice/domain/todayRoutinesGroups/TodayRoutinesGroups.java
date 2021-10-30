@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -28,8 +29,11 @@ public class TodayRoutinesGroups extends BaseTimeEntity {
     @Column
     private LocalDate date;
 
-    @Column
-    private Integer grade;
+    @Column(columnDefinition = "integer default 0")
+    private Integer success;
+
+    @Column(columnDefinition = "integer default 0")
+    private Integer fail;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(foreignKey = @ForeignKey(name = "member_id"))
@@ -41,14 +45,22 @@ public class TodayRoutinesGroups extends BaseTimeEntity {
     private List<TodayRoutines> todayRoutinesList;
 
     @Builder
-    public TodayRoutinesGroups(LocalDate date, Integer grade, Member member){
+    public TodayRoutinesGroups(LocalDate date, Integer success, Integer fail, Member member){
         this.date = date;
-        this.grade = grade;
+        this.success = success;
+        this.fail = fail;
         this.member = member;
     }
 
-    public void updateWhole(LocalDate date, Integer grade){
+    public void updateDate(LocalDate date){
         this.date = date;
-        this.grade = grade;
+    }
+
+    public void updateSuccess(Integer success){
+        this.success += success;
+    }
+
+    public void updateFail(Integer fail){
+        this.fail += fail;
     }
 }

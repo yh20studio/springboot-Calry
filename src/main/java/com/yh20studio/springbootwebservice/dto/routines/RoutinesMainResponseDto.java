@@ -15,14 +15,12 @@ import java.util.Optional;
 public class RoutinesMainResponseDto {
 
     private Long id;
-    private String icon;
     private String title;
     private List<RoutinesMemos> routines_memosList;
     private Integer duration;
 
     public RoutinesMainResponseDto(Routines entity){
         id = entity.getId();
-        icon = entity.getIcon();
         title = entity.getTitle();
         routines_memosList = entity.getRoutines_memosList();
         duration = entity.getDuration();

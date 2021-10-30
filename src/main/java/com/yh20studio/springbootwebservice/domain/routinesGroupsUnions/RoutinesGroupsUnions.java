@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -47,13 +48,17 @@ public class RoutinesGroupsUnions extends BaseTimeEntity {
         this.title = title;
     }
 
+    public void setRoutinesGroupsList(){
+        this.routinesGroupsList = new ArrayList<>();
+    }
+
     public void addRoutinesGroups(RoutinesGroups routinesGroups) {
-        routinesGroupsList.add(routinesGroups);
+        this.routinesGroupsList.add(routinesGroups);
         routinesGroups.setRoutinesGroupsUnions(this);
     }
 
     public void removeRoutinesGroups(RoutinesGroups routinesGroups) {
-        routinesGroupsList.remove(routinesGroups);
+        this.routinesGroupsList.remove(routinesGroups);
         routinesGroups.setRoutinesGroupsUnions(null);
     }
 

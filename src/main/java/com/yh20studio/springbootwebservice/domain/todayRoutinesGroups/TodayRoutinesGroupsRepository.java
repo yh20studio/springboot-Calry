@@ -16,8 +16,13 @@ public interface TodayRoutinesGroupsRepository extends JpaRepository<TodayRoutin
 
     @Query("SELECT p " +
             "FROM TodayRoutinesGroups p " +
-            "WHERE p.member.id = :member and p.date = :date " +
-            "ORDER BY p.id DESC")
+            "WHERE p.member.id = :member and p.date = :date")
     Optional<TodayRoutinesGroups> findByMemberAndDate(@Param(value = "member") Long member, @Param(value = "date") LocalDate date);
+
+    @Query("SELECT p " +
+            "FROM TodayRoutinesGroups p " +
+            "WHERE p.member.id = :member " +
+            "ORDER BY p.id ASC ")
+    Stream<TodayRoutinesGroups> findAllByMember(@Param(value = "member") Long member);
 
 }

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -34,6 +35,18 @@ public class TodayRoutinesGroupsService {
     private MemberRepository memberRepository;
     private SecurityUtil securityUtil;
 
+
+    @Transactional
+    public List<TodayRoutinesGroupsMainResponseDto> getAllTodayRoutinesGroups(){
+        Long memberId = securityUtil.getCurrentMemberId();
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
+
+       return todayRoutinesGroupsRepository.findAllByMember(memberId)
+                .map(TodayRoutinesGroupsMainResponseDto::new)
+                .collect(Collectors.toList());
+
+    }
 
     // 로그인된 유저의 주어진 Date 값을 통해서 TodayRoutinesGroups을 리턴한다.
     @Transactional
@@ -50,7 +63,7 @@ public class TodayRoutinesGroupsService {
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
 
         return new TodayRoutinesGroupsMainResponseDto(todayRoutinesGroupsRepository.findByMemberAndDate(memberId, selectDate)
-                .orElseGet(() -> todayRoutinesGroupsRepository.save((new TodayRoutinesGroupsSaveRequestDto(date, 0, member)).toEntity())));
+                .orElseGet(() -> todayRoutinesGroupsRepository.save((new TodayRoutinesGroupsSaveRequestDto(date, 0, 0, member)).toEntity())));
 
     }
 
@@ -65,9 +78,10 @@ public class TodayRoutinesGroupsService {
     @Transactional
     public TodayRoutinesGroupsMainResponseDto update(Long id, TodayRoutinesGroupsSaveRequestDto dto){
         TodayRoutinesGroups todayRoutinesGroups = todayRoutinesGroupsRepository.findById(id)
-                .map(entity -> {entity.updateWhole(
-                        dto.getDate(),
-                        dto.getGrade());
+                .map(entity -> {entity.updateDate(
+                        dto.getDate()
+                );
+
                     return entity;
                 })
                 .orElseThrow(() -> new NoSuchElementException());

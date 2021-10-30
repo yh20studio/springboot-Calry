@@ -22,8 +22,7 @@ public class SchedulesMainResponseDto {
     private String content;
     private LocalDateTime start_date;
     private LocalDateTime end_date;
-    private LabelsMainResponseDto labels;
-    private MemberSummaryDto member;
+    private Labels labels;
 
 
     public SchedulesMainResponseDto(Schedules entity){
@@ -32,8 +31,7 @@ public class SchedulesMainResponseDto {
         content = entity.getContent();
         start_date = entity.getStart_date();
         end_date = entity.getEnd_date();
-        labels = new LabelsMainResponseDto(entity.getLabels());
-        member = new MemberSummaryDto(entity.getLabels().getMember());
+        labels = entity.getLabels();
     }
 
     // 일정의 시작날짜의 따라서 오름차순으로 정리하는 Comparator

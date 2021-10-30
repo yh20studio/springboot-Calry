@@ -14,14 +14,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RoutinesSaveRequestDto {
 
-    private String icon;
     private String title;
     private Integer duration;
     private Member member;
 
     @Builder
-    public RoutinesSaveRequestDto(String icon, String title, Integer duration){
-        this.icon = icon;
+    public RoutinesSaveRequestDto(String title, Integer duration){
         this.title = title;
         this.duration = duration;
     }
@@ -29,7 +27,6 @@ public class RoutinesSaveRequestDto {
     public Routines toEntity(){
 
         return Routines.builder()
-                .icon(icon)
                 .title(title)
                 .duration(duration)
                 .member(member)

@@ -19,20 +19,24 @@ import java.time.LocalTime;
 public class TodayRoutinesGroupsSaveRequestDto {
 
     private LocalDate date;
-    private Integer grade;
+    private Integer success;
+    private Integer fail;
     private Member member;
 
+
     @Builder
-    public TodayRoutinesGroupsSaveRequestDto(String date, Integer grade, Member member){
-        this.date = LocalDate.parse(date);;
-        this.grade = grade;
+    public TodayRoutinesGroupsSaveRequestDto(String date, Integer success, Integer fail, Member member){
+        this.date = LocalDate.parse(date);
+        this.success = success;
+        this.fail = fail;
         this.member = member;
     }
 
     public TodayRoutinesGroups toEntity(){
         return TodayRoutinesGroups.builder()
                 .date(date)
-                .grade(grade)
+                .success(success)
+                .fail(fail)
                 .member(member)
                 .build();
     }

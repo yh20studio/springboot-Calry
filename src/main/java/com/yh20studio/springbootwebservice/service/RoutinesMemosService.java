@@ -5,8 +5,8 @@ import com.yh20studio.springbootwebservice.domain.routines.Routines;
 import com.yh20studio.springbootwebservice.domain.routines.RoutinesRepository;
 import com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemos;
 import com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemosRepository;
-import com.yh20studio.springbootwebservice.dto.routinesMemos.MemosMainResponseDto;
-import com.yh20studio.springbootwebservice.dto.routinesMemos.MemosSaveRequestDto;
+import com.yh20studio.springbootwebservice.dto.routinesMemos.RoutinesMemosMainResponseDto;
+import com.yh20studio.springbootwebservice.dto.routinesMemos.RoutinesMemosSaveRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,19 +24,19 @@ public class RoutinesMemosService {
 
     // 로그인된 유저의 RequestBody에서 MemosSaveRequestDto를 받은 후 저장
     @Transactional
-    public MemosMainResponseDto save(MemosSaveRequestDto dto){
+    public RoutinesMemosMainResponseDto save(RoutinesMemosSaveRequestDto dto){
 
         Long routineId = dto.getRoutines_id();
         Routines routines = routinesRepository.findById(routineId)
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 접근입니다."));
         dto.setRoutines(routines);
 
-        return new MemosMainResponseDto(routinesmemosRepository.save(dto.toEntity()));
+        return new RoutinesMemosMainResponseDto(routinesmemosRepository.save(dto.toEntity()));
     }
 
     // 로그인된 유저의 RequestBody에서 MemosSaveRequestDto와, url Path에서 RoutinesMeoms의 id를 받은 후 업데이트
     @Transactional
-    public MemosMainResponseDto update(Long id, MemosSaveRequestDto dto){
+    public RoutinesMemosMainResponseDto update(Long id, RoutinesMemosSaveRequestDto dto){
         RoutinesMemos routines_memos = routinesmemosRepository.findById(id)
                 .map(entity -> {entity.updateWhole(
                         dto.getContent());
@@ -44,7 +44,7 @@ public class RoutinesMemosService {
                 })
                 .orElseThrow(() -> new NoSuchElementException());
 
-        return new MemosMainResponseDto(routinesmemosRepository.save(routines_memos));
+        return new RoutinesMemosMainResponseDto(routinesmemosRepository.save(routines_memos));
 
     }
 

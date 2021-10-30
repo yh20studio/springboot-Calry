@@ -9,14 +9,11 @@ import com.yh20studio.springbootwebservice.domain.routinesGroups.RoutinesGroups;
 import com.yh20studio.springbootwebservice.domain.routinesGroups.RoutinesGroupsRepository;
 import com.yh20studio.springbootwebservice.domain.routinesGroupsUnions.RoutinesGroupsUnions;
 import com.yh20studio.springbootwebservice.domain.routinesGroupsUnions.RoutinesGroupsUnionsRepository;
-import com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemos;
-import com.yh20studio.springbootwebservice.dto.routinesGroups.RoutinesGroupsMainResponseDto;
 import com.yh20studio.springbootwebservice.dto.routinesGroups.RoutinesGroupsSaveRequestDto;
 import com.yh20studio.springbootwebservice.dto.routinesGroups.RoutinesGroupsUpdateRequestDto;
 import com.yh20studio.springbootwebservice.dto.routinesGroupsUnionsDto.RoutinesGroupsUnionsMainResponseDto;
 import com.yh20studio.springbootwebservice.dto.routinesGroupsUnionsDto.RoutinesGroupsUnionsSaveRequestDto;
 import com.yh20studio.springbootwebservice.dto.routinesGroupsUnionsDto.RoutinesGroupsUnionsUpdateRequestDto;
-import com.yh20studio.springbootwebservice.dto.routinesMemos.MemosMainResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
@@ -64,11 +60,12 @@ public class RoutinesGroupsUnionsService {
         dto.setMember(member);
         // RoutinesGroupsUnions 저장
         RoutinesGroupsUnions routinesGroupsUnions = routinesGroupsUnionsRepository.save(dto.toEntity());
+        routinesGroupsUnions.setRoutinesGroupsList();
 
         // RoutinesGroups 저장
         List<RoutinesGroupsSaveRequestDto> routinesGroupsSaveRequestDtoList = new ArrayList<>();
 
-        for (RoutinesGroupsSaveRequestDto routinesGroupsSaveRequestDto :dto.getRoutinesGroupsList()){
+        for (RoutinesGroupsSaveRequestDto routinesGroupsSaveRequestDto :dto.getRoutinesGroupsList()) {
             routinesGroupsSaveRequestDto.setRoutinesGroupsUnions(routinesGroupsUnions);
             routinesGroupsSaveRequestDtoList.add(routinesGroupsSaveRequestDto);
         }
@@ -76,7 +73,8 @@ public class RoutinesGroupsUnionsService {
         routinesGroupsRepository.saveAll(
                 routinesGroupsSaveRequestDtoList.stream()
                         .map(RoutinesGroupsSaveRequestDto:: toEntity)
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList()))
+                .forEach(routinesGroups -> routinesGroupsUnions.addRoutinesGroups(routinesGroups));
 
         return new RoutinesGroupsUnionsMainResponseDto(routinesGroupsUnions);
     }

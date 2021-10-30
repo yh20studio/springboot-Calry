@@ -10,14 +10,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MemosSaveRequestDto {
+public class RoutinesMemosSaveRequestDto {
 
     private Long routines_id;
     private String content;
     private Routines routines;
 
     @Builder
-    public MemosSaveRequestDto(Long routines_id, String content){
+    public RoutinesMemosSaveRequestDto(Long routines_id, String content){
         this.routines_id = routines_id;
         this.content = content;
     }

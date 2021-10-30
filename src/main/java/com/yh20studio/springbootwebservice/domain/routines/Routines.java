@@ -25,16 +25,11 @@ public class Routines extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String icon;
-
     @Column(length = 500, nullable = false)
     private String title;
 
     @Column
     private Integer duration;
-
-    @Column
 
     @OneToMany(mappedBy="routines", cascade = CascadeType.REMOVE)
     @OrderBy("id DESC")
@@ -57,16 +52,14 @@ public class Routines extends BaseTimeEntity {
 
 
     @Builder
-    public Routines(String icon, String title, List<RoutinesMemos> routines_memosList, Integer duration, Member member){
-        this.icon = icon;
+    public Routines(String title, List<RoutinesMemos> routines_memosList, Integer duration, Member member){
         this.title = title;
         this.routines_memosList = routines_memosList;
         this.duration = duration;
         this.member = member;
     }
 
-    public void updateWhole(String icon, String title, Integer duration){
-        this.icon = icon;
+    public void updateWhole(String title, Integer duration){
         this.title = title;
         this.duration = duration;
     }

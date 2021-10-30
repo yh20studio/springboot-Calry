@@ -9,7 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Getter
@@ -18,7 +20,7 @@ import java.util.List;
 public class RoutinesGroupsUnionsSaveRequestDto {
 
     private String title;
-    private List<RoutinesGroupsSaveRequestDto> routinesGroupsList;
+    private List<RoutinesGroupsSaveRequestDto> routinesGroupsList = new ArrayList<>();
     private Member member;
 
     @Builder

@@ -34,6 +34,7 @@ public class Member extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String name;
 
     @Column(nullable = false)
@@ -45,6 +46,7 @@ public class Member extends BaseTimeEntity {
     private String password;
 
     @OneToOne(mappedBy = "member")
+    @JsonIgnore
     private RefreshToken refresh_token;
 
     @OneToMany(mappedBy="member")
