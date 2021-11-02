@@ -1,5 +1,7 @@
 package com.yh20studio.springbootwebservice.domain.labelColors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackList;
 import com.yh20studio.springbootwebservice.domain.labels.Labels;
 import com.yh20studio.springbootwebservice.domain.schedules.Schedules;
 import lombok.AccessLevel;
@@ -24,6 +26,11 @@ public class LabelColors {
 
     @Column(nullable = false)
     private String title;
+
+    @OneToMany(mappedBy="label_colors")
+    @OrderBy("id DESC")
+    @JsonIgnore
+    private List<Labels> labelsList;
 
 
     @Builder

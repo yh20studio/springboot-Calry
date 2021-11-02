@@ -30,7 +30,6 @@ public class Labels{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(foreignKey = @ForeignKey(name = "label_colors_id"))
-    @JsonProperty("label_colors")
     private LabelColors label_colors;
 
     @ManyToOne(fetch = FetchType.EAGER)

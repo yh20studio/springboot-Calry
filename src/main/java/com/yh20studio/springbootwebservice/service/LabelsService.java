@@ -60,7 +60,7 @@ public class LabelsService {
                             labelsUpdatdeRequestDto.getTitle(),
                             sequence);
                         return entity;
-                    }).orElseThrow(() -> new NoSuchElementException());
+                    }).orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "값을 찾을 수 없습니다."));
 
             labelsMainResponseDtoList.add(new LabelsMainResponseDto(labelsRepository.save(labels)));
             count++;
