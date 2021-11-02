@@ -10,30 +10,31 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/routines")
 public class RoutinesController {
 
     private RoutinesService routinesService;
 
     // Get Method
-    @GetMapping(value="/routines", produces = "application/json; charset=UTF-8")
+    @GetMapping(value="", produces = "application/json; charset=UTF-8")
     public List<RoutinesMainResponseDto> findMyAllASCRoutines(){
         return routinesService.getMyAllASC();
     }
 
     // Post Method
-    @PostMapping(value="/routines", produces = "application/json; charset=UTF-8")
+    @PostMapping(value="", produces = "application/json; charset=UTF-8")
     public RoutinesMainResponseDto saveRoutines(@RequestBody RoutinesSaveRequestDto dto){
         return routinesService.save(dto);
     }
 
     // Put Method
-    @PutMapping(value="/routines/{id}", produces = "application/json; charset=UTF-8")
+    @PutMapping(value="/{id}", produces = "application/json; charset=UTF-8")
     public RoutinesMainResponseDto updateRoutines(@PathVariable("id") Long id, @RequestBody RoutinesSaveRequestDto dto){
         return routinesService.update(id, dto);
     }
 
     // Delete Method
-    @DeleteMapping(value="/routines/{id}", produces = "application/json; charset=UTF-8")
+    @DeleteMapping(value="/{id}", produces = "application/json; charset=UTF-8")
     public String deleteRoutines(@PathVariable("id") Long id){
         routinesService.delete(id);
         return "delete";

@@ -16,12 +16,6 @@ public class TodayRoutinesController {
 
     private TodayRoutinesService todayRoutinesService;
 
-    // Get Method
-    @GetMapping(value="", produces = "application/json; charset=UTF-8")
-    public List<TodayRoutinesMainResponseDto> findAllDescTodayRoutines(){
-        return todayRoutinesService.getMyAllASC();
-    }
-
     // Post Method
     @PostMapping(value="", produces = "application/json; charset=UTF-8")
     public TodayRoutinesMainResponseDto saveTodayRoutines(@RequestBody TodayRoutinesSaveRequestDto dto){
