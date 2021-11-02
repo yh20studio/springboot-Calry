@@ -2,7 +2,6 @@ package com.yh20studio.springbootwebservice.service;
 
 import com.yh20studio.springbootwebservice.component.JwtUtil;
 import com.yh20studio.springbootwebservice.component.SecurityUtil;
-import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackList;
 import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackListRepository;
 import com.yh20studio.springbootwebservice.domain.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.labelColors.LabelColors;
@@ -18,18 +17,18 @@ import com.yh20studio.springbootwebservice.dto.labels.LabelsSaveRequestDto;
 import com.yh20studio.springbootwebservice.dto.member.MemberMainResponseDto;
 import com.yh20studio.springbootwebservice.dto.member.MemberSaveRequestDto;
 import com.yh20studio.springbootwebservice.dto.token.AccessTokenRequestDto;
-import com.yh20studio.springbootwebservice.dto.token.TokenRequestDto;
-import com.yh20studio.springbootwebservice.dto.token.TokenResponseDto;
+import com.yh20studio.springbootwebservice.dto.token.AccessTokenResponseDto;
+import com.yh20studio.springbootwebservice.dto.token.TokenDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,7 +82,7 @@ public class MemberService {
 
     // 토큰을 통하여 로그인 하는 과정
     @Transactional
-    public TokenResponseDto login(MemberSaveRequestDto memberSaveRequestDto) {
+    public AccessTokenResponseDto login(MemberSaveRequestDto memberSaveRequestDto) {
         // 이메일과 password를 통해서 UsernamePasswordAuthenticationToken을 생성함.
         UsernamePasswordAuthenticationToken authenticationToken = memberSaveRequestDto.toAuthentication();
 
@@ -92,7 +91,7 @@ public class MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 인증 정보를 기반으로 JWT 토큰 생성(Access, Refresh Token)
-        TokenResponseDto tokenResponseDto = jwtUtil.generateTokenDto(authentication);
+        TokenDto tokenDto = jwtUtil.generateToken(authentication);
 
         // Authenticate 에서 유저의 id 값을 가져와서 Member 객체 생성
         Member member = memberRepository.findById(Long.parseLong(authentication.getName()))
@@ -101,35 +100,35 @@ public class MemberService {
         // 발행된 RefreshToken 저장
         RefreshToken refreshToken =  refreshTokenRepository.findByMember(member)
                 .map(entity -> {entity.updateWhole(
-                        tokenResponseDto.getRefreshToken(),
-                        tokenResponseDto.getRefreshTokenExpiresIn()
-                );
+                        tokenDto.getRefreshToken(),
+                        tokenDto.getRefreshTokenExpiresIn());
                     return entity;
                 })
                 .orElseGet(() -> refreshTokenRepository.save(RefreshToken.builder()
-                        .value(tokenResponseDto.getRefreshToken())
-                        .expires(tokenResponseDto.getRefreshTokenExpiresIn())
+                        .value(tokenDto.getRefreshToken())
+                        .expires(tokenDto.getRefreshTokenExpiresIn())
                         .member(member)
                         .build()));
 
         refreshTokenRepository.save(refreshToken);
 
+
         // (Access, Refresh Token) 토큰 리턴
-        return tokenResponseDto;
+        return new AccessTokenResponseDto(tokenDto.getAccessToken(), tokenDto.getAccessTokenExpiresIn());
     }
 
     // 로그인 된 사용자가 TokenRequestDto을 통해서 로그아웃 하는 과정
     @Transactional
-    public MessageResponse logout(TokenRequestDto tokenRequestDto) {
+    public MessageResponse logout(AccessTokenRequestDto accessTokenRequestDto) {
 
-        // Refresh 토큰이 유요하지 않을 경우 HttpStatus.UNAUTHORIZED Throw
-        if (!jwtUtil.validateToken(tokenRequestDto.getRefreshToken())) {
+        // Access 토큰이 유요하지 않을 경우 HttpStatus.UNAUTHORIZED Throw
+        if (!jwtUtil.validateToken(accessTokenRequestDto.getAccessToken())) {
             //401 Error
-            throw new RestException(HttpStatus.UNAUTHORIZED, "Refresh Token 이 유효하지 않습니다.");
+            throw new RestException(HttpStatus.UNAUTHORIZED, "Access Token이 유효하지 않습니다.");
         }
 
-        // Access 토큰으로 Authentication 생성
-        Authentication authentication = jwtUtil.getAuthentication(tokenRequestDto.getAccessToken());
+        // Access 토큰에서 Member Id 가져오기
+        Authentication authentication = jwtUtil.getAuthentication(accessTokenRequestDto.getAccessToken());
 
         // Authenticate 에서 유저의 id 값을 가져와서 Member 객체 생성
         Member member = memberRepository.findById(Long.parseLong(authentication.getName()))
@@ -140,40 +139,23 @@ public class MemberService {
                 //401 Error
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "로그아웃 된 사용자입니다."));
 
-        // 현재 DB에 Refresh 토큰이 존재하는 토큰과, 주어진 토큰을 비교한다. 만약 다르다면 잘못된 접근으로 간주하며, HttpStatus.UNAUTHORIZED Throw
-        if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
-            //401 Error
-            throw new RestException(HttpStatus.UNAUTHORIZED, "토큰의 유저 정보가 일치하지 않습니다.");
-        }
-
         // AccessToken 블랙리스트 추가
         // 로그아웃 과정을 거치면서 주어진 Refresh 토큰으로 재발급은 불가능하지만, 이미 발행되었던 Access 토큰으로 로그인을 막음
-        AccessTokenRequestDto accessTokenRequestDto = AccessTokenRequestDto.builder()
-                .value(tokenRequestDto.getAccessToken())
-                .expires(tokenRequestDto.getAccessTokenExpiresIn())
-                .member(refreshToken.getMember())
-                .build();
-
         accessTokenBlackListRepository.save(accessTokenRequestDto.toEntity());
 
         // RefreshToken 삭제
         refreshTokenRepository.deleteById((refreshToken.getId()));
 
-        return new MessageResponse("Logout");
+        return new MessageResponse("logout");
     }
 
 
-    // TokenRequestDto을 통하여 토큰을 재발급
+    // TokenRequestDto을 통하여 Access 토큰을 재발급
     @Transactional
-    public TokenResponseDto reissue(TokenRequestDto tokenRequestDto) {
-        // Refresh 토큰 검증
-        if (!jwtUtil.validateToken(tokenRequestDto.getRefreshToken())) {
-            //401 Error
-            throw new RestException(HttpStatus.UNAUTHORIZED, "Refresh Token 이 유효하지 않습니다");
-        }
+    public AccessTokenResponseDto reissueAccessToken(AccessTokenRequestDto accessTokenRequestDto) {
 
         // Access 토큰에서 Member Id 가져오기
-        Authentication authentication = jwtUtil.getAuthentication(tokenRequestDto.getAccessToken());
+        Authentication authentication = jwtUtil.getAuthentication(accessTokenRequestDto.getAccessToken());
 
         // Authenticate 에서 유저의 id 값을 가져와서 Member 객체 생성
         Member member = memberRepository.findById(Long.parseLong(authentication.getName()))
@@ -182,25 +164,19 @@ public class MemberService {
         // DB에서 Member Id를 기반으로 Refresh Token 값 가져온다. 해당 토큰이 없다면 HttpStatus.UNAUTHORIZED Throw
         RefreshToken refreshToken = refreshTokenRepository.findByMember(member)
                 //401 Error
-                .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "로그아웃 된 사용자입니다."));
+                .orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "Refresh Token을 찾을 수 없습니다."));
 
-        // DB에 저장된 Refresh 토큰과 주어진 Refresh 토큰이 일치하는지 검사
-        if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
-            //401 Error
-            throw new RestException(HttpStatus.UNAUTHORIZED, "토큰의 유저 정보가 일치하지 않습니다.");
+        long now = (new Date().getTime());
+
+        // refreshToken의 유효기간이 지났다면 다시 로그인해야합니다.
+        if(refreshToken.getExpires() <= now){
+            throw new RestException(HttpStatus.UNAUTHORIZED, "Refresh Token이 유효하지 않습니다.");
+        }else{
+            // 새로운 Access Token 발급
+            AccessTokenResponseDto accessTokenResponseDto = jwtUtil.reissueAccessToken(authentication);
+            return accessTokenResponseDto;
         }
 
-        // 새로운 토큰 발급
-        TokenResponseDto tokenResponseDto = jwtUtil.generateTokenDto(authentication);
-
-        // DB 정보 업데이트
-        RefreshToken newRefreshToken = refreshToken
-                .updateValue(tokenResponseDto.getRefreshToken())
-                .updateExpires(tokenResponseDto.getRefreshTokenExpiresIn());
-
-        refreshTokenRepository.save(newRefreshToken);
-
-        return tokenResponseDto;
     }
 
     // 현재 SecurityContext에 있는 유저 정보 가져오기

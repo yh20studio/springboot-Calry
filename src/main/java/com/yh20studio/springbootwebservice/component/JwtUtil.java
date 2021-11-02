@@ -1,11 +1,15 @@
 package com.yh20studio.springbootwebservice.component;
 
 import com.yh20studio.springbootwebservice.domain.exception.RestException;
-import com.yh20studio.springbootwebservice.dto.token.TokenResponseDto;
+import com.yh20studio.springbootwebservice.domain.member.Member;
+import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
+import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshToken;
+import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshTokenRepository;
+import com.yh20studio.springbootwebservice.dto.token.AccessTokenResponseDto;
+import com.yh20studio.springbootwebservice.dto.token.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,11 +31,9 @@ public class JwtUtil {
 
     private static String AUTHORITIES_KEY = "auth";
     private static String BEARER_TYPE = "bearer";
-    private static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 25 * 7;            // 60분
+    private static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 1;   // 1일
     private static long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
-
     private Key key;
-
 
     // JWT Secret key
     public JwtUtil(@Value("${jwt.secret}") String secretKey) {
@@ -40,7 +42,7 @@ public class JwtUtil {
     }
 
     // Authentication으로 토큰 생성
-    public TokenResponseDto generateTokenDto(Authentication authentication){
+    public TokenDto generateToken(Authentication authentication){
 
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -63,12 +65,34 @@ public class JwtUtil {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
-        return TokenResponseDto.builder()
-                .grantType(BEARER_TYPE)
+        return TokenDto.builder()
                 .accessToken(accessToken)
                 .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
                 .refreshToken(refreshToken)
                 .refreshTokenExpiresIn(refreshTokenExpiresIn.getTime())
+                .build();
+
+    }
+
+    public AccessTokenResponseDto reissueAccessToken(Authentication authentication){
+
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+        long now = (new Date().getTime());
+
+        // Access Token 생성
+        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        String accessToken = Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .setExpiration(accessTokenExpiresIn)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+
+        return AccessTokenResponseDto.builder()
+                .accessToken(accessToken)
+                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
                 .build();
 
     }
@@ -84,7 +108,6 @@ public class JwtUtil {
             throw new RestException(HttpStatus.UNAUTHORIZED, "권한 정보가 없는 토큰입니다.");
         }
 
-        //
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
@@ -105,8 +128,9 @@ public class JwtUtil {
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
 
         } catch (ExpiredJwtException e) {
-
+            throw new RestException(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.");
         } catch (UnsupportedJwtException e) {
+
 
         } catch (IllegalArgumentException e) {
 
@@ -118,7 +142,10 @@ public class JwtUtil {
     public Claims parseClaims(String accessToken){
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
-        } catch (ExpiredJwtException e) {
+        } catch (MalformedJwtException e) {
+            throw new RestException(HttpStatus.UNAUTHORIZED, "토큰 형식이 아닙니다.");
+        }
+        catch (ExpiredJwtException e) {
             return e.getClaims();
         }
     }

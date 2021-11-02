@@ -2,35 +2,28 @@ package com.yh20studio.springbootwebservice.dto.token;
 
 import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackList;
 import com.yh20studio.springbootwebservice.domain.member.Member;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.yh20studio.springbootwebservice.domain.todayRoutinesGroups.TodayRoutinesGroups;
+import lombok.*;
 
-import javax.persistence.Id;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class AccessTokenRequestDto {
-
-    private String value;
-    private Long expires;
-    private Member member;
+    private String accessToken;
+    private Long accessTokenExpiresIn;
 
     @Builder
-    public AccessTokenRequestDto(String value, Long expires, Member member){
-        this.value = value;
-        this.expires = expires;
-        this.member = member;
+    public AccessTokenRequestDto(String accessToken, Long accessTokenExpiresIn){
+        this.accessToken = accessToken;
+        this.accessTokenExpiresIn = accessTokenExpiresIn;
     }
 
     public AccessTokenBlackList toEntity(){
         return AccessTokenBlackList.builder()
-                .value(value)
-                .expires(expires)
-                .member(member)
+                .value(accessToken)
+                .expires(accessTokenExpiresIn)
                 .build();
     }
 }
-

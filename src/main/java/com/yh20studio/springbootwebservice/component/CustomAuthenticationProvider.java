@@ -51,7 +51,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         // checker
         if(!passwordEncoder.matches(password, loadedUser.getPassword())){
-            throw new RestException(HttpStatus.NOT_FOUND, "Password does not match stored value");
+            throw new RestException(HttpStatus.FORBIDDEN, "비밀번호가 틀렸습니다.");
         }
 
         // 인증 완료
