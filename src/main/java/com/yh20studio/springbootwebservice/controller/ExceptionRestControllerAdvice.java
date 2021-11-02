@@ -1,6 +1,6 @@
 package com.yh20studio.springbootwebservice.controller;
 
-import com.yh20studio.springbootwebservice.domain.exception.RestException;
+import com.yh20studio.springbootwebservice.exception.RestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

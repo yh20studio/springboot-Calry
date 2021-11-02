@@ -1,19 +1,13 @@
 package com.yh20studio.springbootwebservice.service;
 
-import com.sun.xml.bind.v2.model.annotation.Quick;
 import com.yh20studio.springbootwebservice.component.SecurityUtil;
-import com.yh20studio.springbootwebservice.domain.exception.RestException;
+import com.yh20studio.springbootwebservice.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
 import com.yh20studio.springbootwebservice.domain.quickSchedules.QuickSchedules;
 import com.yh20studio.springbootwebservice.domain.quickSchedules.QuickSchedulesRepository;
-import com.yh20studio.springbootwebservice.domain.routines.Routines;
-import com.yh20studio.springbootwebservice.domain.schedules.Schedules;
-import com.yh20studio.springbootwebservice.domain.schedules.SchedulesRepository;
 import com.yh20studio.springbootwebservice.dto.quickSchedules.QuickSchedulesMainResponseDto;
 import com.yh20studio.springbootwebservice.dto.quickSchedules.QuickSchedulesSaveRequestDto;
-import com.yh20studio.springbootwebservice.dto.schedules.SchedulesMainResponseDto;
-import com.yh20studio.springbootwebservice.dto.schedules.SchedulesSaveRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

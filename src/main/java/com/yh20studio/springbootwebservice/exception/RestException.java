@@ -1,4 +1,4 @@
-package com.yh20studio.springbootwebservice.domain.exception;
+package com.yh20studio.springbootwebservice.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

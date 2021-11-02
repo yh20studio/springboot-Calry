@@ -1,14 +1,11 @@
 package com.yh20studio.springbootwebservice.component;
 
 import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackListRepository;
-import com.yh20studio.springbootwebservice.domain.exception.RestException;
-import lombok.AllArgsConstructor;
+import com.yh20studio.springbootwebservice.exception.RestException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 

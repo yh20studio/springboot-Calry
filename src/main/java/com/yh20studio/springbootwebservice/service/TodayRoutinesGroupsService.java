@@ -1,18 +1,10 @@
 package com.yh20studio.springbootwebservice.service;
 
 import com.yh20studio.springbootwebservice.component.SecurityUtil;
-import com.yh20studio.springbootwebservice.domain.exception.RestException;
+import com.yh20studio.springbootwebservice.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
-import com.yh20studio.springbootwebservice.domain.routines.RoutinesRepository;
-import com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemosRepository;
-import com.yh20studio.springbootwebservice.domain.schedules.Schedules;
-import com.yh20studio.springbootwebservice.domain.todayRoutines.TodayRoutines;
-import com.yh20studio.springbootwebservice.domain.todayRoutines.TodayRoutinesRepository;
-import com.yh20studio.springbootwebservice.domain.todayRoutinesGroups.TodayRoutinesGroups;
 import com.yh20studio.springbootwebservice.domain.todayRoutinesGroups.TodayRoutinesGroupsRepository;
-import com.yh20studio.springbootwebservice.dto.todayRoutines.TodayRoutinesMainResponseDto;
-import com.yh20studio.springbootwebservice.dto.todayRoutines.TodayRoutinesSaveRequestDto;
 import com.yh20studio.springbootwebservice.dto.todayRoutinesGroups.TodayRoutinesGroupsMainResponseDto;
 import com.yh20studio.springbootwebservice.dto.todayRoutinesGroups.TodayRoutinesGroupsSaveRequestDto;
 import lombok.AllArgsConstructor;
@@ -21,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 

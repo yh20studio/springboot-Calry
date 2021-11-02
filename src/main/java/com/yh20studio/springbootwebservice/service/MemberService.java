@@ -3,7 +3,7 @@ package com.yh20studio.springbootwebservice.service;
 import com.yh20studio.springbootwebservice.component.JwtUtil;
 import com.yh20studio.springbootwebservice.component.SecurityUtil;
 import com.yh20studio.springbootwebservice.domain.accessTokenBlackList.AccessTokenBlackListRepository;
-import com.yh20studio.springbootwebservice.domain.exception.RestException;
+import com.yh20studio.springbootwebservice.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.labelColors.LabelColors;
 import com.yh20studio.springbootwebservice.domain.labelColors.LabelColorsRepository;
 import com.yh20studio.springbootwebservice.domain.labels.LabelsRepository;

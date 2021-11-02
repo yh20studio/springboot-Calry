@@ -3,7 +3,7 @@ package com.yh20studio.springbootwebservice.service;
 
 import com.yh20studio.springbootwebservice.component.SecurityUtil;
 import com.yh20studio.springbootwebservice.domain.labelColors.LabelColorsRepository;
-import com.yh20studio.springbootwebservice.domain.exception.RestException;
+import com.yh20studio.springbootwebservice.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.labels.Labels;
 import com.yh20studio.springbootwebservice.domain.labels.LabelsRepository;
 import com.yh20studio.springbootwebservice.domain.member.Member;
@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor

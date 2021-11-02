@@ -1,7 +1,7 @@
 package com.yh20studio.springbootwebservice.service;
 
 
-import com.yh20studio.springbootwebservice.domain.exception.RestException;
+import com.yh20studio.springbootwebservice.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
 import lombok.AllArgsConstructor;

@@ -1,9 +1,8 @@
 package com.yh20studio.springbootwebservice.service;
 
-import com.yh20studio.springbootwebservice.domain.exception.RestException;
+import com.yh20studio.springbootwebservice.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.routines.Routines;
 import com.yh20studio.springbootwebservice.domain.routines.RoutinesRepository;
-import com.yh20studio.springbootwebservice.domain.routinesGroupsUnions.RoutinesGroupsUnions;
 import com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemos;
 import com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemosRepository;
 import com.yh20studio.springbootwebservice.dto.routinesMemos.RoutinesMemosMainResponseDto;

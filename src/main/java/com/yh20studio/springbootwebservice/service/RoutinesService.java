@@ -1,14 +1,13 @@
 package com.yh20studio.springbootwebservice.service;
 
 import com.yh20studio.springbootwebservice.component.SecurityUtil;
-import com.yh20studio.springbootwebservice.domain.exception.RestException;
+import com.yh20studio.springbootwebservice.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
 import com.yh20studio.springbootwebservice.domain.routines.*;
 import com.yh20studio.springbootwebservice.domain.routinesGroups.RoutinesGroupsRepository;
 import com.yh20studio.springbootwebservice.dto.routines.RoutinesMainResponseDto;
 import com.yh20studio.springbootwebservice.dto.routines.RoutinesSaveRequestDto;
-import com.yh20studio.springbootwebservice.dto.routinesGroups.RoutinesGroupsSaveRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

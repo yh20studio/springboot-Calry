@@ -1,10 +1,6 @@
 package com.yh20studio.springbootwebservice.component;
 
-import com.yh20studio.springbootwebservice.domain.exception.RestException;
-import com.yh20studio.springbootwebservice.domain.member.Member;
-import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
-import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshToken;
-import com.yh20studio.springbootwebservice.domain.refreshToken.RefreshTokenRepository;
+import com.yh20studio.springbootwebservice.exception.RestException;
 import com.yh20studio.springbootwebservice.dto.token.AccessTokenResponseDto;
 import com.yh20studio.springbootwebservice.dto.token.TokenDto;
 import io.jsonwebtoken.*;

@@ -1,10 +1,9 @@
 package com.yh20studio.springbootwebservice.service;
 
 import com.yh20studio.springbootwebservice.component.SecurityUtil;
-import com.yh20studio.springbootwebservice.domain.exception.RestException;
+import com.yh20studio.springbootwebservice.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
-import com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemos;
 import com.yh20studio.springbootwebservice.domain.schedules.Schedules;
 import com.yh20studio.springbootwebservice.domain.schedules.SchedulesRepository;
 import com.yh20studio.springbootwebservice.dto.schedules.*;
