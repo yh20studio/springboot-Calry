@@ -36,18 +36,6 @@ public class TodayRoutinesService {
     private MemberRepository memberRepository;
     private SecurityUtil securityUtil;
 
-
-    // 로그인된 유저의 TodayRoutines을 저장한 순서의 오름차순으로 하여 배열을 리턴한다.
-    @Transactional(readOnly = true)
-    public List<TodayRoutinesMainResponseDto> getMyAllASC(){
-
-        Long memberId = securityUtil.getCurrentMemberId();
-
-        return todayRoutinesRepository.findAllByMemberASC(memberId)
-                .map(TodayRoutinesMainResponseDto::new)
-                .collect(Collectors.toList());
-    }
-
     // 로그인된 유저의 RequestBody에서 TodayRoutines DTO를 받은 후 저장
     // DTO에서 date 값을 받아서 해당 날짜에 TodayRoutinesGroups이 존재하는지 확인한다. 만약 없다면 새롭게 저장하고, TodayRoutinesGroups를 가져오기로 한다.
     // TodayRoutinesGroups의 fail 값을 1 증가 시킨다.
@@ -139,7 +127,7 @@ public class TodayRoutinesService {
     @Transactional
     public Long delete(Long id){
         TodayRoutines todayRoutines = todayRoutinesRepository.findById(id)
-                .orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "값을 찾을 수 없습니다."));
+                .orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 TodayRoutines 값을 찾을 수 없습니다."));
 
         TodayRoutinesGroups todayRoutinesGroups = todayRoutinesGroupsRepository.findById(todayRoutines.getTodayRoutinesGroups().getId())
                 .map(entity -> {entity.updateFail(
@@ -149,8 +137,7 @@ public class TodayRoutinesService {
                 .orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "값을 찾을 수 없습니다."));
 
         todayRoutinesGroupsRepository.save(todayRoutinesGroups);
-
-        todayRoutinesRepository.deleteById(id);
+        todayRoutinesRepository.delete(todayRoutines);
         return id;
     }
 

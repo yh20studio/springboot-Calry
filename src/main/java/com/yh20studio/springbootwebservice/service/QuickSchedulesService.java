@@ -1,11 +1,13 @@
 package com.yh20studio.springbootwebservice.service;
 
+import com.sun.xml.bind.v2.model.annotation.Quick;
 import com.yh20studio.springbootwebservice.component.SecurityUtil;
 import com.yh20studio.springbootwebservice.domain.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
 import com.yh20studio.springbootwebservice.domain.quickSchedules.QuickSchedules;
 import com.yh20studio.springbootwebservice.domain.quickSchedules.QuickSchedulesRepository;
+import com.yh20studio.springbootwebservice.domain.routines.Routines;
 import com.yh20studio.springbootwebservice.domain.schedules.Schedules;
 import com.yh20studio.springbootwebservice.domain.schedules.SchedulesRepository;
 import com.yh20studio.springbootwebservice.dto.quickSchedules.QuickSchedulesMainResponseDto;
@@ -30,7 +32,7 @@ public class QuickSchedulesService {
     private MemberRepository memberRepository;
     private SecurityUtil securityUtil;
 
-    // 로그인 된 Member의 모든 QuickSchedules을 id의 내림차순으로 리턴한다.
+    // 로그인 된 Member의 모든 QuickSchedules을 id의 오름차순으로 리턴한다.
     @Transactional(readOnly = true)
     public List<QuickSchedulesMainResponseDto> getQuickSchedules(){
 
@@ -76,7 +78,9 @@ public class QuickSchedulesService {
     // url Path에서 QuickSchedules의 id를 받은 후 로그인된 유저의 해당 QuickSchedules을 삭제
     @Transactional
     public Long delete(Long id){
-        quickSchedulesRepository.deleteById(id);
+        QuickSchedules quickSchedules = quickSchedulesRepository.findById(id)
+                .orElseThrow(() ->new RestException(HttpStatus.NOT_FOUND, "해당 QuickSchedules 값을 찾을 수 없습니다."));
+        quickSchedulesRepository.delete(quickSchedules);
         return id;
     }
 }

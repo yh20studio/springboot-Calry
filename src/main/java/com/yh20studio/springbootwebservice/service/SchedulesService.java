@@ -4,6 +4,7 @@ import com.yh20studio.springbootwebservice.component.SecurityUtil;
 import com.yh20studio.springbootwebservice.domain.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
+import com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemos;
 import com.yh20studio.springbootwebservice.domain.schedules.Schedules;
 import com.yh20studio.springbootwebservice.domain.schedules.SchedulesRepository;
 import com.yh20studio.springbootwebservice.dto.schedules.*;
@@ -30,8 +31,6 @@ public class SchedulesService {
     // 주어진 Date를 이용해서 해당 날짜의 로그인된 Member의 모든 스케줄과, 지정된 공휴일 스케줄을 startTime에 따라서 리턴한다.
     @Transactional(readOnly = true)
     public List<SchedulesMainResponseDto> getDaySchedulesOrderByTime(String date){
-        Calendar cal = Calendar.getInstance();
-        Calendar nextCal = Calendar.getInstance();
 
         String [] givenDate = date.split("-");
         int year = Integer.parseInt(givenDate[0]);
@@ -628,7 +627,10 @@ public class SchedulesService {
     // url Path에서 Schedules의 id를 받은 후 로그인된 유저의 해당 Schedules을 삭제
     @Transactional
     public Long delete(Long id){
-        schedulesRepository.deleteById(id);
+        Schedules schedules = schedulesRepository.findById(id)
+                .orElseThrow(() ->new RestException(HttpStatus.NOT_FOUND, "해당 Schedules 값을 찾을 수 없습니다."));
+        schedulesRepository.delete(schedules);
+
         return id;
     }
 

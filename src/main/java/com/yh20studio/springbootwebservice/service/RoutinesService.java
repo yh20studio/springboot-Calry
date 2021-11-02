@@ -70,8 +70,9 @@ public class RoutinesService {
     // url Path에서 Routines의 id를 받은 후 로그인된 유저의 해당 Routines을 삭제
     @Transactional
     public Long delete(Long id){
-
-        routinesRepository.deleteById(id);
+        Routines routines = routinesRepository.findById(id)
+                .orElseThrow(() ->new RestException(HttpStatus.NOT_FOUND, "해당 Routines 값을 찾을 수 없습니다."));
+        routinesRepository.delete(routines);
         return id;
     }
 

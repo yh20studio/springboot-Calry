@@ -24,7 +24,7 @@ public class SchedulesSaveRequestDto {
     private Labels labels;
 
     @Builder
-    public SchedulesSaveRequestDto(String title, String content, String start_date, String end_date, Labels labels, Member member){
+    public SchedulesSaveRequestDto(String title, String content, String start_date, String end_date, Labels labels){
         this.title = title;
         this.content = content;
         this.start_date = stringToLocalDateTime(start_date);

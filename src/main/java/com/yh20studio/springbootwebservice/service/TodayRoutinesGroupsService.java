@@ -6,6 +6,7 @@ import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
 import com.yh20studio.springbootwebservice.domain.routines.RoutinesRepository;
 import com.yh20studio.springbootwebservice.domain.routinesMemos.RoutinesMemosRepository;
+import com.yh20studio.springbootwebservice.domain.schedules.Schedules;
 import com.yh20studio.springbootwebservice.domain.todayRoutines.TodayRoutines;
 import com.yh20studio.springbootwebservice.domain.todayRoutines.TodayRoutinesRepository;
 import com.yh20studio.springbootwebservice.domain.todayRoutinesGroups.TodayRoutinesGroups;
@@ -36,7 +37,8 @@ public class TodayRoutinesGroupsService {
     private SecurityUtil securityUtil;
 
 
-    @Transactional
+    // 로그인된 유저의 모든 TodayRoutinesGroups을 리턴한다.
+    @Transactional(readOnly = true)
     public List<TodayRoutinesGroupsMainResponseDto> getAllTodayRoutinesGroups(){
         Long memberId = securityUtil.getCurrentMemberId();
         Member member = memberRepository.findById(memberId)
@@ -65,35 +67,6 @@ public class TodayRoutinesGroupsService {
         return new TodayRoutinesGroupsMainResponseDto(todayRoutinesGroupsRepository.findByMemberAndDate(memberId, selectDate)
                 .orElseGet(() -> todayRoutinesGroupsRepository.save((new TodayRoutinesGroupsSaveRequestDto(date, 0, 0, member)).toEntity())));
 
-    }
-
-    // 로그인된 유저의 RequestBody에서 TodayRoutinesGroups DTO를 받은 후 저장
-    @Transactional
-    public TodayRoutinesGroupsMainResponseDto save(TodayRoutinesGroupsSaveRequestDto dto){
-
-        return new TodayRoutinesGroupsMainResponseDto(todayRoutinesGroupsRepository.save(dto.toEntity()));
-    }
-
-    // 로그인된 유저의 RequestBody에서 TodayRoutinesGroups DTO와, url Path에서 TodayRoutinesGroups의 id를 받은 후 업데이트
-    @Transactional
-    public TodayRoutinesGroupsMainResponseDto update(Long id, TodayRoutinesGroupsSaveRequestDto dto){
-        TodayRoutinesGroups todayRoutinesGroups = todayRoutinesGroupsRepository.findById(id)
-                .map(entity -> {entity.updateDate(
-                        dto.getDate()
-                );
-                    return entity;
-                })
-                .orElseThrow(() -> new NoSuchElementException());
-
-        return new TodayRoutinesGroupsMainResponseDto(todayRoutinesGroupsRepository.save(todayRoutinesGroups));
-
-    }
-
-    // url Path에서 TodayRoutinesGroups의 id를 받은 후 로그인된 유저의 해당 TodayRoutinesGroups을 삭제
-    @Transactional
-    public Long delete(Long id){
-        todayRoutinesGroupsRepository.deleteById(id);
-        return id;
     }
 
 }

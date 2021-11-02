@@ -4,6 +4,7 @@ import com.yh20studio.springbootwebservice.component.SecurityUtil;
 import com.yh20studio.springbootwebservice.domain.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
+import com.yh20studio.springbootwebservice.domain.quickSchedules.QuickSchedules;
 import com.yh20studio.springbootwebservice.domain.routines.RoutinesRepository;
 import com.yh20studio.springbootwebservice.domain.routinesGroups.RoutinesGroups;
 import com.yh20studio.springbootwebservice.domain.routinesGroups.RoutinesGroupsRepository;
@@ -35,7 +36,7 @@ public class RoutinesGroupsUnionsService {
     private MemberRepository memberRepository;
     private SecurityUtil securityUtil;
 
-    // 로그인 된 Member의 모든 RoutinesGroupsUnions을 id의 내림차순으로 리턴한다.
+    // 로그인 된 Member의 모든 RoutinesGroupsUnions을 id의 오름차순으로 리턴한다.
     @Transactional(readOnly = true)
     public List<RoutinesGroupsUnionsMainResponseDto> getMyRoutinesGroupsUnions(){
 
@@ -131,7 +132,9 @@ public class RoutinesGroupsUnionsService {
     // url Path에서 RoutinesGroupsUnions의 id를 받은 후 로그인된 유저의 해당 RoutinesGroupsUnions를 모두 삭제
     @Transactional
     public Long deleteRoutinesGroupsUnions(Long id){
-        routinesGroupsUnionsRepository.deleteById(id);
+        RoutinesGroupsUnions routinesGroupsUnions = routinesGroupsUnionsRepository.findById(id)
+                .orElseThrow(() ->new RestException(HttpStatus.NOT_FOUND, "해당 RoutinesGroupsUnions 값을 찾을 수 없습니다."));
+        routinesGroupsUnionsRepository.delete(routinesGroupsUnions);
         return id;
     }
 }
