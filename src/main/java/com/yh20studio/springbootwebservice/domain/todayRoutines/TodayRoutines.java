@@ -5,6 +5,7 @@ import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.routines.Routines;
 import com.yh20studio.springbootwebservice.domain.todayRoutinesGroups.TodayRoutinesGroups;
+import com.yh20studio.springbootwebservice.dto.todayRoutines.TodayRoutinesSaveRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -50,4 +53,11 @@ public class TodayRoutines extends BaseTimeEntity {
         this.finishTime = finishTime;
         this.finish = finish;
     }
+
+    public void setTodayRoutinesGroups(TodayRoutinesGroups todayRoutinesGroups){
+        this.todayRoutinesGroups = todayRoutinesGroups;
+    }
+
+
 }
+

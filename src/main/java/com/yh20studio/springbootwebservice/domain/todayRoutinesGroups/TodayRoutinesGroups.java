@@ -60,7 +60,10 @@ public class TodayRoutinesGroups extends BaseTimeEntity {
         this.success += success;
     }
 
-    public void updateFail(Integer fail){
+    public void increaseFailCount(Integer fail){
         this.fail += fail;
     }
+
+
+
 }

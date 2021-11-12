@@ -30,26 +30,19 @@ public class TodayRoutinesGroupsService {
     @Transactional(readOnly = true)
     public List<TodayRoutinesGroupsMainResponseDto> getAllTodayRoutinesGroups(){
         Long memberId = securityUtil.getCurrentMemberId();
-        Member member = memberRepository.findById(memberId)
+        memberRepository.findById(memberId)
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
 
-       return todayRoutinesGroupsRepository.findAllByMember(memberId)
+        return todayRoutinesGroupsRepository.findAllByMember(memberId)
                 .map(TodayRoutinesGroupsMainResponseDto::new)
                 .collect(Collectors.toList());
-
     }
 
     // 로그인된 유저의 주어진 Date 값을 통해서 TodayRoutinesGroups을 리턴한다.
     @Transactional
     public TodayRoutinesGroupsMainResponseDto getByDate(String date){
-        String [] givenDate = date.split("-");
-        int year = Integer.parseInt(givenDate[0]);
-        int month = Integer.parseInt(givenDate[1]);
-        int day = Integer.parseInt(givenDate[2]);
-
-        LocalDate selectDate = LocalDate.of(year, month, day);
+        LocalDate selectDate = LocalDate.parse(date);
         Long memberId = securityUtil.getCurrentMemberId();
-
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
 
@@ -57,5 +50,7 @@ public class TodayRoutinesGroupsService {
                 .orElseGet(() -> todayRoutinesGroupsRepository.save((new TodayRoutinesGroupsSaveRequestDto(date, 0, 0, member)).toEntity())));
 
     }
+
+
 
 }

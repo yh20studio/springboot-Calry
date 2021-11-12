@@ -1,6 +1,7 @@
 package com.yh20studio.springbootwebservice.controller;
 
 import com.yh20studio.springbootwebservice.dto.todayRoutines.TodayRoutinesMainResponseDto;
+import com.yh20studio.springbootwebservice.dto.todayRoutines.TodayRoutinesSaveListRequestDto;
 import com.yh20studio.springbootwebservice.dto.todayRoutines.TodayRoutinesSaveRequestDto;
 import com.yh20studio.springbootwebservice.dto.todayRoutines.TodayRoutinesUpdateRequestDto;
 import com.yh20studio.springbootwebservice.service.TodayRoutinesService;
@@ -24,7 +25,7 @@ public class TodayRoutinesController {
 
     // List로 여러 데이터가 들어올 경우 Post Method
     @PostMapping(value="/list", produces = "application/json; charset=UTF-8")
-    public List<TodayRoutinesMainResponseDto> saveTodayRoutinesList(@RequestBody List<TodayRoutinesSaveRequestDto> dto){
+    public List<TodayRoutinesMainResponseDto> saveTodayRoutinesList(@RequestBody TodayRoutinesSaveListRequestDto dto){
         return todayRoutinesService.saveList(dto);
     }
 

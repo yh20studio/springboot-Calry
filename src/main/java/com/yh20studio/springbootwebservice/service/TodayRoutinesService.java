@@ -3,6 +3,7 @@ package com.yh20studio.springbootwebservice.service;
 import com.yh20studio.springbootwebservice.component.SecurityUtil;
 import com.yh20studio.springbootwebservice.domain.todayRoutines.TodayRoutines;
 import com.yh20studio.springbootwebservice.domain.todayRoutines.TodayRoutinesRepository;
+import com.yh20studio.springbootwebservice.dto.todayRoutines.TodayRoutinesSaveListRequestDto;
 import com.yh20studio.springbootwebservice.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
@@ -31,6 +32,7 @@ public class TodayRoutinesService {
     private TodayRoutinesGroupsRepository todayRoutinesGroupsRepository;
     private MemberRepository memberRepository;
     private SecurityUtil securityUtil;
+    private TodayRoutinesGroupsService todayRoutinesGroupsService;
 
     // 로그인된 유저의 RequestBody에서 TodayRoutines DTO를 받은 후 저장
     // DTO에서 date 값을 받아서 해당 날짜에 TodayRoutinesGroups이 존재하는지 확인한다. 만약 없다면 새롭게 저장하고, TodayRoutinesGroups를 가져오기로 한다.
@@ -38,59 +40,44 @@ public class TodayRoutinesService {
     @Transactional
     public TodayRoutinesMainResponseDto save(TodayRoutinesSaveRequestDto dto){
         Long memberId = securityUtil.getCurrentMemberId();
-
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
 
         TodayRoutinesGroups todayRoutinesGroups = todayRoutinesGroupsRepository.findByMemberAndDate(memberId, LocalDate.parse(dto.getDate()))
                 .orElseGet(() -> todayRoutinesGroupsRepository.save((new TodayRoutinesGroupsSaveRequestDto(dto.getDate(), 0, 0, member)).toEntity()));
 
-        dto.setTodayRoutinesGroups(todayRoutinesGroups);
 
-        todayRoutinesGroups.updateFail(1);
+        dto.setTodayRoutinesGroups(todayRoutinesGroups);
+        todayRoutinesGroups.increaseFailCount(1);
+
         todayRoutinesGroupsRepository.save(todayRoutinesGroups);
 
         return new TodayRoutinesMainResponseDto(todayRoutinesRepository.save(dto.toEntity()));
     }
 
-    // 로그인된 유저의 RequestBody에서 List<TodayRoutines> DTO를 받은 후 저장
+    // 로그인된 유저의 RequestBody에서 TodayRoutinesSaveListRequestDto를 받은 후 저장
     // DTO에서 date 값을 받아서 해당 날짜에 TodayRoutinesGroups이 존재하는지 확인한다. 만약 없다면 새롭게 저장하고, TodayRoutinesGroups를 가져오기로 한다.
     // TodayRoutinesGroups의 fail 값을 총 TodayRoutines 개수 만큼 증가시킨다.
     @Transactional
-    public List<TodayRoutinesMainResponseDto> saveList(List<TodayRoutinesSaveRequestDto> dtoList){
+    public List<TodayRoutinesMainResponseDto> saveList(TodayRoutinesSaveListRequestDto dtoSaveList){
         Long memberId = securityUtil.getCurrentMemberId();
-
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
 
-        List<TodayRoutinesSaveRequestDto> todayRoutinesSaveRequestDtoList = new ArrayList();
-        TodayRoutinesGroups todayRoutinesGroups = null;
+        TodayRoutinesGroups todayRoutinesGroups = todayRoutinesGroupsRepository.findByMemberAndDate(memberId, LocalDate.parse(dtoSaveList.getDate()))
+                .orElseGet(() -> todayRoutinesGroupsRepository.save((new TodayRoutinesGroupsSaveRequestDto(dtoSaveList.getDate(), 0, 0, member)).toEntity()));
 
-        for(TodayRoutinesSaveRequestDto todayRoutinesGroupsDto : dtoList){
+        List<TodayRoutines> todayRoutinesList = dtoSaveList.getTodayRoutinesList();
 
-            if (todayRoutinesGroups == null){ // todayRoutinesGroups 값이 비워져 있다면?
-                todayRoutinesGroups = todayRoutinesGroupsRepository.findByMemberAndDate(memberId, LocalDate.parse(todayRoutinesGroupsDto.getDate()))
-                        .orElseGet(() -> todayRoutinesGroupsRepository.save((new TodayRoutinesGroupsSaveRequestDto(todayRoutinesGroupsDto.getDate(), 0, 0, member)).toEntity()));
-            }
-            if(todayRoutinesGroups.getDate() != LocalDate.parse(todayRoutinesGroupsDto.getDate())){ // 반복문 도중에 만약 날짜가 다음날로 넘어가서 새롭게 todayRoutinesGroups를 정의 해야할 경우
-                todayRoutinesGroups = todayRoutinesGroupsRepository.findByMemberAndDate(memberId, LocalDate.parse(todayRoutinesGroupsDto.getDate()))
-                        .orElseGet(() -> todayRoutinesGroupsRepository.save((new TodayRoutinesGroupsSaveRequestDto(todayRoutinesGroupsDto.getDate(), 0, 0, member)).toEntity()));
-            }
-
-            todayRoutinesGroupsDto.setTodayRoutinesGroups(todayRoutinesGroups);
-            todayRoutinesSaveRequestDtoList.add(todayRoutinesGroupsDto);
-        }
-
-        todayRoutinesGroups.updateFail(todayRoutinesSaveRequestDtoList.size());
+        todayRoutinesGroups.increaseFailCount(todayRoutinesList.size());
         todayRoutinesGroupsRepository.save(todayRoutinesGroups);
 
+        for(TodayRoutines todayRoutines : todayRoutinesList){
+            todayRoutines.setTodayRoutinesGroups(todayRoutinesGroups);
+        }
 
-        return todayRoutinesRepository.saveAll(
-                todayRoutinesSaveRequestDtoList
-                        .stream()
-                        .map(TodayRoutinesSaveRequestDto::toEntity)
-                .collect(Collectors.toList())
-        ).stream().map(TodayRoutinesMainResponseDto::new).collect(Collectors.toList());
+        return todayRoutinesRepository.saveAll(todayRoutinesList)
+                .stream().map(TodayRoutinesMainResponseDto::new).collect(Collectors.toList());
     }
 
     // 로그인된 유저의 RequestBody에서 TodayRoutines DTO와, url Path에서 TodayRoutines의 id를 받은 후 업데이트
@@ -126,7 +113,7 @@ public class TodayRoutinesService {
                 .orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 TodayRoutines 값을 찾을 수 없습니다."));
 
         TodayRoutinesGroups todayRoutinesGroups = todayRoutinesGroupsRepository.findById(todayRoutines.getTodayRoutinesGroups().getId())
-                .map(entity -> {entity.updateFail(
+                .map(entity -> {entity.increaseFailCount(
                         -1);
                     return entity;
                 })
