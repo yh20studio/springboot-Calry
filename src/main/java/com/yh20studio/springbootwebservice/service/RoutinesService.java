@@ -54,13 +54,8 @@ public class RoutinesService {
     // 로그인된 유저의 RequestBody에서 RoutinesSaveRequestDto와, url Path에서 Routines의 id를 받은 후 업데이트
     @Transactional
     public RoutinesMainResponseDto update(Long id, RoutinesSaveRequestDto dto){
-        Routines routines = routinesRepository.findById(id)
-                .map(entity -> {entity.updateWhole(
-                        dto.getTitle(),
-                        dto.getDuration());
-                    return entity;
-                })
-                .orElseThrow(() -> new NoSuchElementException());
+        Routines routines = routinesRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        routines.updateWhole(dto.getTitle(), dto.getDuration());
 
         return new RoutinesMainResponseDto(routinesRepository.save(routines));
 

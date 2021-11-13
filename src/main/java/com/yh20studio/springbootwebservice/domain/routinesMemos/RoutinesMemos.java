@@ -44,7 +44,11 @@ public class RoutinesMemos {
         this.content = content;
         this.routines = routines;
     }
-    public void updateWhole(String content){
+    public void updateContent(String content){
         this.content = content;
+    }
+
+    public void setRoutines(Routines routines){
+        this.routines = routines;
     }
 }

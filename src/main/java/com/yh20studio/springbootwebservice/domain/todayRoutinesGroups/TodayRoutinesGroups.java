@@ -52,11 +52,7 @@ public class TodayRoutinesGroups extends BaseTimeEntity {
         this.member = member;
     }
 
-    public void updateDate(LocalDate date){
-        this.date = date;
-    }
-
-    public void updateSuccess(Integer success){
+    public void increaseSuccessCount(Integer success){
         this.success += success;
     }
 
@@ -64,6 +60,8 @@ public class TodayRoutinesGroups extends BaseTimeEntity {
         this.fail += fail;
     }
 
-
+    public void decreaseFailCount(Integer fail){
+        this.fail -= fail;
+    }
 
 }

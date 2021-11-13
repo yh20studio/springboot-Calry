@@ -32,7 +32,6 @@ public class TodayRoutinesService {
     private TodayRoutinesGroupsRepository todayRoutinesGroupsRepository;
     private MemberRepository memberRepository;
     private SecurityUtil securityUtil;
-    private TodayRoutinesGroupsService todayRoutinesGroupsService;
 
     // 로그인된 유저의 RequestBody에서 TodayRoutines DTO를 받은 후 저장
     // DTO에서 date 값을 받아서 해당 날짜에 TodayRoutinesGroups이 존재하는지 확인한다. 만약 없다면 새롭게 저장하고, TodayRoutinesGroups를 가져오기로 한다.
@@ -85,20 +84,11 @@ public class TodayRoutinesService {
     @Transactional
     public TodayRoutinesMainResponseDto update(Long id, TodayRoutinesUpdateRequestDto dto){
         TodayRoutines todayRoutines = todayRoutinesRepository.findById(id)
-                .map(entity -> {entity.updateWhole(
-                        dto.getFinishTime(),
-                        dto.getFinish());
-                    return entity;
-                })
                 .orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "값을 찾을 수 없습니다."));
+        TodayRoutinesGroups todayRoutinesGroups = todayRoutines.getTodayRoutinesGroups();
 
-        TodayRoutinesGroups todayRoutinesGroups = todayRoutinesGroupsRepository.findById(todayRoutines.getTodayRoutinesGroups().getId())
-                .map(entity -> {entity.updateSuccess(
-                        1);
-                    return entity;
-                })
-                .orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "값을 찾을 수 없습니다."));
-
+        todayRoutines.updateWhole(dto.getFinishTime(), dto.getFinish());
+        todayRoutinesGroups.increaseSuccessCount(1);
         todayRoutinesGroupsRepository.save(todayRoutinesGroups);
 
         return new TodayRoutinesMainResponseDto(todayRoutinesRepository.save(todayRoutines));
@@ -112,12 +102,8 @@ public class TodayRoutinesService {
         TodayRoutines todayRoutines = todayRoutinesRepository.findById(id)
                 .orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "해당 TodayRoutines 값을 찾을 수 없습니다."));
 
-        TodayRoutinesGroups todayRoutinesGroups = todayRoutinesGroupsRepository.findById(todayRoutines.getTodayRoutinesGroups().getId())
-                .map(entity -> {entity.increaseFailCount(
-                        -1);
-                    return entity;
-                })
-                .orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "값을 찾을 수 없습니다."));
+        TodayRoutinesGroups todayRoutinesGroups = todayRoutines.getTodayRoutinesGroups();
+        todayRoutinesGroups.decreaseFailCount(1);
 
         todayRoutinesGroupsRepository.save(todayRoutinesGroups);
         todayRoutinesRepository.delete(todayRoutines);

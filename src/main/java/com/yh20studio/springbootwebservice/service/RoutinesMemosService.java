@@ -25,27 +25,22 @@ public class RoutinesMemosService {
     // 로그인된 유저의 RequestBody에서 RoutinesMemosSaveRequestDto를 받은 후 저장
     @Transactional
     public RoutinesMemosMainResponseDto save(RoutinesMemosSaveRequestDto dto){
-
         Long routineId = dto.getRoutines_id();
         Routines routines = routinesRepository.findById(routineId)
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 접근입니다."));
-        dto.setRoutines(routines);
+        RoutinesMemos routinesMemos = dto.toEntity();
+        routinesMemos.setRoutines(routines);
 
-        return new RoutinesMemosMainResponseDto(routinesmemosRepository.save(dto.toEntity()));
+        return new RoutinesMemosMainResponseDto(routinesmemosRepository.save(routinesMemos));
     }
 
     // 로그인된 유저의 RequestBody에서 MemosSaveRequestDto와, url Path에서 RoutinesMeoms의 id를 받은 후 업데이트
     @Transactional
     public RoutinesMemosMainResponseDto update(Long id, RoutinesMemosSaveRequestDto dto){
-        RoutinesMemos routines_memos = routinesmemosRepository.findById(id)
-                .map(entity -> {entity.updateWhole(
-                        dto.getContent());
-                    return entity;
-                })
-                .orElseThrow(() -> new NoSuchElementException());
+        RoutinesMemos routines_memos = routinesmemosRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        routines_memos.updateContent(dto.getContent());
 
         return new RoutinesMemosMainResponseDto(routinesmemosRepository.save(routines_memos));
-
     }
 
     // url Path에서 RoutinesMeoms의 id를 받은 후 로그인된 유저의 해당 RoutinesMeoms를 삭제
