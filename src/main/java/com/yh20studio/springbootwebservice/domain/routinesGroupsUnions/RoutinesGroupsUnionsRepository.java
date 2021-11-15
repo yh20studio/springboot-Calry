@@ -13,7 +13,8 @@ public interface RoutinesGroupsUnionsRepository extends JpaRepository<RoutinesGr
 
     @Query("SELECT p " +
             "FROM RoutinesGroupsUnions p " +
-            "WHERE p.member.id = :member ")
+            "WHERE p.member.id = :member " +
+            "ORDER BY p.id ASC ")
     Stream<RoutinesGroupsUnions> findAllByMember(@Param(value = "member") Long member);
 
 

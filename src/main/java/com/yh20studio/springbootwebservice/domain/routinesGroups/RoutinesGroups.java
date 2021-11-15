@@ -22,7 +22,7 @@ public class RoutinesGroups extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(foreignKey = @ForeignKey(name = "routines_groups_unions_id"), nullable = false)
     @JsonIgnore
     private RoutinesGroupsUnions routinesGroupsUnions;

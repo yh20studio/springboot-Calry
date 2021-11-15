@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,7 +46,7 @@ public class RoutinesGroupsUnions extends BaseTimeEntity {
         this.routinesGroupsList = routinesGroupsList;
     }
 
-    public void updateWhole(String title){
+    public void updateTitle(String title){
         this.title = title;
     }
 
@@ -52,15 +54,25 @@ public class RoutinesGroupsUnions extends BaseTimeEntity {
         this.routinesGroupsList = new ArrayList<>();
     }
 
+    public void setMember(Member member){this.member = member;}
+    
     public void addRoutinesGroups(RoutinesGroups routinesGroups) {
         this.routinesGroupsList.add(routinesGroups);
         routinesGroups.setRoutinesGroupsUnions(this);
     }
 
-    public void removeRoutinesGroups(RoutinesGroups routinesGroups) {
-        this.routinesGroupsList.remove(routinesGroups);
-        routinesGroups.setRoutinesGroupsUnions(null);
+    public Collection<RoutinesGroups> updateRoutinesGroups(List<RoutinesGroups> routinesGroupsList){
+        HashMap<Long, RoutinesGroups> needDeleteRoutinesGroupsMap =  new HashMap<>();
+        this.routinesGroupsList.forEach(routinesGroups -> needDeleteRoutinesGroupsMap.put(routinesGroups.getId(), routinesGroups));
+
+        for(RoutinesGroups newRoutinesGroups :routinesGroupsList){
+            if (needDeleteRoutinesGroupsMap.containsKey(newRoutinesGroups.getId())){
+                needDeleteRoutinesGroupsMap.remove(newRoutinesGroups.getId());
+            }
+        }
+
+        this.routinesGroupsList = routinesGroupsList;
+
+        return needDeleteRoutinesGroupsMap.values();
     }
-
-
 }

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,25 +32,21 @@ public class RoutinesGroupsUnionsService {
 
     private RoutinesGroupsUnionsRepository routinesGroupsUnionsRepository;
     private RoutinesGroupsRepository routinesGroupsRepository;
-    private RoutinesRepository routinesRepository;
     private MemberRepository memberRepository;
     private SecurityUtil securityUtil;
 
     // 로그인 된 Member의 모든 RoutinesGroupsUnions을 id의 오름차순으로 리턴한다.
     @Transactional(readOnly = true)
     public List<RoutinesGroupsUnionsMainResponseDto> getMyRoutinesGroupsUnions(){
-
         Long memberId = securityUtil.getCurrentMemberId();
 
-        List<RoutinesGroupsUnionsMainResponseDto> routinesGroupsUnionsMainResponseDtoList =  routinesGroupsUnionsRepository.findAllByMember(memberId)
+        return routinesGroupsUnionsRepository.findAllByMember(memberId)
                 .map(RoutinesGroupsUnionsMainResponseDto::new)
                 .collect(Collectors.toList());
-
-        return routinesGroupsUnionsMainResponseDtoList;
     }
 
     // 로그인된 유저의 RequestBody에서 RoutinesGroupsUnionsSaveRequestDto DTO를 받은 후
-    // 각 RoutinesGroups을 모두 저장 후 RoutinesGroupsUnions을 저장
+    // RoutinesGroupsUnions을 저장 후 각 RoutinesGroups을 모두 저장
     @Transactional
     public RoutinesGroupsUnionsMainResponseDto saveRoutinesGroupsUnions(RoutinesGroupsUnionsSaveRequestDto dto){
 
@@ -57,26 +54,27 @@ public class RoutinesGroupsUnionsService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
 
-        dto.setMember(member);
-        // RoutinesGroupsUnions 저장
-        RoutinesGroupsUnions routinesGroupsUnions = routinesGroupsUnionsRepository.save(dto.toEntity());
+        RoutinesGroupsUnions routinesGroupsUnions = dto.toEntity();
+        routinesGroupsUnions.setMember(member);
         routinesGroupsUnions.setRoutinesGroupsList();
 
-        // RoutinesGroups 저장
-        List<RoutinesGroupsSaveRequestDto> routinesGroupsSaveRequestDtoList = new ArrayList<>();
+        // RoutinesGroupsUnions 저장
+        RoutinesGroupsUnions saved = routinesGroupsUnionsRepository.save(routinesGroupsUnions);
 
-        for (RoutinesGroupsSaveRequestDto routinesGroupsSaveRequestDto :dto.getRoutinesGroupsList()) {
-            routinesGroupsSaveRequestDto.setRoutinesGroupsUnions(routinesGroupsUnions);
-            routinesGroupsSaveRequestDtoList.add(routinesGroupsSaveRequestDto);
+        // RoutinesGroups 저장
+        List<RoutinesGroups> routinesGroupsList = dto.getRoutinesGroupsList()
+                .stream()
+                .map(saveDto -> saveDto.toEntity())
+                .collect(Collectors.toList());
+
+        for (RoutinesGroups routinesGroups :routinesGroupsList) {
+            routinesGroups.setRoutinesGroupsUnions(saved);
         }
 
-        routinesGroupsRepository.saveAll(
-                routinesGroupsSaveRequestDtoList.stream()
-                        .map(RoutinesGroupsSaveRequestDto:: toEntity)
-                        .collect(Collectors.toList()))
-                .forEach(routinesGroups -> routinesGroupsUnions.addRoutinesGroups(routinesGroups));
+        routinesGroupsRepository.saveAll(routinesGroupsList)
+                .forEach(routinesGroups -> saved.addRoutinesGroups(routinesGroups));
 
-        return new RoutinesGroupsUnionsMainResponseDto(routinesGroupsUnions);
+        return new RoutinesGroupsUnionsMainResponseDto(saved);
     }
 
     // 로그인된 유저의 RequestBody에서 RoutinesGroupsUnionsSaveRequestDto를 받아서 새로 생성할 RoutinesGroups을 찾아서 저장합니다.
@@ -86,43 +84,39 @@ public class RoutinesGroupsUnionsService {
     public RoutinesGroupsUnionsMainResponseDto updateRoutinesGroupsUnions(Long id, RoutinesGroupsUnionsUpdateRequestDto dto){
 
         RoutinesGroupsUnions routinesGroupsUnions = routinesGroupsUnionsRepository.findById(id)
-                .map(entity -> {entity.updateWhole(
-                        dto.getTitle());
-                    return entity;
-                })
                 .orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "값을 찾지 못했습니다."));
 
+        routinesGroupsUnions.updateTitle(dto.getTitle());
 
-        HashMap<Long, RoutinesGroups> oldRoutinesGroupsMap =  new HashMap<>();
+        List<RoutinesGroups> newRoutinesGroupsList = new ArrayList<>();
+        List<RoutinesGroups> routinesGroupsList = dto.getRoutinesGroupsList()
+                .stream()
+                .map(saveDto -> {
+                    if(saveDto.getId() == -1L){
+                        RoutinesGroups routinesGroups = saveDto.toEntity();
+                        newRoutinesGroupsList.add(routinesGroups);
+                        return routinesGroups;
+                    }
+                    else {
+                        return routinesGroupsRepository.findById(saveDto.getId())
+                                .orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "값을 찾지 못했습니다."));
+                    }
+                })
+                .collect(Collectors.toList());
 
-        routinesGroupsUnions.getRoutinesGroupsList()
-                .forEach(routinesGroups -> oldRoutinesGroupsMap.put(routinesGroups.getId(), routinesGroups));
-
-        // 새로 생성되는 목록
-        List<RoutinesGroupsUpdateRequestDto> routinesGroupsUpdateRequestDtoList = new ArrayList<>();
-
-        for (RoutinesGroupsUpdateRequestDto updateRequestDto : dto.getRoutinesGroupsList()){
-            if (updateRequestDto.getId() == -1L){
-                updateRequestDto.setRoutinesGroupsUnions(routinesGroupsUnions);
-                routinesGroupsUpdateRequestDtoList.add(updateRequestDto);
-            }else{
-                oldRoutinesGroupsMap.remove(updateRequestDto.getId());
-            }
+        for (RoutinesGroups routinesGroups : newRoutinesGroupsList){
+            routinesGroups.setRoutinesGroupsUnions(routinesGroupsUnions);
         }
 
         // 없었던 RoutinesGroups들은 새로 저장
-        routinesGroupsRepository.saveAll(
-                routinesGroupsUpdateRequestDtoList.stream()
-                        .map(RoutinesGroupsUpdateRequestDto:: toEntity)
-                        .collect(Collectors.toList()))
-                .forEach(routinesGroups -> routinesGroupsUnions.addRoutinesGroups(routinesGroups));
+        routinesGroupsRepository.saveAll(newRoutinesGroupsList);
 
-        for(RoutinesGroups deleteRoutinesGroups :oldRoutinesGroupsMap.values()){
-            routinesGroupsUnions.removeRoutinesGroups(deleteRoutinesGroups);
-        }
+        Collection<RoutinesGroups> needToDeleteRoutinesGroups = routinesGroupsUnions.updateRoutinesGroups(routinesGroupsList);
 
         // 삭제된 RoutinesGropus들을 DB에서 실제로 삭제하는 과정
-        routinesGroupsRepository.deleteAllById(oldRoutinesGroupsMap.keySet());
+        for(RoutinesGroups routinesGroups : needToDeleteRoutinesGroups){
+            routinesGroupsRepository.delete(routinesGroups);
+        }
 
         return new RoutinesGroupsUnionsMainResponseDto(routinesGroupsUnionsRepository.save(routinesGroupsUnions));
 
