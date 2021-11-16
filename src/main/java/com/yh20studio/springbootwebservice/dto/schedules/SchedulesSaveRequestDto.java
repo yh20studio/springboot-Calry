@@ -44,7 +44,7 @@ public class SchedulesSaveRequestDto {
 
     // json으로 받아온 날짜에 대한 String 값을 LocalDateTime으로 변환
     public LocalDateTime stringToLocalDateTime(String str){
-        return LocalDateTime.parse(str, DateTimeFormatter.ISO_LOCAL_DATE_TIME)   ;
+        return LocalDateTime.parse(str, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
 }

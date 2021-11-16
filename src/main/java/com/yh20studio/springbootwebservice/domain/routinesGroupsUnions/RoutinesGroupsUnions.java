@@ -55,7 +55,7 @@ public class RoutinesGroupsUnions extends BaseTimeEntity {
     }
 
     public void setMember(Member member){this.member = member;}
-    
+
     public void addRoutinesGroups(RoutinesGroups routinesGroups) {
         this.routinesGroupsList.add(routinesGroups);
         routinesGroups.setRoutinesGroupsUnions(this);
