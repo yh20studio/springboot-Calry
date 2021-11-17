@@ -1,6 +1,8 @@
 package com.yh20studio.springbootwebservice.service;
 
 import com.yh20studio.springbootwebservice.component.SecurityUtil;
+import com.yh20studio.springbootwebservice.domain.calendars.Calendars;
+import com.yh20studio.springbootwebservice.dto.calendars.CalendarsMainResponseDto;
 import com.yh20studio.springbootwebservice.exception.RestException;
 import com.yh20studio.springbootwebservice.domain.member.Member;
 import com.yh20studio.springbootwebservice.domain.member.MemberRepository;
@@ -51,68 +53,6 @@ public class SchedulesService {
 
         return joined.stream().map(SchedulesMainResponseDto::new).collect(Collectors.toList());
     }
-
-
-    /*
-    Member의 모든 Schedules과 지정된 공휴일 Schedules에 대한 정보,
-    Schedules에 대한 정보를 1주일 단위로 나누어서 정리한 HashMap,
-    지정된 공휴일 Schedules에 대한 정보를
-    WeekCalendarMainResponseDto에 담아서 내보낸다.
-     */
-    @Transactional(readOnly = true)
-    public WeekCalendarMainResponseDto getWholeSchedules() {
-
-        // Korea_holiday member Id : 10
-        List<Schedules> holidaySchedules = schedulesRepository.findMySchedules(10L)
-                .collect(Collectors.toList());
-        // member's Schedule
-        Long memberId = securityUtil.getCurrentMemberId();
-        List<Schedules> memberSchedules = schedulesRepository.findMySchedules(memberId)
-                .collect(Collectors.toList());
-
-        List<Schedules> joinSchedulesOrderByDateGap = Schedules.getJoinSchedulesByGap(holidaySchedules, memberSchedules);
-        HashMap<LocalDate, ArrayList<ArrayList<int[]>>> calendarMap = Schedules.calendarMapOrderByWeekSchedules(joinSchedulesOrderByDateGap);
-        // 공휴일에 대해서는 날짜 색깔을 빨간색으로 표기해야하기 때문에, 공휴일만 있는 List를 따로 담아준다.
-        HashMap<LocalDate, SchedulesMainResponseDto> holidayMap = Schedules.holidaysHashMap(holidaySchedules);
-
-        // 완성된 calendarMap과 wholeSchedulesOrderByDateGap를 WeekCalendarMainResponseDto로 담아서 내보낸다.
-        WeekCalendarMainResponseDto weekCalendarMainResponseDto = new WeekCalendarMainResponseDto();
-        weekCalendarMainResponseDto.setWeeks(calendarMap);
-        weekCalendarMainResponseDto.setSchedules(joinSchedulesOrderByDateGap.stream().map(SchedulesMainResponseDto::new).collect(Collectors.toList()));
-        weekCalendarMainResponseDto.setHolidays(holidayMap);
-
-        return weekCalendarMainResponseDto;
-    }
-
-    /*
-        주어진 (updateStart, updateEnd)에 해당하는 로그인된 Member의 Schedules과 지정된 공휴일 Schedules에 대한 정보를 1주일 단위로 나누어서 정리한다.
-        이 정보는 WeekCalendarMainResponseDto.weekSchedules에 담기며, 1주일에 대한 정보를 1주일이 시작되는 날짜인 LocalDate으로 접근 가능합니다.
-     */
-    @Transactional(readOnly = true)
-    public WeekCalendarMainResponseDto getPartSchedules(String updateStart, String updateEnd) {
-
-        LocalDateTime startDate = LocalDateTime.parse(updateStart, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        LocalDateTime endDate = LocalDateTime.parse(updateEnd, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        startDate = LocalDateTime.of(startDate.getYear(), startDate.getMonth(), startDate.getDayOfMonth(), 0, 0, 0, 0);
-        endDate = LocalDateTime.of(endDate.getYear(), endDate.getMonth(), endDate.getDayOfMonth(), 23, 59, 59, 59);
-
-        // Korea_holiday member Id : 10
-        List<Schedules> holidaySchedules = schedulesRepository.findMySchedulesByStartDateAndEndDate(startDate, endDate, 10L)
-                .collect(Collectors.toList());
-        // member's Schedule
-        Long memberId = securityUtil.getCurrentMemberId();
-        List<Schedules> memberSchedules = schedulesRepository.findMySchedulesByStartDateAndEndDate(startDate, endDate, memberId)
-                .collect(Collectors.toList());
-
-        List<Schedules> joinSchedulesOrderByDateGap = Schedules.getJoinSchedulesByGap(holidaySchedules, memberSchedules);
-        HashMap<LocalDate, ArrayList<ArrayList<int[]>>> calendarMap = Schedules.partCalendarMapOrderByWeekSchedules(joinSchedulesOrderByDateGap, startDate, endDate);
-
-        // 생성된 calendarMap만 WeekCalendarMainResponseDto에 추가한다.
-        WeekCalendarMainResponseDto weekCalendarMainResponseDto = new WeekCalendarMainResponseDto();
-        weekCalendarMainResponseDto.setWeeks(calendarMap);
-        return weekCalendarMainResponseDto;
-    }
-
 
     // 로그인된 유저의 RequestBody에서 SchedulesSaveRequestDto를 받은 후 저장
     @Transactional
