@@ -62,4 +62,8 @@ public class QuickSchedules extends BaseTimeEntity {
         this.labels = labels;
     }
 
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
 }

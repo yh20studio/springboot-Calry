@@ -15,6 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -97,6 +99,11 @@ public class Member extends BaseTimeEntity {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+
+    // 이메일과 password를 통해서 UsernamePasswordAuthenticationToken를 리턴함
+    public static UsernamePasswordAuthenticationToken toAuthentication(String email, String password){
+        return new UsernamePasswordAuthenticationToken(email, password);
     }
 
 }

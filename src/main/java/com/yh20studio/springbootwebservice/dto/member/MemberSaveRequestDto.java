@@ -41,9 +41,4 @@ public class MemberSaveRequestDto {
                 .role(Member.Role.GUEST)
                 .build();
     }
-
-    // 이메일과 password를 통해서 UsernamePasswordAuthenticationToken를 리턴함
-    public UsernamePasswordAuthenticationToken toAuthentication(){
-        return new UsernamePasswordAuthenticationToken(email, password);
-    }
 }

@@ -29,11 +29,8 @@ public class QuickSchedulesService {
     // 로그인 된 Member의 모든 QuickSchedules을 id의 오름차순으로 리턴한다.
     @Transactional(readOnly = true)
     public List<QuickSchedulesMainResponseDto> getQuickSchedules(){
-
         Long memberId = securityUtil.getCurrentMemberId();
-        List<QuickSchedulesMainResponseDto> quickSchedulesMainResponseDtoList =  quickSchedulesRepository.findMySchedules(memberId).map(QuickSchedulesMainResponseDto::new).collect(Collectors.toList());
-
-        return quickSchedulesMainResponseDtoList;
+        return quickSchedulesRepository.findMySchedules(memberId).map(QuickSchedulesMainResponseDto::new).collect(Collectors.toList());
 
     }
 
@@ -41,30 +38,26 @@ public class QuickSchedulesService {
     @Transactional
     public QuickSchedulesMainResponseDto save(QuickSchedulesSaveRequestDto dto){
         Long memberId = securityUtil.getCurrentMemberId();
-
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
 
-        dto.setMember(member);
+        QuickSchedules quickSchedules = dto.toEntity();
+        quickSchedules.setMember(member);
 
-        return new QuickSchedulesMainResponseDto(quickSchedulesRepository.save(dto.toEntity()));
+        return new QuickSchedulesMainResponseDto(quickSchedulesRepository.save(quickSchedules));
     }
 
     // 로그인된 유저의 RequestBody에서 QuickSchedules DTO와, url Path에서 QuickSchedules의 id를 받은 후 업데이트
     @Transactional
     public QuickSchedulesMainResponseDto update(Long id, QuickSchedulesSaveRequestDto dto){
-        QuickSchedules quickSchedules = quickSchedulesRepository.findById(id)
-                .map(entity -> {entity.updateWhole(
-                        dto.getTitle(),
-                        dto.getContent(),
-                        dto.getStart_time(),
-                        dto.getEnd_time(),
-                        dto.getLabels()
-                );
-                    return entity;
-                })
-                .orElseThrow(() -> new NoSuchElementException());
-
+        QuickSchedules quickSchedules = quickSchedulesRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        quickSchedules.updateWhole(
+                dto.getTitle(),
+                dto.getContent(),
+                dto.getStart_time(),
+                dto.getEnd_time(),
+                dto.getLabels()
+        );
         return new QuickSchedulesMainResponseDto(quickSchedulesRepository.save(quickSchedules));
 
     }

@@ -3,11 +3,15 @@ package com.yh20studio.springbootwebservice.domain.refreshToken;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yh20studio.springbootwebservice.domain.BaseTimeEntity;
 import com.yh20studio.springbootwebservice.domain.member.Member;
+import com.yh20studio.springbootwebservice.dto.token.AccessTokenResponseDto;
+import com.yh20studio.springbootwebservice.exception.RestException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -41,13 +45,11 @@ public class RefreshToken {
         this.expires = expires;
     }
 
-    public RefreshToken updateValue(String token){
-        this.value = token;
-        return this;
-    }
-
-    public RefreshToken updateExpires(Long expires){
-        this.expires = expires;
-        return this;
+    public void validateExpires(){
+        long now = (new Date().getTime());
+        // refreshToken의 유효기간이 지났다면 다시 로그인해야합니다.
+        if(expires <= now){
+            throw new RestException(HttpStatus.UNAUTHORIZED, "Refresh Token이 유효하지 않습니다.");
+        }
     }
 }
