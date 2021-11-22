@@ -17,10 +17,9 @@ public class RoutinesGroupsMainResponseDto {
     private Routines routines;
     private RoutinesGroupsUnions routinesGroupsUnions;
 
-    public RoutinesGroupsMainResponseDto(RoutinesGroups entity){
+    public RoutinesGroupsMainResponseDto(RoutinesGroups entity) {
         id = entity.getId();
         routines = entity.getRoutines();
         routinesGroupsUnions = entity.getRoutinesGroupsUnions();
     }
-
 }

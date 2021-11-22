@@ -24,20 +24,21 @@ public class TodayRoutinesSaveRequestDto {
     private Routines routines;
 
     @Builder
-    public TodayRoutinesSaveRequestDto(String finishTime, Boolean finish, String date, Routines routines){
-        this.finishTime = LocalTime.parse(finishTime);;
+    public TodayRoutinesSaveRequestDto(String finishTime, Boolean finish, String date,
+        Routines routines) {
+        this.finishTime = LocalTime.parse(finishTime);
         this.finish = finish;
         this.date = date;
         this.routines = routines;
     }
 
-    public TodayRoutines toEntity(){
+    public TodayRoutines toEntity() {
 
         return TodayRoutines.builder()
-                .finishTime(finishTime)
-                .finish(finish)
-                .todayRoutinesGroups(todayRoutinesGroups)
-                .routines(routines)
-                .build();
+            .finishTime(finishTime)
+            .finish(finish)
+            .todayRoutinesGroups(todayRoutinesGroups)
+            .routines(routines)
+            .build();
     }
 }

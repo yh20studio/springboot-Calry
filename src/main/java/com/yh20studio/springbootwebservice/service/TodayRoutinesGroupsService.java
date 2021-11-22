@@ -28,29 +28,30 @@ public class TodayRoutinesGroupsService {
 
     // 로그인된 유저의 모든 TodayRoutinesGroups을 리턴한다.
     @Transactional(readOnly = true)
-    public List<TodayRoutinesGroupsMainResponseDto> getAllTodayRoutinesGroups(){
+    public List<TodayRoutinesGroupsMainResponseDto> getAllTodayRoutinesGroups() {
         Long memberId = securityUtil.getCurrentMemberId();
         memberRepository.findById(memberId)
-                .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
+            .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
 
         return todayRoutinesGroupsRepository.findAllByMember(memberId)
-                .map(TodayRoutinesGroupsMainResponseDto::new)
-                .collect(Collectors.toList());
+            .map(TodayRoutinesGroupsMainResponseDto::new)
+            .collect(Collectors.toList());
     }
 
     // 로그인된 유저의 주어진 Date 값을 통해서 TodayRoutinesGroups을 리턴한다.
     @Transactional
-    public TodayRoutinesGroupsMainResponseDto getByDate(String date){
+    public TodayRoutinesGroupsMainResponseDto getByDate(String date) {
         LocalDate selectDate = LocalDate.parse(date);
         Long memberId = securityUtil.getCurrentMemberId();
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
+            .orElseThrow(() -> new RestException(HttpStatus.UNAUTHORIZED, "잘못된 사용자 입니다."));
 
-        return new TodayRoutinesGroupsMainResponseDto(todayRoutinesGroupsRepository.findByMemberAndDate(memberId, selectDate)
-                .orElseGet(() -> todayRoutinesGroupsRepository.save((new TodayRoutinesGroupsSaveRequestDto(date, 0, 0, member)).toEntity())));
+        return new TodayRoutinesGroupsMainResponseDto(
+            todayRoutinesGroupsRepository.findByMemberAndDate(memberId, selectDate)
+                .orElseGet(() -> todayRoutinesGroupsRepository
+                    .save((new TodayRoutinesGroupsSaveRequestDto(date, 0, 0, member)).toEntity())));
 
     }
-
 
 
 }

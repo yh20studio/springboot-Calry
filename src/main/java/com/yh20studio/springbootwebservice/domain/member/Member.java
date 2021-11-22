@@ -26,10 +26,10 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @TypeDef(
-        name = "pgsql_enum",
-        typeClass = PostgreSQLEnumType.class
+    name = "pgsql_enum",
+    typeClass = PostgreSQLEnumType.class
 )
-@Table(name="\"Member\"")
+@Table(name = "\"Member\"")
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -52,29 +52,29 @@ public class Member extends BaseTimeEntity {
     @JsonIgnore
     private RefreshToken refresh_token;
 
-    @OneToMany(mappedBy="member")
+    @OneToMany(mappedBy = "member")
     @OrderBy("id DESC")
     @JsonIgnore
     private List<AccessTokenBlackList> access_token_black_list;
 
-    @OneToMany(mappedBy="member")
+    @OneToMany(mappedBy = "member")
     @OrderBy("id DESC")
     @JsonIgnore
     private List<Routines> routinesList;
 
-    @OneToMany(mappedBy="member")
+    @OneToMany(mappedBy = "member")
     @OrderBy("id DESC")
     @JsonIgnore
     private List<RoutinesGroupsUnions> routinesGroupsUnionsList;
 
-    @OneToMany(mappedBy="member")
+    @OneToMany(mappedBy = "member")
     @OrderBy("id DESC")
     @JsonIgnore
     private List<FocusTodos> focusTodosList;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @Type( type = "pgsql_enum" )
+    @Type(type = "pgsql_enum")
     private Role role;
 
     public enum Role {
@@ -84,7 +84,7 @@ public class Member extends BaseTimeEntity {
         private String value;
         private String title;
 
-        Role(String value, String title){
+        Role(String value, String title) {
             this.value = value;
             this.title = title;
         }
@@ -94,13 +94,14 @@ public class Member extends BaseTimeEntity {
         }
 
     }
-    public void updateId(Long id){
+
+    public void updateId(Long id) {
         this.id = id;
     }
 
 
     @Builder
-    public Member(String name, String email, String password, Role role){
+    public Member(String name, String email, String password, Role role) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -108,9 +109,9 @@ public class Member extends BaseTimeEntity {
     }
 
     // 이메일과 password를 통해서 UsernamePasswordAuthenticationToken를 리턴함
-    public static UsernamePasswordAuthenticationToken toAuthentication(String email, String password){
+    public static UsernamePasswordAuthenticationToken toAuthentication(String email,
+        String password) {
         return new UsernamePasswordAuthenticationToken(email, password);
     }
-
 }
 

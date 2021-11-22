@@ -29,17 +29,18 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws RestException {
         return memberRepository.findByEmail(username)
-                .map(this::createUserDetails)
-                .orElseThrow(() -> new RestException(HttpStatus.NOT_FOUND, "가입되지 않은 이메일입니다.")); // 404 error
+            .map(this::createUserDetails)
+            .orElseThrow(
+                () -> new RestException(HttpStatus.NOT_FOUND, "가입되지 않은 이메일입니다.")); // 404 error
     }
 
     // DB 에 User 값이 존재한다면 UserDetails 객체로 만들어서 리턴
     private UserDetails createUserDetails(Member member) {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRole().toString());
         return new User(
-                String.valueOf(member.getId()),
-                member.getPassword(),
-                Collections.singleton(grantedAuthority)
+            String.valueOf(member.getId()),
+            member.getPassword(),
+            Collections.singleton(grantedAuthority)
         );
     }
 }

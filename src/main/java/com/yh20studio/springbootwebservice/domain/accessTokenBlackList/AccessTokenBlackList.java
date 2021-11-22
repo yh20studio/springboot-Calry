@@ -31,10 +31,9 @@ public class AccessTokenBlackList {
     private Member member;
 
     @Builder
-    public AccessTokenBlackList(String value, Long expires, Member member){
+    public AccessTokenBlackList(String value, Long expires, Member member) {
         this.value = value;
         this.expires = expires;
         this.member = member;
     }
-
 }

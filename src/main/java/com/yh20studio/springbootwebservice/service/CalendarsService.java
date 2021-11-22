@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Service
 public class CalendarsService {
+
     private SchedulesRepository schedulesRepository;
     private SecurityUtil securityUtil;
 
@@ -34,20 +35,24 @@ public class CalendarsService {
 
         // Korea_holiday member Id : 10
         List<Schedules> holidaySchedules = schedulesRepository.findMySchedules(10L)
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
         // member's Schedule
         Long memberId = securityUtil.getCurrentMemberId();
         List<Schedules> memberSchedules = schedulesRepository.findMySchedules(memberId)
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
 
-        List<Schedules> joinSchedulesOrderByDateGap = Schedules.getJoinSchedulesByGapForWholeWeekCalendars(holidaySchedules, memberSchedules);
+        List<Schedules> joinSchedulesOrderByDateGap = Schedules
+            .getJoinSchedulesByGapForWholeWeekCalendars(holidaySchedules, memberSchedules);
 
         // 공휴일에 대해서는 날짜 색깔을 빨간색으로 표기해야하기 때문에, 공휴일만 있는 List를 따로 담아준다.
-        HashMap<LocalDate, SchedulesMainResponseDto> holidayMap = Schedules.holidaysHashMap(holidaySchedules);
+        HashMap<LocalDate, SchedulesMainResponseDto> holidayMap = Schedules
+            .holidaysHashMap(holidaySchedules);
 
         Calendars calendars = Calendars.builder().build();
         calendars.calendarsOrderByWeekSchedules(joinSchedulesOrderByDateGap);
-        calendars.setSchedules(joinSchedulesOrderByDateGap.stream().map(SchedulesMainResponseDto::new).collect(Collectors.toList()));
+        calendars.setSchedules(
+            joinSchedulesOrderByDateGap.stream().map(SchedulesMainResponseDto::new)
+                .collect(Collectors.toList()));
         calendars.setHolidays(holidayMap);
 
         return new CalendarsMainResponseDto(calendars);
@@ -60,20 +65,30 @@ public class CalendarsService {
     @Transactional(readOnly = true)
     public CalendarsMainResponseDto getPartSchedules(String updateStart, String updateEnd) {
 
-        LocalDateTime updateStartDateTime = LocalDateTime.parse(updateStart, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        LocalDateTime updateEndDateTime = LocalDateTime.parse(updateEnd, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        updateStartDateTime = LocalDateTime.of(updateStartDateTime.getYear(), updateStartDateTime.getMonth(), updateStartDateTime.getDayOfMonth(), 0, 0, 0, 0);
-        updateEndDateTime = LocalDateTime.of(updateEndDateTime.getYear(), updateEndDateTime.getMonth(), updateEndDateTime.getDayOfMonth(), 23, 59, 59, 59);
+        LocalDateTime updateStartDateTime = LocalDateTime
+            .parse(updateStart, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        LocalDateTime updateEndDateTime = LocalDateTime
+            .parse(updateEnd, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        updateStartDateTime = LocalDateTime
+            .of(updateStartDateTime.getYear(), updateStartDateTime.getMonth(),
+                updateStartDateTime.getDayOfMonth(), 0, 0, 0, 0);
+        updateEndDateTime = LocalDateTime
+            .of(updateEndDateTime.getYear(), updateEndDateTime.getMonth(),
+                updateEndDateTime.getDayOfMonth(), 23, 59, 59, 59);
 
         // Korea_holiday member Id : 10
-        List<Schedules> holidaySchedules = schedulesRepository.findMySchedulesByStartDateAndEndDate(updateStartDateTime, updateEndDateTime, 10L)
-                .collect(Collectors.toList());
+        List<Schedules> holidaySchedules = schedulesRepository
+            .findMySchedulesByStartDateAndEndDate(updateStartDateTime, updateEndDateTime, 10L)
+            .collect(Collectors.toList());
         // member's Schedule
         Long memberId = securityUtil.getCurrentMemberId();
-        List<Schedules> memberSchedules = schedulesRepository.findMySchedulesByStartDateAndEndDate(updateStartDateTime, updateEndDateTime, memberId)
-                .collect(Collectors.toList());
+        List<Schedules> memberSchedules = schedulesRepository
+            .findMySchedulesByStartDateAndEndDate(updateStartDateTime, updateEndDateTime, memberId)
+            .collect(Collectors.toList());
 
-        List<Schedules> joinSchedulesOrderByDateGap = Schedules.getJoinSchedulesByGapForPartWeekCalendars(holidaySchedules, memberSchedules, updateStartDateTime, updateEndDateTime);
+        List<Schedules> joinSchedulesOrderByDateGap = Schedules
+            .getJoinSchedulesByGapForPartWeekCalendars(holidaySchedules, memberSchedules,
+                updateStartDateTime, updateEndDateTime);
 
         Calendars calendars = Calendars.builder().build();
         calendars.calendarsOrderByWeekSchedules(joinSchedulesOrderByDateGap);

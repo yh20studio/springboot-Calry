@@ -17,26 +17,28 @@ public class SchedulesController {
     private SchedulesService schedulesService;
 
     // Get Method, 지정한 날짜의 해당되는 Schedules를 불러오는 Method
-    @GetMapping(value="/day/{date}", produces = "application/json; charset=UTF-8")
-    public List<SchedulesMainResponseDto> getDaySchedulesOrderByTime(@PathVariable("date") String date){
+    @GetMapping(value = "/day/{date}", produces = "application/json; charset=UTF-8")
+    public List<SchedulesMainResponseDto> getDaySchedulesOrderByTime(
+        @PathVariable("date") String date) {
         return schedulesService.getDaySchedulesOrderByTime(date);
     }
 
     // Post Method
-    @PostMapping(value="", produces = "application/json; charset=UTF-8")
-    public SchedulesMainResponseDto saveSchedules(@RequestBody SchedulesSaveRequestDto dto){
+    @PostMapping(value = "", produces = "application/json; charset=UTF-8")
+    public SchedulesMainResponseDto saveSchedules(@RequestBody SchedulesSaveRequestDto dto) {
         return schedulesService.save(dto);
     }
 
     // Put Method
-    @PutMapping(value="/{id}", produces = "application/json; charset=UTF-8")
-    public SchedulesMainResponseDto updateSchedules(@PathVariable("id") Long id, @RequestBody SchedulesSaveRequestDto schedulesSaveRequestDto){
+    @PutMapping(value = "/{id}", produces = "application/json; charset=UTF-8")
+    public SchedulesMainResponseDto updateSchedules(@PathVariable("id") Long id,
+        @RequestBody SchedulesSaveRequestDto schedulesSaveRequestDto) {
         return schedulesService.update(id, schedulesSaveRequestDto);
     }
 
     // Delete Method
-    @DeleteMapping(value="/{id}", produces = "application/json; charset=UTF-8")
-    public String deleteSchedules(@PathVariable("id") Long id){
+    @DeleteMapping(value = "/{id}", produces = "application/json; charset=UTF-8")
+    public String deleteSchedules(@PathVariable("id") Long id) {
         schedulesService.delete(id);
         return "delete";
     }

@@ -19,8 +19,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name="\"TodayRoutines\"")
+@Table(name = "\"TodayRoutines\"")
 public class TodayRoutines extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,7 +42,8 @@ public class TodayRoutines extends BaseTimeEntity {
     private Routines routines;
 
     @Builder
-    public TodayRoutines(LocalTime finishTime, Boolean finish, TodayRoutinesGroups todayRoutinesGroups, Routines routines){
+    public TodayRoutines(LocalTime finishTime, Boolean finish,
+        TodayRoutinesGroups todayRoutinesGroups, Routines routines) {
         this.finishTime = finishTime;
         this.finish = finish;
         this.todayRoutinesGroups = todayRoutinesGroups;
@@ -49,15 +51,13 @@ public class TodayRoutines extends BaseTimeEntity {
 
     }
 
-    public void updateWhole(LocalTime finishTime, Boolean finish){
+    public void updateWhole(LocalTime finishTime, Boolean finish) {
         this.finishTime = finishTime;
         this.finish = finish;
     }
 
-    public void setTodayRoutinesGroups(TodayRoutinesGroups todayRoutinesGroups){
+    public void setTodayRoutinesGroups(TodayRoutinesGroups todayRoutinesGroups) {
         this.todayRoutinesGroups = todayRoutinesGroups;
     }
-
-
 }
 

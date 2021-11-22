@@ -19,19 +19,17 @@ public class RoutinesSaveRequestDto {
     private Member member;
 
     @Builder
-    public RoutinesSaveRequestDto(String title, Integer duration){
+    public RoutinesSaveRequestDto(String title, Integer duration) {
         this.title = title;
         this.duration = duration;
     }
 
-    public Routines toEntity(){
+    public Routines toEntity() {
 
         return Routines.builder()
-                .title(title)
-                .duration(duration)
-                .member(member)
-                .build();
+            .title(title)
+            .duration(duration)
+            .member(member)
+            .build();
     }
-
-
 }

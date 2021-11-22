@@ -17,18 +17,15 @@ public class RoutinesMemosSaveRequestDto {
     private Routines routines;
 
     @Builder
-    public RoutinesMemosSaveRequestDto(Long routines_id, String content){
+    public RoutinesMemosSaveRequestDto(Long routines_id, String content) {
         this.routines_id = routines_id;
         this.content = content;
     }
 
-    public RoutinesMemos toEntity(){
+    public RoutinesMemos toEntity() {
         return RoutinesMemos.builder()
-                .content(content)
-                .routines(routines)
-                .build();
+            .content(content)
+            .routines(routines)
+            .build();
     }
-
-
-
 }

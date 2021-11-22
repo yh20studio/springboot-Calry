@@ -10,10 +10,9 @@ public class LabelColorsMainResponseDto {
     private String title;
     private String code;
 
-    public LabelColorsMainResponseDto(LabelColors entity){
+    public LabelColorsMainResponseDto(LabelColors entity) {
         id = entity.getId();
         title = entity.getTitle();
         code = entity.getCode();
     }
-
 }

@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -38,12 +39,12 @@ class MemberServiceUnitTest {
 
     @BeforeEach
     private void setup() {
-        savedMember = new Member("test", "test@naver.com",  "123", Member.Role.GUEST);
+        savedMember = new Member("test", "test@naver.com", "123", Member.Role.GUEST);
         savedMember.updateId(1L);
     }
 
     @AfterEach
-    private void cleanup (){
+    private void cleanup() {
         memberRepository.deleteAll();
     }
 
@@ -72,7 +73,8 @@ class MemberServiceUnitTest {
         given(memberRepository.existsByEmail(anyString())).willReturn(Boolean.TRUE);
 
         //when
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> memberService.signup(memberSaveRequestDto));
+        RuntimeException exception = assertThrows(RuntimeException.class,
+            () -> memberService.signup(memberSaveRequestDto));
 
         //then
         verify(memberRepository, times(1)).existsByEmail(anyString());

@@ -11,9 +11,8 @@ public interface LabelColorsRepository extends JpaRepository<LabelColors, Long> 
     Optional<LabelColors> findById(Long id);
 
     @Query("SELECT p " +
-            "FROM LabelColors p " +
-            "WHERE p.id <> 1 " +
-            "ORDER BY p.id ASC ")
+        "FROM LabelColors p " +
+        "WHERE p.id <> 1 " +
+        "ORDER BY p.id ASC ")
     Stream<LabelColors> findAllWithoutHoliday();
-
 }

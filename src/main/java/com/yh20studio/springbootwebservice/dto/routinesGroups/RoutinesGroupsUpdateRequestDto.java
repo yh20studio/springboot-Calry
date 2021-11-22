@@ -18,16 +18,15 @@ public class RoutinesGroupsUpdateRequestDto {
     private RoutinesGroupsUnions routinesGroupsUnions;
 
     @Builder
-    public RoutinesGroupsUpdateRequestDto(Long id, Routines routines){
+    public RoutinesGroupsUpdateRequestDto(Long id, Routines routines) {
         this.id = id;
         this.routines = routines;
     }
 
-    public RoutinesGroups toEntity(){
+    public RoutinesGroups toEntity() {
         return RoutinesGroups.builder()
-                .routines(routines)
-                .routinesGroupsUnions(routinesGroupsUnions)
-                .build();
+            .routines(routines)
+            .routinesGroupsUnions(routinesGroupsUnions)
+            .build();
     }
-
 }

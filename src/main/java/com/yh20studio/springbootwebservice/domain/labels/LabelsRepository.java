@@ -14,9 +14,9 @@ public interface LabelsRepository extends JpaRepository<Labels, Long> {
     Optional<Labels> findById(Long id);
 
     @Query("SELECT p " +
-            "FROM Labels p " +
-            "WHERE p.member.id = :member " +
-            "ORDER BY p.sequence ASC ")
+        "FROM Labels p " +
+        "WHERE p.member.id = :member " +
+        "ORDER BY p.sequence ASC ")
     Stream<Labels> findLabelsByMemberOrderBySequence(@Param(value = "member") Long member);
 
 }

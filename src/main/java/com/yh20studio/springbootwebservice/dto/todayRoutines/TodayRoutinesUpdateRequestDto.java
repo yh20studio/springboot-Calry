@@ -23,18 +23,19 @@ public class TodayRoutinesUpdateRequestDto {
     private Routines routines;
 
     @Builder
-    public TodayRoutinesUpdateRequestDto(String finishTime, Boolean finish){
-        this.finishTime = LocalTime.parse(finishTime);;
+    public TodayRoutinesUpdateRequestDto(String finishTime, Boolean finish) {
+        this.finishTime = LocalTime.parse(finishTime);
+        ;
         this.finish = finish;
     }
 
-    public TodayRoutines toEntity(){
+    public TodayRoutines toEntity() {
 
         return TodayRoutines.builder()
-                .finishTime(finishTime)
-                .finish(finish)
-                .todayRoutinesGroups(todayRoutinesGroups)
-                .routines(routines)
-                .build();
+            .finishTime(finishTime)
+            .finish(finish)
+            .todayRoutinesGroups(todayRoutinesGroups)
+            .routines(routines)
+            .build();
     }
 }

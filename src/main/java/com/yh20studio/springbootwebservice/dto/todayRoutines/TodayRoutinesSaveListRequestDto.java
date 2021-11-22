@@ -21,7 +21,7 @@ public class TodayRoutinesSaveListRequestDto {
     private List<TodayRoutines> todayRoutinesList;
 
     @Builder
-    public TodayRoutinesSaveListRequestDto(String date, List<TodayRoutines> todayRoutinesList){
+    public TodayRoutinesSaveListRequestDto(String date, List<TodayRoutines> todayRoutinesList) {
         this.date = date;
         this.todayRoutinesList = todayRoutinesList;
     }

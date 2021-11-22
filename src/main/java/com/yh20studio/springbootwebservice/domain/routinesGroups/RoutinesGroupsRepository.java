@@ -10,6 +10,6 @@ import java.util.stream.Stream;
 
 
 public interface RoutinesGroupsRepository extends JpaRepository<RoutinesGroups, Long> {
-    Optional<RoutinesGroups> findById(Long id);
 
+    Optional<RoutinesGroups> findById(Long id);
 }

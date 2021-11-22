@@ -24,15 +24,16 @@ public class RoutinesGroupsUnionsSaveRequestDto {
     private Member member;
 
     @Builder
-    public RoutinesGroupsUnionsSaveRequestDto(String title, List<RoutinesGroupsSaveRequestDto> routinesGroupsList){
+    public RoutinesGroupsUnionsSaveRequestDto(String title,
+        List<RoutinesGroupsSaveRequestDto> routinesGroupsList) {
         this.title = title;
         this.routinesGroupsList = routinesGroupsList;
     }
 
-    public RoutinesGroupsUnions toEntity(){
+    public RoutinesGroupsUnions toEntity() {
         return RoutinesGroupsUnions.builder()
-                .title(title)
-                .member(member)
-                .build();
+            .title(title)
+            .member(member)
+            .build();
     }
 }

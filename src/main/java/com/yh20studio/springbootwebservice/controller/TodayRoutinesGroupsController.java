@@ -22,17 +22,15 @@ public class TodayRoutinesGroupsController {
     private TodayRoutinesGroupsService todayRoutinesGroupsService;
 
     // 주어진 date 값에 따라서 TodayRoutinesGroupsMainResponseDto를 가져오는 Get Method
-    @GetMapping(value="/{date}", produces = "application/json; charset=UTF-8")
-    public TodayRoutinesGroupsMainResponseDto findAllTodayRoutinesGroupsByDate(@PathVariable("date") String date){
+    @GetMapping(value = "/{date}", produces = "application/json; charset=UTF-8")
+    public TodayRoutinesGroupsMainResponseDto findAllTodayRoutinesGroupsByDate(
+        @PathVariable("date") String date) {
         return todayRoutinesGroupsService.getByDate(date);
     }
 
     // 로그인된 Member의 모든 TodayRoutinesGroups의 성공 여부 및 grade를 가져오는 Get Method
-    @GetMapping(value="", produces = "application/json; charset=UTF-8")
-    public List<TodayRoutinesGroupsMainResponseDto> findAllTodayRoutinesGroups(){
+    @GetMapping(value = "", produces = "application/json; charset=UTF-8")
+    public List<TodayRoutinesGroupsMainResponseDto> findAllTodayRoutinesGroups() {
         return todayRoutinesGroupsService.getAllTodayRoutinesGroups();
     }
-
-
-
 }

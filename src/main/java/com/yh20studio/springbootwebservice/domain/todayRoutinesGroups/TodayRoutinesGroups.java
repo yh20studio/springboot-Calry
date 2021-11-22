@@ -20,8 +20,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name="\"TodayRoutinesGroups\"")
+@Table(name = "\"TodayRoutinesGroups\"")
 public class TodayRoutinesGroups extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,28 +41,27 @@ public class TodayRoutinesGroups extends BaseTimeEntity {
     @JsonIgnore
     private Member member;
 
-    @OneToMany(mappedBy="todayRoutinesGroups")
+    @OneToMany(mappedBy = "todayRoutinesGroups")
     @OrderBy("id ASC")
     private List<TodayRoutines> todayRoutinesList;
 
     @Builder
-    public TodayRoutinesGroups(LocalDate date, Integer success, Integer fail, Member member){
+    public TodayRoutinesGroups(LocalDate date, Integer success, Integer fail, Member member) {
         this.date = date;
         this.success = success;
         this.fail = fail;
         this.member = member;
     }
 
-    public void increaseSuccessCount(Integer success){
+    public void increaseSuccessCount(Integer success) {
         this.success += success;
     }
 
-    public void increaseFailCount(Integer fail){
+    public void increaseFailCount(Integer fail) {
         this.fail += fail;
     }
 
-    public void decreaseFailCount(Integer fail){
+    public void decreaseFailCount(Integer fail) {
         this.fail -= fail;
     }
-
 }

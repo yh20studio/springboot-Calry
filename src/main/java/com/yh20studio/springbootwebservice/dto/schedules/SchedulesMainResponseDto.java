@@ -25,7 +25,7 @@ public class SchedulesMainResponseDto {
     private Labels labels;
 
 
-    public SchedulesMainResponseDto(Schedules entity){
+    public SchedulesMainResponseDto(Schedules entity) {
         id = entity.getId();
         title = entity.getTitle();
         content = entity.getContent();

@@ -20,12 +20,13 @@ public class Calendars {
     private HashMap<LocalDate, SchedulesMainResponseDto> holidays;
 
     @Builder
-    public Calendars(){
+    public Calendars() {
         this.weekSchedules = new HashMap<>();
     }
 
     // weekRowSchedule 생성
-    private ArrayList<int[]> createNewWeekRowSchedule(int scheduleStartWeekday, Integer scheduleId, int rowGap){
+    private ArrayList<int[]> createNewWeekRowSchedule(int scheduleStartWeekday, Integer scheduleId,
+        int rowGap) {
         ArrayList<int[]> weekRowSchedule = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             if (i == scheduleStartWeekday - 1) {
@@ -40,7 +41,8 @@ public class Calendars {
     }
 
     // weekRowSchedule 업데이트
-    private void updateWeekRowSchedule(int rowGap, int columnIndex, Integer scheduleId, ArrayList<int[]> weekRowSchedule){
+    private void updateWeekRowSchedule(int rowGap, int columnIndex, Integer scheduleId,
+        ArrayList<int[]> weekRowSchedule) {
         for (int i = 0; i < rowGap; i++) {
             // [schedules의 id, Schedules이 실제 달력에서 차지하는 영역의 칸 수]를 weekRowSchedule에 넣는 과정
             if (i == 0) {
@@ -54,14 +56,16 @@ public class Calendars {
     }
 
     // weekRowSchedule에 schedules을 넣은 만큼 temporary_weekRowOccupy에 scheduleId로 표시한다
-    private void updateWeekRowOccupy(int[] weekRowOccupy, int scheduleStartWeekday, Integer scheduleId, int rowEndWeekday){
+    private void updateWeekRowOccupy(int[] weekRowOccupy, int scheduleStartWeekday,
+        Integer scheduleId, int rowEndWeekday) {
         for (int i = scheduleStartWeekday; i <= rowEndWeekday; i++) {
             weekRowOccupy[i - 1] = scheduleId;
         }
     }
 
     // Schedules이 차지할 Column에 다른 Schedules이 차지하고 있는지 확인하는 과정
-    private Boolean isAlreadyOccupyInWeekCalendar(int scheduleStartWeekday, int rowEndWeekday, int[] temporary_weekRowOccupy){
+    private Boolean isAlreadyOccupyInWeekCalendar(int scheduleStartWeekday, int rowEndWeekday,
+        int[] temporary_weekRowOccupy) {
         for (int i = scheduleStartWeekday; i <= rowEndWeekday; i++) {
             if (temporary_weekRowOccupy[i - 1] != -1) {
                 // 만약 이미 다른 Schedules이 차지 하고 있다면 alreadyOccupy을 TRUE로 변경하고 반복문 종료
@@ -73,10 +77,10 @@ public class Calendars {
     }
 
     // scheduleStartWeekday와 이미 차지되고 있는 영역을 비교하여 columnIndex를 구한다.
-    private int findColumnIndex(int scheduleStartWeekday, ArrayList<int[]> weekRowSchedule){
+    private int findColumnIndex(int scheduleStartWeekday, ArrayList<int[]> weekRowSchedule) {
         int sumOfGap = 1;
         int columnIndex = 0;
-        while(sumOfGap < scheduleStartWeekday) {
+        while (sumOfGap < scheduleStartWeekday) {
             int occupyGap = weekRowSchedule.get(columnIndex)[1];
             sumOfGap += occupyGap;
             columnIndex++;
@@ -84,11 +88,11 @@ public class Calendars {
         return columnIndex;
     }
 
-    public void setSchedules(List<SchedulesMainResponseDto> schedules){
+    public void setSchedules(List<SchedulesMainResponseDto> schedules) {
         this.schedules = schedules;
     }
 
-    public void setHolidays(HashMap<LocalDate, SchedulesMainResponseDto> holidays){
+    public void setHolidays(HashMap<LocalDate, SchedulesMainResponseDto> holidays) {
         this.holidays = holidays;
     }
 
@@ -161,17 +165,20 @@ public class Calendars {
                     // weekOccupy를 통해서 데이터를 추가할 Schedules이 들어갈 Row가 있는지 판별
                     for (int[] temporary_weekRowOccupy : weekOccupy) {
                         // temporary_weekRowOccupy에 빈 자리가 있는지 확인
-                        boolean alreadyOccupy = isAlreadyOccupyInWeekCalendar(scheduleStartWeekday, rowEndWeekday, temporary_weekRowOccupy);
+                        boolean alreadyOccupy = isAlreadyOccupyInWeekCalendar(scheduleStartWeekday,
+                            rowEndWeekday, temporary_weekRowOccupy);
 
                         // temporary_weekRowOccupy에 Schedules이 들어갈 수 있는 빈자리가 있다면 추가하는 과정을 진행한다.
                         if (alreadyOccupy == Boolean.FALSE) {
                             weekRowSchedule = weekCalendar.get(weekRow);
 
                             // weekRowSchedule에는 Schedules가 차지하는 영역 만큼 빈 공간이 제거되어 있기 때문에 요일에 따라서 index를 접근할 수 없기 때문에 ColumnIndex를 통해 접근한다.
-                            int columnIndex = findColumnIndex(scheduleStartWeekday, weekRowSchedule);
+                            int columnIndex = findColumnIndex(scheduleStartWeekday,
+                                weekRowSchedule);
 
                             updateWeekRowSchedule(rowGap, columnIndex, scheduleId, weekRowSchedule);
-                            updateWeekRowOccupy(temporary_weekRowOccupy, scheduleStartWeekday, scheduleId, rowEndWeekday);
+                            updateWeekRowOccupy(temporary_weekRowOccupy, scheduleStartWeekday,
+                                scheduleId, rowEndWeekday);
 
                             // schedules이 weekRowSchedule에 추가되었기 때문에 check 값을 변경한다.
                             schedulesAddToWeekRowSchedule = Boolean.TRUE;
@@ -185,9 +192,11 @@ public class Calendars {
                     }
                     // 만약 weekOccupy의 weekRowOccupy를 전부 확인했음에도 Schedules이 들어갈 자리가 없다면, Row를 1개 추가한다.
                     if (schedulesAddToWeekRowSchedule == Boolean.FALSE) {
-                        weekRowSchedule = createNewWeekRowSchedule(scheduleStartWeekday, scheduleId, rowGap);
+                        weekRowSchedule = createNewWeekRowSchedule(scheduleStartWeekday, scheduleId,
+                            rowGap);
                         weekRowOccupy = new int[]{-1, -1, -1, -1, -1, -1, -1};
-                        updateWeekRowOccupy(weekRowOccupy, scheduleStartWeekday, scheduleId, rowEndWeekday);
+                        updateWeekRowOccupy(weekRowOccupy, scheduleStartWeekday, scheduleId,
+                            rowEndWeekday);
 
                         // weekCalendar와 weekOccupy에 각 Row값을 추가한다.
                         weekCalendar.add(weekRowSchedule);
@@ -196,9 +205,11 @@ public class Calendars {
                 }
                 // calendarMap에 해당 Schedules이 시작되는 주의 일요일 날짜로 WeekCalendar에 대한 정보가 없다면 새롭게 데이터를 만들고 추가
                 else {
-                    weekRowSchedule = createNewWeekRowSchedule(scheduleStartWeekday, scheduleId, rowGap);
+                    weekRowSchedule = createNewWeekRowSchedule(scheduleStartWeekday, scheduleId,
+                        rowGap);
                     weekRowOccupy = new int[]{-1, -1, -1, -1, -1, -1, -1};
-                    updateWeekRowOccupy(weekRowOccupy, scheduleStartWeekday, scheduleId, rowEndWeekday);
+                    updateWeekRowOccupy(weekRowOccupy, scheduleStartWeekday, scheduleId,
+                        rowEndWeekday);
 
                     // weekCalendar와 weekOccupy에 각 Row값을 추가한다.
                     weekCalendar = new ArrayList<>();

@@ -16,15 +16,14 @@ public class LabelsController {
     private LabelsService labelsService;
 
     // Get Method
-    @GetMapping(value="", produces = "application/json; charset=UTF-8")
-    public List<LabelsMainResponseDto> getLabels(){
+    @GetMapping(value = "", produces = "application/json; charset=UTF-8")
+    public List<LabelsMainResponseDto> getLabels() {
         return labelsService.getMyAllDesc();
     }
 
     // Put Method, Labels의 order를 바꾸기 위한 Method
-    @PutMapping(value="", produces = "application/json; charset=UTF-8")
-    public List<LabelsMainResponseDto> updateLabels(@RequestBody LabelsListDto labelsListDto){
+    @PutMapping(value = "", produces = "application/json; charset=UTF-8")
+    public List<LabelsMainResponseDto> updateLabels(@RequestBody LabelsListDto labelsListDto) {
         return labelsService.update(labelsListDto);
     }
-
 }

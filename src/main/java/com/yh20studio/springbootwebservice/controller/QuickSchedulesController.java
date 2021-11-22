@@ -17,26 +17,28 @@ public class QuickSchedulesController {
     private QuickSchedulesService quickSchedulesService;
 
     // Get Method
-    @GetMapping(value="", produces = "application/json; charset=UTF-8")
-    public List<QuickSchedulesMainResponseDto> getQuickSchedules(){
+    @GetMapping(value = "", produces = "application/json; charset=UTF-8")
+    public List<QuickSchedulesMainResponseDto> getQuickSchedules() {
         return quickSchedulesService.getQuickSchedules();
     }
 
     // Post Method
-    @PostMapping(value="", produces = "application/json; charset=UTF-8")
-    public QuickSchedulesMainResponseDto saveQuickSchedules(@RequestBody QuickSchedulesSaveRequestDto dto){
+    @PostMapping(value = "", produces = "application/json; charset=UTF-8")
+    public QuickSchedulesMainResponseDto saveQuickSchedules(
+        @RequestBody QuickSchedulesSaveRequestDto dto) {
         return quickSchedulesService.save(dto);
     }
 
     // Put Method
-    @PutMapping(value="/{id}", produces = "application/json; charset=UTF-8")
-    public QuickSchedulesMainResponseDto updateQuickSchedules(@PathVariable("id") Long id, @RequestBody QuickSchedulesSaveRequestDto quickSchedulesSaveRequestDto){
+    @PutMapping(value = "/{id}", produces = "application/json; charset=UTF-8")
+    public QuickSchedulesMainResponseDto updateQuickSchedules(@PathVariable("id") Long id,
+        @RequestBody QuickSchedulesSaveRequestDto quickSchedulesSaveRequestDto) {
         return quickSchedulesService.update(id, quickSchedulesSaveRequestDto);
     }
 
     // Delete Method
-    @DeleteMapping(value="/{id}", produces = "application/json; charset=UTF-8")
-    public ResponseEntity<String> deleteQuickSchedules(@PathVariable("id") Long id){
+    @DeleteMapping(value = "/{id}", produces = "application/json; charset=UTF-8")
+    public ResponseEntity<String> deleteQuickSchedules(@PathVariable("id") Long id) {
         quickSchedulesService.delete(id);
         return ResponseEntity.ok("delete");
     }

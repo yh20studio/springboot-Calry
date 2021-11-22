@@ -10,10 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class SecurityUtil {
 
-    private SecurityUtil() { }
+    private SecurityUtil() {
+    }
 
     public Long getCurrentMemberId() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication authentication = SecurityContextHolder.getContext()
+            .getAuthentication();
 
         if (authentication == null || authentication.getName() == null) {
             //401 Error

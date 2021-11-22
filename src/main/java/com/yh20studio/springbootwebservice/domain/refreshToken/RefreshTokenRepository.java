@@ -12,6 +12,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
+
     Optional<RefreshToken> findByMember(Member member);
+
     boolean existsByMember(Member member);
 }

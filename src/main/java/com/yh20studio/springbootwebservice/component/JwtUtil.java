@@ -29,6 +29,7 @@ public class JwtUtil {
     private static String BEARER_TYPE = "bearer";
     private static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 1;   // 1일
     private static long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
+
     private Key key;
 
     // JWT Secret key
@@ -38,76 +39,76 @@ public class JwtUtil {
     }
 
     // Authentication으로 토큰 생성
-    public TokenDto generateToken(Authentication authentication){
+    public TokenDto generateToken(Authentication authentication) {
 
         String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.joining(","));
         long now = (new Date().getTime());
 
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .setExpiration(accessTokenExpiresIn)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+            .setSubject(authentication.getName())
+            .claim(AUTHORITIES_KEY, authorities)
+            .setExpiration(accessTokenExpiresIn)
+            .signWith(key, SignatureAlgorithm.HS512)
+            .compact();
 
         // Refresh Token 생성
         Date refreshTokenExpiresIn = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
         String refreshToken = Jwts.builder()
-                .setExpiration(refreshTokenExpiresIn)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+            .setExpiration(refreshTokenExpiresIn)
+            .signWith(key, SignatureAlgorithm.HS512)
+            .compact();
 
         return TokenDto.builder()
-                .accessToken(accessToken)
-                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
-                .refreshToken(refreshToken)
-                .refreshTokenExpiresIn(refreshTokenExpiresIn.getTime())
-                .build();
+            .accessToken(accessToken)
+            .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
+            .refreshToken(refreshToken)
+            .refreshTokenExpiresIn(refreshTokenExpiresIn.getTime())
+            .build();
 
     }
 
-    public AccessTokenResponseDto reissueAccessToken(Authentication authentication){
+    public AccessTokenResponseDto reissueAccessToken(Authentication authentication) {
 
         String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.joining(","));
         long now = (new Date().getTime());
 
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .setExpiration(accessTokenExpiresIn)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+            .setSubject(authentication.getName())
+            .claim(AUTHORITIES_KEY, authorities)
+            .setExpiration(accessTokenExpiresIn)
+            .signWith(key, SignatureAlgorithm.HS512)
+            .compact();
 
         return AccessTokenResponseDto.builder()
-                .accessToken(accessToken)
-                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
-                .build();
+            .accessToken(accessToken)
+            .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
+            .build();
 
     }
 
     // AccessToken으로 Authentication 생성
-    public Authentication getAuthentication(String accessToken){
+    public Authentication getAuthentication(String accessToken) {
 
         Claims claims = parseClaims(accessToken);
 
         // claims 값에  AccessToken을 생성할 때 넣었던 authorities 값이 존재하지 않는다면 HttpStatus.UNAUTHORIZED Trow
-        if (claims.get(AUTHORITIES_KEY) == null){
+        if (claims.get(AUTHORITIES_KEY) == null) {
             //401 Error
             throw new RestException(HttpStatus.UNAUTHORIZED, "권한 정보가 없는 토큰입니다.");
         }
 
         Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+            Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
 
         // username 값에 memberId 값을 넣어줌
         UserDetails userDetails = new User(claims.getSubject(), "", authorities);
@@ -117,16 +118,15 @@ public class JwtUtil {
     }
 
     // 토큰의 유효성 확인
-    public boolean validateToken(String token){
-        try{
+    public boolean validateToken(String token) {
+        try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 
         } catch (ExpiredJwtException e) {
             throw new RestException(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.");
         } catch (UnsupportedJwtException e) {
-
 
         } catch (IllegalArgumentException e) {
 
@@ -135,13 +135,13 @@ public class JwtUtil {
     }
 
     // 토큰의 claims 확인
-    public Claims parseClaims(String accessToken){
+    public Claims parseClaims(String accessToken) {
         try {
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken)
+                .getBody();
         } catch (MalformedJwtException e) {
             throw new RestException(HttpStatus.UNAUTHORIZED, "토큰 형식이 아닙니다.");
-        }
-        catch (ExpiredJwtException e) {
+        } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
     }

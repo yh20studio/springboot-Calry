@@ -18,27 +18,28 @@ public class MemberSaveRequestDto {
     private Member.Role role;
 
     @Builder
-    public MemberSaveRequestDto(String name, String email, String picture, String resource, String password, Member.Role role){
+    public MemberSaveRequestDto(String name, String email, String picture, String resource,
+        String password, Member.Role role) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
     }
 
-    public Member toEntity(){
+    public Member toEntity() {
         return Member.builder()
-                .name(name)
-                .email(email)
-                .role(Member.Role.GUEST)
-                .build();
+            .name(name)
+            .email(email)
+            .role(Member.Role.GUEST)
+            .build();
     }
 
-    public Member toMember(PasswordEncoder passwordEncoder){
+    public Member toMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
-                .name(name)
-                .email(email)
-                .password(passwordEncoder.encode(password))
-                .role(Member.Role.GUEST)
-                .build();
+            .name(name)
+            .email(email)
+            .password(passwordEncoder.encode(password))
+            .role(Member.Role.GUEST)
+            .build();
     }
 }

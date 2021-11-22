@@ -21,8 +21,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name="\"Labels\"")
-public class Labels{
+@Table(name = "\"Labels\"")
+public class Labels {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,37 +44,40 @@ public class Labels{
     private Member member;
 
     @Builder
-    public Labels(String title, Integer sequence, LabelColors label_colors, Member member){
+    public Labels(String title, Integer sequence, LabelColors label_colors, Member member) {
         this.title = title;
         this.sequence = sequence;
         this.label_colors = label_colors;
         this.member = member;
     }
-    public void updateTitle(String title){
+
+    public void updateTitle(String title) {
         this.title = title;
     }
-    public void updateSequence(Integer sequence){
+
+    public void updateSequence(Integer sequence) {
         this.sequence = sequence;
     }
 
-    public static void updateSequenceList(List<Labels> labelsList){
+    public static void updateSequenceList(List<Labels> labelsList) {
         int count = 0;
-        for(Labels labels : labelsList){
+        for (Labels labels : labelsList) {
             int sequence = count;
             labels.updateSequence(sequence);
             count++;
         }
     }
 
-    public static List<Labels> labelsListFromLabelColorsList(List<LabelColors> labelColorsList, Member member){
+    public static List<Labels> labelsListFromLabelColorsList(List<LabelColors> labelColorsList,
+        Member member) {
         List<Labels> labelsList = new ArrayList<>();
-        for(LabelColors labelColors : labelColorsList){
+        for (LabelColors labelColors : labelColorsList) {
             Labels labels = Labels.builder()
-                    .title(labelColors.getTitle())
-                    .sequence(labelColors.getId().intValue()-1)
-                    .label_colors(labelColors)
-                    .member(member)
-                    .build();
+                .title(labelColors.getTitle())
+                .sequence(labelColors.getId().intValue() - 1)
+                .label_colors(labelColors)
+                .member(member)
+                .build();
             labelsList.add(labels);
         }
 

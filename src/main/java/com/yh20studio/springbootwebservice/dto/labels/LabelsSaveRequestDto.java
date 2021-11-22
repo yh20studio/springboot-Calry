@@ -20,22 +20,20 @@ public class LabelsSaveRequestDto {
     private Member member;
 
     @Builder
-    public LabelsSaveRequestDto(String title, Integer sequence, LabelColors labelColors, Member member){
+    public LabelsSaveRequestDto(String title, Integer sequence, LabelColors labelColors,
+        Member member) {
         this.title = title;
         this.sequence = sequence;
         this.labelColors = labelColors;
         this.member = member;
     }
 
-    public Labels toEntity(){
+    public Labels toEntity() {
         return Labels.builder()
-                .title(title)
-                .sequence(sequence)
-                .label_colors(labelColors)
-                .member(member)
-                .build();
+            .title(title)
+            .sequence(sequence)
+            .label_colors(labelColors)
+            .member(member)
+            .build();
     }
-
-
-
 }

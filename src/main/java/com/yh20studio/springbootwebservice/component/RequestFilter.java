@@ -21,26 +21,29 @@ import java.util.Map;
 public class RequestFilter implements Filter {
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper((HttpServletRequest) request);
-        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse) response);
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+        throws IOException, ServletException {
+        ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(
+            (HttpServletRequest) request);
+        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(
+            (HttpServletResponse) response);
 
         long start = System.currentTimeMillis();
         chain.doFilter(requestWrapper, responseWrapper);
         long end = System.currentTimeMillis();
 
         log.info("\n" +
-                        "[REQUEST] {} - {} {} - {}\n" +
-                        "Headers : {}\n" +
-                        "Request : {}\n" +
-                        "Response : {}\n",
-                ((HttpServletRequest) request).getMethod(),
-                ((HttpServletRequest) request).getRequestURI(),
-                responseWrapper.getStatus(),
-                (end - start) / 1000.0,
-                getHeaders((HttpServletRequest) request),
-                getRequestBody(requestWrapper),
-                getResponseBody(responseWrapper)
+                "[REQUEST] {} - {} {} - {}\n" +
+                "Headers : {}\n" +
+                "Request : {}\n" +
+                "Response : {}\n",
+            ((HttpServletRequest) request).getMethod(),
+            ((HttpServletRequest) request).getRequestURI(),
+            responseWrapper.getStatus(),
+            (end - start) / 1000.0,
+            getHeaders((HttpServletRequest) request),
+            getRequestBody(requestWrapper),
+            getResponseBody(responseWrapper)
 
         );
     }
@@ -57,7 +60,8 @@ public class RequestFilter implements Filter {
     }
 
     private String getRequestBody(ContentCachingRequestWrapper request) {
-        ContentCachingRequestWrapper wrapper = WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
+        ContentCachingRequestWrapper wrapper = WebUtils
+            .getNativeRequest(request, ContentCachingRequestWrapper.class);
         if (wrapper != null) {
             byte[] buf = wrapper.getContentAsByteArray();
             if (buf.length > 0) {
@@ -74,7 +78,7 @@ public class RequestFilter implements Filter {
     private String getResponseBody(final HttpServletResponse response) throws IOException {
         String payload = null;
         ContentCachingResponseWrapper wrapper =
-                WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
+            WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
         if (wrapper != null) {
             byte[] buf = wrapper.getContentAsByteArray();
             if (buf.length > 0) {

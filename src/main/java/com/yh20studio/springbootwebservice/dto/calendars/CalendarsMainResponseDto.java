@@ -13,15 +13,15 @@ import java.util.List;
 
 @Getter
 public class CalendarsMainResponseDto {
+
     private HashMap<LocalDate, ArrayList<ArrayList<int[]>>> weekSchedules;
     private List<SchedulesMainResponseDto> schedules;
     private HashMap<LocalDate, SchedulesMainResponseDto> holidays;
 
 
-    public CalendarsMainResponseDto(Calendars calendars){
+    public CalendarsMainResponseDto(Calendars calendars) {
         weekSchedules = calendars.getWeekSchedules();
         schedules = calendars.getSchedules();
         holidays = calendars.getHolidays();
     }
-
 }

@@ -33,17 +33,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException{
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
 
         String jwt = resolveToken(request);
 
-        if(StringUtils.hasText(jwt) && jwtUtil.validateToken(jwt)) {
+        if (StringUtils.hasText(jwt) && jwtUtil.validateToken(jwt)) {
             // 만약 해당 토큰이 금지 되었다면 HttpStatus.UNAUTHORIZED Throw
-            if(accessTokenBlackListRepository.existsByValue(jwt)){
+            if (accessTokenBlackListRepository.existsByValue(jwt)) {
                 //401 Error
                 throw new RestException(HttpStatus.UNAUTHORIZED, "Access Token 이 유효하지 않습니다.");
-            }
-            else{
+            } else {
                 Authentication authentication = jwtUtil.getAuthentication(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

@@ -9,10 +9,11 @@ import java.util.Optional;
 
 @Getter
 public class MemberSummaryDto {
+
     private Long id;
     private Member.Role role;
 
-    public MemberSummaryDto(Member entity){
+    public MemberSummaryDto(Member entity) {
         id = entity.getId();
         role = entity.getRole();
     }

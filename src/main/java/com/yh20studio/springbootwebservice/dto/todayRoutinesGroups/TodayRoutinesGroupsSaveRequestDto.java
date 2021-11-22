@@ -25,20 +25,21 @@ public class TodayRoutinesGroupsSaveRequestDto {
 
 
     @Builder
-    public TodayRoutinesGroupsSaveRequestDto(String date, Integer success, Integer fail, Member member){
+    public TodayRoutinesGroupsSaveRequestDto(String date, Integer success, Integer fail,
+        Member member) {
         this.date = LocalDate.parse(date);
         this.success = success;
         this.fail = fail;
         this.member = member;
     }
 
-    public TodayRoutinesGroups toEntity(){
+    public TodayRoutinesGroups toEntity() {
         return TodayRoutinesGroups.builder()
-                .date(date)
-                .success(success)
-                .fail(fail)
-                .member(member)
-                .build();
+            .date(date)
+            .success(success)
+            .fail(fail)
+            .member(member)
+            .build();
     }
 
 }

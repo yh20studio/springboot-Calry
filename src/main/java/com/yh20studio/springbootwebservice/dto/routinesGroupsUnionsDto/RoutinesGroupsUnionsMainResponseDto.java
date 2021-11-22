@@ -20,11 +20,9 @@ public class RoutinesGroupsUnionsMainResponseDto {
     private String title;
     private List<RoutinesGroups> routinesGroupsList;
 
-    public RoutinesGroupsUnionsMainResponseDto(RoutinesGroupsUnions entity){
+    public RoutinesGroupsUnionsMainResponseDto(RoutinesGroupsUnions entity) {
         id = entity.getId();
         title = entity.getTitle();
         routinesGroupsList = entity.getRoutinesGroupsList();
     }
-
-
 }

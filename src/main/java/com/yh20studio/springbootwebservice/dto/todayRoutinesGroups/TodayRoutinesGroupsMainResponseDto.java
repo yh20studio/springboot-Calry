@@ -23,15 +23,15 @@ public class TodayRoutinesGroupsMainResponseDto {
 
 
     // todayRoutines 중에서 완료되지 않은 값만 내보낸다.
-    public TodayRoutinesGroupsMainResponseDto(TodayRoutinesGroups entity){
+    public TodayRoutinesGroupsMainResponseDto(TodayRoutinesGroups entity) {
         id = entity.getId();
         date = entity.getDate();
         success = entity.getSuccess();
         fail = entity.getFail();
         member = entity.getMember();
-        if(entity.getTodayRoutinesList() != null){
+        if (entity.getTodayRoutinesList() != null) {
             entity.getTodayRoutinesList().forEach(todayRoutines -> {
-                if(todayRoutines.getFinish() == Boolean.FALSE){
+                if (todayRoutines.getFinish() == Boolean.FALSE) {
                     todayRoutinesList.add(todayRoutines);
                 }
             });

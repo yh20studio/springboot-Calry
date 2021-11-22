@@ -18,9 +18,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name="\"Routines_memos\"")
+@Table(name = "\"Routines_memos\"")
 @EntityListeners(AuditingEntityListener.class)
 public class RoutinesMemos {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,15 +41,16 @@ public class RoutinesMemos {
     private LocalDateTime modified_date;
 
     @Builder
-    public RoutinesMemos(String content, Routines routines){
+    public RoutinesMemos(String content, Routines routines) {
         this.content = content;
         this.routines = routines;
     }
-    public void updateContent(String content){
+
+    public void updateContent(String content) {
         this.content = content;
     }
 
-    public void setRoutines(Routines routines){
+    public void setRoutines(Routines routines) {
         this.routines = routines;
     }
 }

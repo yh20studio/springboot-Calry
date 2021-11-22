@@ -20,8 +20,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name="\"RoutinesGroupsUnions\"")
+@Table(name = "\"RoutinesGroupsUnions\"")
 public class RoutinesGroupsUnions extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,39 +35,44 @@ public class RoutinesGroupsUnions extends BaseTimeEntity {
     @JsonIgnore
     private Member member;
 
-    @OneToMany(mappedBy="routinesGroupsUnions", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "routinesGroupsUnions", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderBy("id ASC")
     @JsonIgnore
     private List<RoutinesGroups> routinesGroupsList;
 
     @Builder
-    public RoutinesGroupsUnions(String title, Member member, List<RoutinesGroups> routinesGroupsList){
+    public RoutinesGroupsUnions(String title, Member member,
+        List<RoutinesGroups> routinesGroupsList) {
         this.title = title;
         this.member = member;
         this.routinesGroupsList = routinesGroupsList;
     }
 
-    public void updateTitle(String title){
+    public void updateTitle(String title) {
         this.title = title;
     }
 
-    public void setRoutinesGroupsList(){
+    public void setRoutinesGroupsList() {
         this.routinesGroupsList = new ArrayList<>();
     }
 
-    public void setMember(Member member){this.member = member;}
+    public void setMember(Member member) {
+        this.member = member;
+    }
 
     public void addRoutinesGroups(RoutinesGroups routinesGroups) {
         this.routinesGroupsList.add(routinesGroups);
         routinesGroups.setRoutinesGroupsUnions(this);
     }
 
-    public Collection<RoutinesGroups> updateRoutinesGroups(List<RoutinesGroups> routinesGroupsList){
-        HashMap<Long, RoutinesGroups> needDeleteRoutinesGroupsMap =  new HashMap<>();
-        this.routinesGroupsList.forEach(routinesGroups -> needDeleteRoutinesGroupsMap.put(routinesGroups.getId(), routinesGroups));
+    public Collection<RoutinesGroups> updateRoutinesGroups(
+        List<RoutinesGroups> routinesGroupsList) {
+        HashMap<Long, RoutinesGroups> needDeleteRoutinesGroupsMap = new HashMap<>();
+        this.routinesGroupsList.forEach(routinesGroups -> needDeleteRoutinesGroupsMap
+            .put(routinesGroups.getId(), routinesGroups));
 
-        for(RoutinesGroups newRoutinesGroups :routinesGroupsList){
-            if (needDeleteRoutinesGroupsMap.containsKey(newRoutinesGroups.getId())){
+        for (RoutinesGroups newRoutinesGroups : routinesGroupsList) {
+            if (needDeleteRoutinesGroupsMap.containsKey(newRoutinesGroups.getId())) {
                 needDeleteRoutinesGroupsMap.remove(newRoutinesGroups.getId());
             }
         }

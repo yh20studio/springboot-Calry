@@ -19,11 +19,10 @@ public class RoutinesMainResponseDto {
     private List<RoutinesMemos> routines_memosList;
     private Integer duration;
 
-    public RoutinesMainResponseDto(Routines entity){
+    public RoutinesMainResponseDto(Routines entity) {
         id = entity.getId();
         title = entity.getTitle();
         routines_memosList = entity.getRoutines_memosList();
         duration = entity.getDuration();
     }
-
 }

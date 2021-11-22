@@ -12,11 +12,12 @@ import java.util.stream.Stream;
 
 
 public interface QuickSchedulesRepository extends JpaRepository<QuickSchedules, Long> {
+
     Optional<QuickSchedules> findById(Long id);
 
     @Query("SELECT p " +
-            "FROM QuickSchedules p " +
-            "WHERE p.member.id = :member " +
-            "ORDER BY p.id ASC ")
+        "FROM QuickSchedules p " +
+        "WHERE p.member.id = :member " +
+        "ORDER BY p.id ASC ")
     Stream<QuickSchedules> findMySchedules(@Param(value = "member") Long member);
 }

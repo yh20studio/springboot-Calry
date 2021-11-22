@@ -16,8 +16,9 @@ import java.time.LocalTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name="\"QuickSchedules\"")
+@Table(name = "\"QuickSchedules\"")
 public class QuickSchedules extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,7 +46,8 @@ public class QuickSchedules extends BaseTimeEntity {
     private Labels labels;
 
     @Builder
-    public QuickSchedules(String title, String content, LocalTime start_time, LocalTime end_time, Member member, Labels labels){
+    public QuickSchedules(String title, String content, LocalTime start_time, LocalTime end_time,
+        Member member, Labels labels) {
         this.title = title;
         this.content = content;
         this.start_time = start_time;
@@ -54,7 +56,8 @@ public class QuickSchedules extends BaseTimeEntity {
         this.labels = labels;
     }
 
-    public void updateWhole(String title, String content, LocalTime start_time, LocalTime end_time, Labels labels){
+    public void updateWhole(String title, String content, LocalTime start_time, LocalTime end_time,
+        Labels labels) {
         this.title = title;
         this.content = content;
         this.start_time = start_time;
@@ -65,5 +68,4 @@ public class QuickSchedules extends BaseTimeEntity {
     public void setMember(Member member) {
         this.member = member;
     }
-
 }

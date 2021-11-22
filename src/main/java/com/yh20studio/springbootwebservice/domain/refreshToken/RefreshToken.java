@@ -35,20 +35,21 @@ public class RefreshToken {
     private Member member;
 
     @Builder
-    public RefreshToken(String value, Long expires, Member member){
+    public RefreshToken(String value, Long expires, Member member) {
         this.value = value;
         this.expires = expires;
         this.member = member;
     }
-    public void updateWhole(String token, Long expires){
+
+    public void updateWhole(String token, Long expires) {
         this.value = token;
         this.expires = expires;
     }
 
-    public void validateExpires(){
+    public void validateExpires() {
         long now = (new Date().getTime());
         // refreshToken의 유효기간이 지났다면 다시 로그인해야합니다.
-        if(expires <= now){
+        if (expires <= now) {
             throw new RestException(HttpStatus.UNAUTHORIZED, "Refresh Token이 유효하지 않습니다.");
         }
     }

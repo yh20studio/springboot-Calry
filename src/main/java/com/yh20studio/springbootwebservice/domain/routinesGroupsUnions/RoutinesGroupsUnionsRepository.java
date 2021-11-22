@@ -9,13 +9,12 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface RoutinesGroupsUnionsRepository extends JpaRepository<RoutinesGroupsUnions, Long> {
+
     Optional<RoutinesGroupsUnions> findById(Long id);
 
     @Query("SELECT p " +
-            "FROM RoutinesGroupsUnions p " +
-            "WHERE p.member.id = :member " +
-            "ORDER BY p.id ASC ")
+        "FROM RoutinesGroupsUnions p " +
+        "WHERE p.member.id = :member " +
+        "ORDER BY p.id ASC ")
     Stream<RoutinesGroupsUnions> findAllByMember(@Param(value = "member") Long member);
-
-
 }

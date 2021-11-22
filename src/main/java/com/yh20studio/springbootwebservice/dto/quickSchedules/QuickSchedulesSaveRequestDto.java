@@ -26,7 +26,8 @@ public class QuickSchedulesSaveRequestDto {
     private Member member;
 
     @Builder
-    public QuickSchedulesSaveRequestDto(String title, String content, String start_time, String end_time, Labels labels, Member member){
+    public QuickSchedulesSaveRequestDto(String title, String content, String start_time,
+        String end_time, Labels labels, Member member) {
         this.title = title;
         this.content = content;
         this.start_time = LocalTime.parse(start_time);
@@ -35,19 +36,18 @@ public class QuickSchedulesSaveRequestDto {
         this.member = member;
     }
 
-    public QuickSchedules toEntity(){
+    public QuickSchedules toEntity() {
         return QuickSchedules.builder()
-                .title(title)
-                .content(content)
-                .start_time(start_time)
-                .end_time(end_time)
-                .labels(labels)
-                .member(member)
-                .build();
+            .title(title)
+            .content(content)
+            .start_time(start_time)
+            .end_time(end_time)
+            .labels(labels)
+            .member(member)
+            .build();
     }
 
-    public void setMember(Member member){
+    public void setMember(Member member) {
         this.member = member;
     }
-
 }

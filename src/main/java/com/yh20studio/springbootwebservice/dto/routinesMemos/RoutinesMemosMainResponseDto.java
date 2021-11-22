@@ -16,11 +16,10 @@ public class RoutinesMemosMainResponseDto {
     private LocalDateTime modified_date;
     private LocalDateTime created_date;
 
-    public RoutinesMemosMainResponseDto(RoutinesMemos entity){
+    public RoutinesMemosMainResponseDto(RoutinesMemos entity) {
         id = entity.getId();
         content = entity.getContent();
         modified_date = entity.getModified_date();
         created_date = entity.getCreated_date();
     }
-
 }

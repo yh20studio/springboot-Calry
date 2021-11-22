@@ -24,7 +24,8 @@ public class SchedulesSaveRequestDto {
     private Labels labels;
 
     @Builder
-    public SchedulesSaveRequestDto(String title, String content, String start_date, String end_date, Labels labels){
+    public SchedulesSaveRequestDto(String title, String content, String start_date, String end_date,
+        Labels labels) {
         this.title = title;
         this.content = content;
         this.start_date = stringToLocalDateTime(start_date);
@@ -32,18 +33,18 @@ public class SchedulesSaveRequestDto {
         this.labels = labels;
     }
 
-    public Schedules toEntity(){
+    public Schedules toEntity() {
         return Schedules.builder()
-                .title(title)
-                .content(content)
-                .start_date(start_date)
-                .end_date(end_date)
-                .labels(labels)
-                .build();
+            .title(title)
+            .content(content)
+            .start_date(start_date)
+            .end_date(end_date)
+            .labels(labels)
+            .build();
     }
 
     // json으로 받아온 날짜에 대한 String 값을 LocalDateTime으로 변환
-    public LocalDateTime stringToLocalDateTime(String str){
+    public LocalDateTime stringToLocalDateTime(String str) {
         return LocalDateTime.parse(str, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 

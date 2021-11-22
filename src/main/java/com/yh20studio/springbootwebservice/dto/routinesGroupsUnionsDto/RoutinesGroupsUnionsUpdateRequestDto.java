@@ -21,15 +21,16 @@ public class RoutinesGroupsUnionsUpdateRequestDto {
     private Member member;
 
     @Builder
-    public RoutinesGroupsUnionsUpdateRequestDto(String title, List<RoutinesGroupsUpdateRequestDto> routinesGroupsList){
+    public RoutinesGroupsUnionsUpdateRequestDto(String title,
+        List<RoutinesGroupsUpdateRequestDto> routinesGroupsList) {
         this.title = title;
         this.routinesGroupsList = routinesGroupsList;
     }
 
-    public RoutinesGroupsUnions toEntity(){
+    public RoutinesGroupsUnions toEntity() {
         return RoutinesGroupsUnions.builder()
-                .title(title)
-                .member(member)
-                .build();
+            .title(title)
+            .member(member)
+            .build();
     }
 }

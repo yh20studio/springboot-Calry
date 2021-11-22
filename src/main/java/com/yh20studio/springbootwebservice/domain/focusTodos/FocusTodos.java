@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name="\"FocusTodos\"")
+@Table(name = "\"FocusTodos\"")
 public class FocusTodos extends BaseTimeEntity {
 
     @Id
@@ -36,24 +36,25 @@ public class FocusTodos extends BaseTimeEntity {
     private Member member;
 
     @Builder
-    public FocusTodos(String content, Boolean success, LocalDateTime successDateTime, Member member) {
+    public FocusTodos(String content, Boolean success, LocalDateTime successDateTime,
+        Member member) {
         this.content = content;
         this.success = success;
         this.successDateTime = successDateTime;
         this.member = member;
     }
 
-    public void setMember(Member member){
+    public void setMember(Member member) {
         this.member = member;
     }
 
-    public void updateWhole(String content, Boolean success, LocalDateTime successDateTime){
+    public void updateWhole(String content, Boolean success, LocalDateTime successDateTime) {
         this.content = content;
         this.success = success;
         this.successDateTime = successDateTime;
     }
 
-    public void doSuccess(Boolean success, LocalDateTime successDateTime){
+    public void doSuccess(Boolean success, LocalDateTime successDateTime) {
         this.success = success;
         this.successDateTime = successDateTime;
     }

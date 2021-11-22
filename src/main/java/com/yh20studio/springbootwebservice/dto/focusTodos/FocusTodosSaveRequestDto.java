@@ -21,19 +21,20 @@ public class FocusTodosSaveRequestDto {
     private Member member;
 
     @Builder
-    public FocusTodosSaveRequestDto(String content, Boolean success, String successDateTime, Member member){
+    public FocusTodosSaveRequestDto(String content, Boolean success, String successDateTime,
+        Member member) {
         this.content = content;
         this.success = success;
         this.successDateTime = LocalDateTime.parse(successDateTime);
         this.member = member;
     }
 
-    public FocusTodos toEntity(){
+    public FocusTodos toEntity() {
         return FocusTodos.builder()
-                .content(content)
-                .success(success)
-                .successDateTime(successDateTime)
-                .member(member)
-                .build();
+            .content(content)
+            .success(success)
+            .successDateTime(successDateTime)
+            .member(member)
+            .build();
     }
 }

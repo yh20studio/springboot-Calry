@@ -14,7 +14,7 @@ public class LabelsMainResponseDto {
     private Integer sequence;
     private LabelColorsMainResponseDto label_colors;
 
-    public LabelsMainResponseDto(Labels entity){
+    public LabelsMainResponseDto(Labels entity) {
         id = entity.getId();
         title = entity.getTitle();
         label_colors = new LabelColorsMainResponseDto(entity.getLabel_colors());

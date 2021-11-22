@@ -12,8 +12,9 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name="\"RecommendRoutines\"")
+@Table(name = "\"RecommendRoutines\"")
 public class RecommendRoutines {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,14 +34,15 @@ public class RecommendRoutines {
     private RoutinesCategory routines_category;
 
     @Builder
-    public RecommendRoutines(String icon, String title, Integer duration, RoutinesCategory routines_category){
+    public RecommendRoutines(String icon, String title, Integer duration,
+        RoutinesCategory routines_category) {
         this.icon = icon;
         this.title = title;
         this.duration = duration;
         this.routines_category = routines_category;
     }
 
-    public void updateWhole(String icon, String title, Integer duration){
+    public void updateWhole(String icon, String title, Integer duration) {
         this.icon = icon;
         this.title = title;
         this.duration = duration;

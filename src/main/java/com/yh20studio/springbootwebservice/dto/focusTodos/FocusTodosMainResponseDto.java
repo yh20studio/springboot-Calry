@@ -14,12 +14,11 @@ public class FocusTodosMainResponseDto {
     private LocalDateTime successDateTime;
     private MemberSummaryDto member;
 
-    public FocusTodosMainResponseDto(FocusTodos entity){
+    public FocusTodosMainResponseDto(FocusTodos entity) {
         id = entity.getId();
         content = entity.getContent();
         success = entity.getSuccess();
         successDateTime = entity.getSuccessDateTime();
         member = new MemberSummaryDto(entity.getMember());
     }
-
 }

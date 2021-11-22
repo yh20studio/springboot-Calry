@@ -16,8 +16,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name="\"RoutinesGroups\"")
+@Table(name = "\"RoutinesGroups\"")
 public class RoutinesGroups extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,14 +33,12 @@ public class RoutinesGroups extends BaseTimeEntity {
     private Routines routines;
 
     @Builder
-    public RoutinesGroups(RoutinesGroupsUnions routinesGroupsUnions, Routines routines){
+    public RoutinesGroups(RoutinesGroupsUnions routinesGroupsUnions, Routines routines) {
         this.routinesGroupsUnions = routinesGroupsUnions;
         this.routines = routines;
     }
 
-    public void setRoutinesGroupsUnions(RoutinesGroupsUnions routinesGroupsUnions){
+    public void setRoutinesGroupsUnions(RoutinesGroupsUnions routinesGroupsUnions) {
         this.routinesGroupsUnions = routinesGroupsUnions;
     }
-
-
 }

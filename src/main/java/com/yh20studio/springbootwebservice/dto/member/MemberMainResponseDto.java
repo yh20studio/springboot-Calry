@@ -10,13 +10,14 @@ import java.util.Optional;
 
 @Getter
 public class MemberMainResponseDto {
+
     private Long id;
     private String name;
     private String email;
     private Member.Role role;
     private String modifiedDate;
 
-    public MemberMainResponseDto(Member entity){
+    public MemberMainResponseDto(Member entity) {
         id = entity.getId();
         name = entity.getName();
         email = entity.getEmail();
@@ -25,11 +26,10 @@ public class MemberMainResponseDto {
     }
 
     // RoutinesMemos가 수정된 LocalDateTime을 Json으로 내보내기 위하여 String으로 변환
-    private String toStringDateTime(LocalDateTime localDateTime){
+    private String toStringDateTime(LocalDateTime localDateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return Optional.ofNullable(localDateTime)
-                .map(formatter::format)
-                .orElse("");
+            .map(formatter::format)
+            .orElse("");
     }
-
 }

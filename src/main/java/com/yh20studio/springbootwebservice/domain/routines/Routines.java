@@ -19,8 +19,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name="\"Routines\"")
+@Table(name = "\"Routines\"")
 public class Routines extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,16 +32,16 @@ public class Routines extends BaseTimeEntity {
     @Column
     private Integer duration;
 
-    @OneToMany(mappedBy="routines", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "routines", cascade = CascadeType.REMOVE)
     @OrderBy("id DESC")
     @JsonIgnore
     private List<RoutinesGroups> routines_groupsList;
 
-    @OneToMany(mappedBy="routines", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "routines", cascade = CascadeType.REMOVE)
     @OrderBy("id DESC")
     private List<RoutinesMemos> routines_memosList;
 
-    @OneToMany(mappedBy="routines", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "routines", cascade = CascadeType.REMOVE)
     @OrderBy("id DESC")
     @JsonIgnore
     private List<TodayRoutines> today_routinesList;
@@ -52,14 +53,15 @@ public class Routines extends BaseTimeEntity {
 
 
     @Builder
-    public Routines(String title, List<RoutinesMemos> routines_memosList, Integer duration, Member member){
+    public Routines(String title, List<RoutinesMemos> routines_memosList, Integer duration,
+        Member member) {
         this.title = title;
         this.routines_memosList = routines_memosList;
         this.duration = duration;
         this.member = member;
     }
 
-    public void updateWhole(String title, Integer duration){
+    public void updateWhole(String title, Integer duration) {
         this.title = title;
         this.duration = duration;
     }

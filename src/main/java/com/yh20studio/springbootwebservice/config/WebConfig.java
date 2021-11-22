@@ -15,8 +15,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://127.0.0.1:8000/")
-                .allowedMethods("POST","GET","DELETE","PUT");
+            .allowedOrigins("http://127.0.0.1:8000/")
+            .allowedMethods("POST", "GET", "DELETE", "PUT");
     }
 
     // REST API에 대한 접근 및 리턴이 실행될때 Log 값을 적기 위한 Bean 생성.
@@ -30,5 +30,4 @@ public class WebConfig implements WebMvcConfigurer {
         c.setMaxPayloadLength(1000);
         return c;
     }
-
 }

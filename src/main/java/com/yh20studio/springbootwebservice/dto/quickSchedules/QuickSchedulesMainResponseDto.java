@@ -21,8 +21,7 @@ public class QuickSchedulesMainResponseDto {
     private LabelsMainResponseDto labels;
     private MemberSummaryDto member;
 
-
-    public QuickSchedulesMainResponseDto(QuickSchedules entity){
+    public QuickSchedulesMainResponseDto(QuickSchedules entity) {
         id = entity.getId();
         title = entity.getTitle();
         content = entity.getContent();
@@ -31,5 +30,4 @@ public class QuickSchedulesMainResponseDto {
         labels = new LabelsMainResponseDto(entity.getLabels());
         member = new MemberSummaryDto(entity.getMember());
     }
-
 }

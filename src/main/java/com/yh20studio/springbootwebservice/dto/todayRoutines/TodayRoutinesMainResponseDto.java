@@ -17,7 +17,7 @@ public class TodayRoutinesMainResponseDto {
     private Routines routines;
 
 
-    public TodayRoutinesMainResponseDto(TodayRoutines entity){
+    public TodayRoutinesMainResponseDto(TodayRoutines entity) {
         id = entity.getId();
         finishTime = entity.getFinishTime();
         finish = entity.getFinish();

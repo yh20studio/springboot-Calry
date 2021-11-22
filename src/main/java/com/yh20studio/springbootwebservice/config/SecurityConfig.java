@@ -29,33 +29,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // Auth 상황에서 사용되는 PasswordEncoder를 Bean으로 생성하고 사용할 때마다 주입받는 방식을 사용하기 위함.
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
+    protected void configure(HttpSecurity http) throws Exception {
         http
-                    .csrf().disable()
-                    .exceptionHandling()
-                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                    .accessDeniedHandler(jwtAccessDeniedHandler)
-                .and()
-                    .headers().frameOptions().disable()
-                .and()
-                    .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                // 로그인된 세션이 없을때 접근가능한 항목들
-                .and()
-                    .authorizeRequests()
-                    .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                    .antMatchers("/", "/login**", "/member/**", "/h2/**", "/h2-console/**").permitAll()
-                    .antMatchers("/api/v1/**").hasRole(Member.Role.USER.name())
-                    .anyRequest().authenticated()
-                .and()
-                    .cors()
-                .and()
-                    .apply(new JwtSecurityConfig(jwtUtil, accessTokenBlackListRepository));
+            .csrf().disable()
+            .exceptionHandling()
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .accessDeniedHandler(jwtAccessDeniedHandler)
+            .and()
+            .headers().frameOptions().disable()
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            // 로그인된 세션이 없을때 접근가능한 항목들
+            .and()
+            .authorizeRequests()
+            .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+            .antMatchers("/", "/login**", "/member/**", "/h2/**", "/h2-console/**").permitAll()
+            .antMatchers("/api/v1/**").hasRole(Member.Role.USER.name())
+            .anyRequest().authenticated()
+            .and()
+            .cors()
+            .and()
+            .apply(new JwtSecurityConfig(jwtUtil, accessTokenBlackListRepository));
     }
 
 

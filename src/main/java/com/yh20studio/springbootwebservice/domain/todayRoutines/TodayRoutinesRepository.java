@@ -8,12 +8,12 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface TodayRoutinesRepository extends JpaRepository<TodayRoutines, Long> {
+
     Optional<TodayRoutines> findById(Long id);
 
     @Query("SELECT p " +
-            "FROM TodayRoutines p " +
-            "WHERE p.routines.member.id = :member " +
-            "ORDER BY p.id ASC")
+        "FROM TodayRoutines p " +
+        "WHERE p.routines.member.id = :member " +
+        "ORDER BY p.id ASC")
     Stream<TodayRoutines> findAllByMemberASC(@Param(value = "member") Long member);
-
 }

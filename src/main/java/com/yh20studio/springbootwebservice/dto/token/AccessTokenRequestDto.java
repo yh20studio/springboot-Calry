@@ -11,19 +11,20 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class AccessTokenRequestDto {
+
     private String accessToken;
     private Long accessTokenExpiresIn;
 
     @Builder
-    public AccessTokenRequestDto(String accessToken, Long accessTokenExpiresIn){
+    public AccessTokenRequestDto(String accessToken, Long accessTokenExpiresIn) {
         this.accessToken = accessToken;
         this.accessTokenExpiresIn = accessTokenExpiresIn;
     }
 
-    public AccessTokenBlackList toEntity(){
+    public AccessTokenBlackList toEntity() {
         return AccessTokenBlackList.builder()
-                .value(accessToken)
-                .expires(accessTokenExpiresIn)
-                .build();
+            .value(accessToken)
+            .expires(accessTokenExpiresIn)
+            .build();
     }
 }

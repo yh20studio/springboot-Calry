@@ -18,13 +18,13 @@ public class restAssuredTest {
     }
 
     @Test
-    public void test_접근하면_test_html_호출된다 () throws Exception {
+    public void test_접근하면_test_html_호출된다() throws Exception {
         given()
-                .when()
-                .get("/test")
-                .then()
-                .statusCode(200)
-                .contentType("text/html")
-                .body(containsString("권한 관리"));
+            .when()
+            .get("/test")
+            .then()
+            .statusCode(200)
+            .contentType("text/html")
+            .body(containsString("권한 관리"));
     }
 }

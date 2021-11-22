@@ -20,7 +20,8 @@ public class LabelsUpdatdeRequestDto {
     private Member member;
 
     @Builder
-    public LabelsUpdatdeRequestDto(Long id, String title, Integer sequence, LabelColors labelColors, Member member){
+    public LabelsUpdatdeRequestDto(Long id, String title, Integer sequence, LabelColors labelColors,
+        Member member) {
         this.id = id;
         this.title = title;
         this.sequence = sequence;
@@ -28,15 +29,12 @@ public class LabelsUpdatdeRequestDto {
         this.member = member;
     }
 
-    public Labels toEntity(){
+    public Labels toEntity() {
         return Labels.builder()
-                .title(title)
-                .sequence(sequence)
-                .label_colors(labelColors)
-                .member(member)
-                .build();
+            .title(title)
+            .sequence(sequence)
+            .label_colors(labelColors)
+            .member(member)
+            .build();
     }
-
-
-
 }
