@@ -19,30 +19,24 @@ public class Calendars {
 	private static final int ONE_WEEK = 7;
 
 	private HashMap<LocalDate, WeekCalendars> weekCalendarMap;
-	private List<SchedulesMainResponseDto> schedules;
+	private List<Schedules> schedules;
 	private HashMap<LocalDate, SchedulesMainResponseDto> holidays;
 
 	@Builder
-	public Calendars() {
+	public Calendars(List<Schedules> schedules, HashMap<LocalDate, SchedulesMainResponseDto> holidays) {
 		this.weekCalendarMap = new HashMap<>();
-	}
-
-	public void setSchedules(List<SchedulesMainResponseDto> schedules) {
 		this.schedules = schedules;
-	}
-
-	public void setHolidays(HashMap<LocalDate, SchedulesMainResponseDto> holidays) {
 		this.holidays = holidays;
 	}
 
-	public void calendarsOrderByWeekSchedules(List<Schedules> wholeSchedulesOrderByDateGap) {
+	public void calendarsOrderByWeekSchedules() {
 		WeekCalendars weekCalendars;
-		for (Schedules schedules : wholeSchedulesOrderByDateGap) {
-			Integer scheduleId = schedules.getId().intValue();
-			int scheduleStartWeekday = schedules.getStartWeekday();
-			int scheduleEndWeekday = schedules.getEndWeekday();
-			int scheduleWidth = schedules.getColumnGap();
-			LocalDate weekStartDate = schedules.getWeekStartLocalDate();
+		for (Schedules each : schedules) {
+			Integer scheduleId = each.getId().intValue();
+			int scheduleStartWeekday = each.getStartWeekday();
+			int scheduleEndWeekday = each.getEndWeekday();
+			int scheduleWidth = each.getColumnWidth();
+			LocalDate weekStartDate = each.getWeekStartLocalDate();
 
 			while (scheduleWidth > ZERO) {
 				int endWeekday;

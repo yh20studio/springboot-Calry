@@ -3,6 +3,7 @@ package com.yh20studio.springbootwebservice.dto.calendars;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.yh20studio.springbootwebservice.domain.calendars.Calendars;
 import com.yh20studio.springbootwebservice.domain.calendars.WeekCalendars;
@@ -19,7 +20,11 @@ public class CalendarsMainResponseDto {
 
 	public CalendarsMainResponseDto(Calendars calendars) {
 		weekCalendarMap = calendars.getWeekCalendarMap();
-		schedules = calendars.getSchedules();
+		schedules = calendars
+			.getSchedules()
+			.stream()
+			.map(SchedulesMainResponseDto::new)
+			.collect(Collectors.toList());
 		holidays = calendars.getHolidays();
 	}
 }
