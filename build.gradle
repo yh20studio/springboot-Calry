@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.yh20studio'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '1.8'
 
 configurations {
@@ -43,4 +43,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+jar {
+    enabled = false
 }
