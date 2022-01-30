@@ -1,15 +1,19 @@
 spring:
-    profiles:
-        group:
-            "test": "google,jwt,postgresqltest"
-            "dev": "google,jwt,postgresql"
+  profiles:
+    active: dev
 ---
 spring:
-    config:
-        activate:
-            on-profile: test
+  profiles:
+    group:
+      "test": "jwt,postgresqltest"
+      "dev": "jwt,postgresql"
 ---
 spring:
-    config:
-        activate:
-            on-profile: dev
+  config:
+    activate:
+      on-profile: test
+---
+spring:
+  config:
+    activate:
+      on-profile: dev

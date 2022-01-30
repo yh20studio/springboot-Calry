@@ -61,7 +61,7 @@ public class FocusTodosService {
 
     }
 
-    // 로그인된 유저의 RequestBody에서 FocusTodos를 성공 처리하는 과정
+    // 로그인된 유저의 FocusTodos를 성공 처리하는 과정
     @Transactional
     public FocusTodosMainResponseDto success(Long id, FocusTodosSaveRequestDto dto) {
         FocusTodos focusTodos = focusTodosRepository.findById(id)
